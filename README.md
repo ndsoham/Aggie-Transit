@@ -7,7 +7,10 @@
 3. Save favorite locations
 4. Proximity alerts
 
-
+## Technologies
+<img src = "Logos/Xcode Logo.png" width = 200 height = 200>
+<img src = "Logos/Figma Logo.png" width = 200 height = 200>
+<img src = "Logos/Tamu Transportation Services Logo.png" width = 200 height = 200>
 
 
 
