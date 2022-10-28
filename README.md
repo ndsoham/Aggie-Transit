@@ -1,4 +1,4 @@
-<h><Aggie Transit img align = "right" height = "50" width = "50" src="Logos/App Logo.png"></h>
+<h1><Aggie Transit img align = "right" height = "50" width = "50" src="Logos/App Logo.png"></h1>
  A transportation app that allows Texas A&M students to route from one location on campus to another. 
 
 ## Features
