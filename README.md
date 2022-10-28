@@ -1,4 +1,4 @@
-# Aggie-Transit
+<h><Aggie Transit img align = "right" height = "50" width = "50" src="Logos/App Logo.png"></h>
  A transportation app that allows Texas A&M students to route from one location on campus to another. 
 
 ## Features
