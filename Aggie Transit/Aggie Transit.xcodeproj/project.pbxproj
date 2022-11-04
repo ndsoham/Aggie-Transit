@@ -16,6 +16,7 @@
 		0F36CD4F29155FDB0059BC24 /* HomeScreenModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD4E29155FDB0059BC24 /* HomeScreenModalViewController.swift */; };
 		0F36CD512915602B0059BC24 /* SettingsScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD502915602B0059BC24 /* SettingsScreenViewController.swift */; };
 		0F36CD53291560A80059BC24 /* NotificationsScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD52291560A80059BC24 /* NotificationsScreenViewController.swift */; };
+		0F36CD56291562C40059BC24 /* HomeScreenFAB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		0F36CD4E29155FDB0059BC24 /* HomeScreenModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenModalViewController.swift; sourceTree = "<group>"; };
 		0F36CD502915602B0059BC24 /* SettingsScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenViewController.swift; sourceTree = "<group>"; };
 		0F36CD52291560A80059BC24 /* NotificationsScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsScreenViewController.swift; sourceTree = "<group>"; };
+		0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenFAB.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,12 +78,21 @@
 		0F36CD4D29155F560059BC24 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0F36CD54291562070059BC24 /* Buttons */,
 				0F36CD4B29155F4B0059BC24 /* HomeScreenViewController.swift */,
 				0F36CD4E29155FDB0059BC24 /* HomeScreenModalViewController.swift */,
 				0F36CD502915602B0059BC24 /* SettingsScreenViewController.swift */,
 				0F36CD52291560A80059BC24 /* NotificationsScreenViewController.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		0F36CD54291562070059BC24 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */,
+			);
+			path = Buttons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -155,6 +166,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F36CD56291562C40059BC24 /* HomeScreenFAB.swift in Sources */,
 				0F36CD3829155B460059BC24 /* AppDelegate.swift in Sources */,
 				0F36CD512915602B0059BC24 /* SettingsScreenViewController.swift in Sources */,
 				0F36CD3A29155B460059BC24 /* SceneDelegate.swift in Sources */,
