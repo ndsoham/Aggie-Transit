@@ -11,8 +11,10 @@ import UIKit
 class HomeScreenViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        let SettingsFAB = HomeScreenFAB(frame: CGRect(x: 100, y: 100, width: 40, height: 40), backgroundImage: UIImage(systemName: "home") ?? UIImage(), buttonName: "testButton")
+        let SettingsFAB = HomeScreenFAB(frame: CGRect(x: 100, y: 100, width: 40, height: 40), backgroundImage: UIImage(systemName: "house") ?? UIImage(), buttonName: "testButton")
+        let NotificationsFab = HomeScreenFAB(frame: CGRect(x: 150, y: 100, width: 40, height: 40), backgroundImage: UIImage(systemName: "house.fill") ?? UIImage(), buttonName: "testButton")
         self.view.addSubview(SettingsFAB)
+        self.view.addSubview(NotificationsFab)
     }
     
     

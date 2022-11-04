@@ -16,12 +16,15 @@ class HomeScreenFAB: UIButton {
         self.backgroundImage = backgroundImage
         self.buttonName = buttonName
         super.init(frame: frame)
-        super.setBackgroundImage(self.backgroundImage, for: .normal)
-    }
+        self.setBackgroundImage(self.backgroundImage, for: .normal)
+        self.layer.borderColor = CGColor(red: 0.1, green: 0.3, blue: 0.5, alpha: 1)
+        self.layer.borderWidth = CGFloat(floatLiteral: 1.0)
     
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
     
 }
