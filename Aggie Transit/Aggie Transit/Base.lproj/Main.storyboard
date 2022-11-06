@@ -26,7 +26,7 @@
         <!--Home Screen Modal View Controller-->
         <scene sceneID="8k3-IK-9Oy">
             <objects>
-                <viewController id="N5V-Oo-zTA" customClass="HomeScreenModalViewController" customModule="Aggie_Transit" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HomeScreenModalViewController" id="N5V-Oo-zTA" customClass="HomeScreenModalViewController" customModule="Aggie_Transit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lSE-Ag-Uoy">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

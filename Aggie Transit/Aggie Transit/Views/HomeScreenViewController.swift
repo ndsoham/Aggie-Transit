@@ -13,9 +13,13 @@ class HomeScreenViewController: UIViewController {
         super.viewDidLoad()
         // init buttons
         initializeFABButtons()
-      
-    
+  
+        
     }
+    override func viewDidAppear(_ animated: Bool) {
+        presentHomeScreenMenu2()
+    }
+  
     func initializeFABButtons(){
         // decide height and width of buttons based on the size of the phone
         let height = self.view.frame.height
@@ -66,5 +70,19 @@ class HomeScreenViewController: UIViewController {
         }
     }
     
+    @IBAction func presentHomeScreenMenu() {
+       
+        let homeScreenMenu = HomeScreenModalViewController()
+        homeScreenMenu.modalPresentationStyle = .popover
+        self.present(homeScreenMenu, animated: false)
+    }
+    @IBAction func presentHomeScreenMenu2() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let homeScreenMenu = storyboard.instantiateViewController(identifier: "HomeScreenModalViewController")
+        homeScreenMenu.modalPresentationStyle = .popover
+        self.present(homeScreenMenu, animated: false)
+    }
+    
     
 }
+
