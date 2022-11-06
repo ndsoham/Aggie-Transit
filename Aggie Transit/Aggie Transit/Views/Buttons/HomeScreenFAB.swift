@@ -8,17 +8,29 @@
 import Foundation
 import UIKit
 
+enum HomeScreenFABPath: String {
+    case settings = "HomeScreenSettingsFAB"
+    case notifications = "HomeScreenNotificationsFAB"
+}
+
+enum ButtonName: String {
+    case settings = "Settings Button"
+    case notifications = "Notifications Button"
+}
+
 class HomeScreenFAB: UIButton {
-    let backgroundImage: UIImage
-    let buttonName: String
+    let backgroundImage: HomeScreenFABPath
+    var buttonName: ButtonName
     
-    init(frame: CGRect, backgroundImage:UIImage, buttonName:String){
+    init(frame: CGRect, backgroundImage:HomeScreenFABPath, buttonName:ButtonName){
         self.backgroundImage = backgroundImage
         self.buttonName = buttonName
         super.init(frame: frame)
-        self.setBackgroundImage(self.backgroundImage, for: .normal)
-        self.layer.borderColor = CGColor(red: 0.1, green: 0.3, blue: 0.5, alpha: 1)
-        self.layer.borderWidth = CGFloat(floatLiteral: 1.0)
+        if let buttonBackgroundImage = UIImage(named: self.backgroundImage.rawValue) {
+            self.setBackgroundImage(buttonBackgroundImage, for: .normal)
+            self.imageView?.contentMode = .scaleAspectFit
+        }
+    
     
     }
     
