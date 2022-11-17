@@ -7,26 +7,37 @@
 
 import Foundation
 import UIKit
-
+import MapKit
 class HomeScreenViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        // init buttons
-        initializeFABButtons()
-  
+        // init buttons and background map
+        layoutSubviews()
+
         
     }
     override func viewDidAppear(_ animated: Bool) {
-        presentHomeScreenMenu2()
+        // present menu
+        presentHomeScreenMenu()
+
     }
   
-    func initializeFABButtons(){
+    func layoutSubviews(){
         // decide height and width of buttons based on the size of the phone
         let height = self.view.frame.height
         let width = self.view.frame.width
         let padding = height * (7.15/812)
         let fabHeight = CGFloat(floatLiteral: (height * (54.85/812)))
         let fabWidth = fabHeight
+        // initialize the map
+        let map = MKMapView(frame: CGRect(x: 0, y: 0, width: width, height: height))
+        view.addSubview(map)
+        let margins = view.safeAreaLayoutGuide
+        map.leadingAnchor.constraint(equalTo: margins.leadingAnchor).isActive = true
+        map.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
+        map.topAnchor.constraint(equalTo: margins.topAnchor).isActive = true
+        map.bottomAnchor.constraint(equalTo: margins.bottomAnchor).isActive = true
+        map.translatesAutoresizingMaskIntoConstraints = false
         // initialize buttons
         let homeScreenNotificationsFAB = HomeScreenFAB(frame: CGRect(x: 0, y: 0, width: fabWidth, height: fabHeight), backgroundImage: .notifications, buttonName: .notifications)
         let homeScreenSettingsFAB = HomeScreenFAB(frame: CGRect(x: 0, y: 0, width: fabWidth, height: fabHeight), backgroundImage: .settings, buttonName: .settings)
@@ -45,16 +56,13 @@ class HomeScreenViewController: UIViewController {
         stackView.spacing = padding
         stackView.alignment = .center
         stackView.distribution = .fillEqually
-        view.addSubview(stackView)
+        map.addSubview(stackView)
         //         Add constraints to the stack view
-        let safeMargins = view.safeAreaLayoutGuide
-        print("Height: \(fabWidth)")
-        print("Width: \(fabHeight)")
+        let safeMargins = map.safeAreaLayoutGuide
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor,constant: -10 * (width/375)).isActive = true
         stackView.topAnchor.constraint(equalTo: safeMargins.topAnchor,constant: 10).isActive = true
         stackView.widthAnchor.constraint(equalToConstant: fabWidth).isActive = true
-        stackView.heightAnchor.constraint(equalToConstant: fabHeight*2+padding).isActive = true
         // Add even handlers to buttons
         homeScreenSettingsFAB.addTarget(self, action: #selector(handleButtonPress), for: .touchUpInside)
         homeScreenNotificationsFAB.addTarget(self, action:#selector(handleButtonPress), for: .touchUpInside)
@@ -68,21 +76,19 @@ class HomeScreenViewController: UIViewController {
       else if sender.buttonName.rawValue == "Notifications Button" {
             print("notifications button pressed")
         }
+      else {
+          print("trying somethind new")
+      }
     }
     
     @IBAction func presentHomeScreenMenu() {
        
-        let homeScreenMenu = HomeScreenModalViewController()
-        homeScreenMenu.modalPresentationStyle = .popover
-        self.present(homeScreenMenu, animated: false)
-    }
-    @IBAction func presentHomeScreenMenu2() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let homeScreenMenu = storyboard.instantiateViewController(identifier: "HomeScreenModalViewController")
         homeScreenMenu.modalPresentationStyle = .popover
         self.present(homeScreenMenu, animated: false)
     }
-    
+  
     
 }
 

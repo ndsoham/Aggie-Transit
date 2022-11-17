@@ -17,10 +17,8 @@
 		0F36CD512915602B0059BC24 /* SettingsScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD502915602B0059BC24 /* SettingsScreenViewController.swift */; };
 		0F36CD53291560A80059BC24 /* NotificationsScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD52291560A80059BC24 /* NotificationsScreenViewController.swift */; };
 		0F36CD56291562C40059BC24 /* HomeScreenFAB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */; };
-		0FEF048129175EA900ADFB15 /* HomeScreenTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEF047F29175EA900ADFB15 /* HomeScreenTableViewCell.swift */; };
-		0FEF048229175EA900ADFB15 /* HomeScreenTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0FEF048029175EA900ADFB15 /* HomeScreenTableViewCell.xib */; };
-		0FEF048929175F1800ADFB15 /* HomeScreenCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEF048729175F1800ADFB15 /* HomeScreenCollectionViewCell.swift */; };
-		0FEF048A29175F1800ADFB15 /* HomeScreenCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0FEF048829175F1800ADFB15 /* HomeScreenCollectionViewCell.xib */; };
+		0F4A5AE529243BF0007944F3 /* PageIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4A5AE429243BF0007944F3 /* PageIndicator.swift */; };
+		0FF08D93291C9C9800A7BB48 /* HomeScreenModalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF08D92291C9C9800A7BB48 /* HomeScreenModalTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,10 +34,8 @@
 		0F36CD502915602B0059BC24 /* SettingsScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenViewController.swift; sourceTree = "<group>"; };
 		0F36CD52291560A80059BC24 /* NotificationsScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsScreenViewController.swift; sourceTree = "<group>"; };
 		0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenFAB.swift; sourceTree = "<group>"; };
-		0FEF047F29175EA900ADFB15 /* HomeScreenTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenTableViewCell.swift; sourceTree = "<group>"; };
-		0FEF048029175EA900ADFB15 /* HomeScreenTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeScreenTableViewCell.xib; sourceTree = "<group>"; };
-		0FEF048729175F1800ADFB15 /* HomeScreenCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenCollectionViewCell.swift; sourceTree = "<group>"; };
-		0FEF048829175F1800ADFB15 /* HomeScreenCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeScreenCollectionViewCell.xib; sourceTree = "<group>"; };
+		0F4A5AE429243BF0007944F3 /* PageIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageIndicator.swift; sourceTree = "<group>"; };
+		0FF08D92291C9C9800A7BB48 /* HomeScreenModalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenModalTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,8 +82,8 @@
 		0F36CD4D29155F560059BC24 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				0FEF048429175EEE00ADFB15 /* Collection View Cells */,
-				0FEF047C29175E1200ADFB15 /* Table View Cells */,
+				0F4A5AE329243BDC007944F3 /* Page Indicator */,
+				0FEE66092919E464004E2C93 /* Table View Cells */,
 				0F36CD54291562070059BC24 /* Buttons */,
 				0F36CD4B29155F4B0059BC24 /* HomeScreenViewController.swift */,
 				0F36CD4E29155FDB0059BC24 /* HomeScreenModalViewController.swift */,
@@ -105,22 +101,20 @@
 			path = Buttons;
 			sourceTree = "<group>";
 		};
-		0FEF047C29175E1200ADFB15 /* Table View Cells */ = {
+		0F4A5AE329243BDC007944F3 /* Page Indicator */ = {
 			isa = PBXGroup;
 			children = (
-				0FEF047F29175EA900ADFB15 /* HomeScreenTableViewCell.swift */,
-				0FEF048029175EA900ADFB15 /* HomeScreenTableViewCell.xib */,
+				0F4A5AE429243BF0007944F3 /* PageIndicator.swift */,
 			);
-			path = "Table View Cells";
+			path = "Page Indicator";
 			sourceTree = "<group>";
 		};
-		0FEF048429175EEE00ADFB15 /* Collection View Cells */ = {
+		0FEE66092919E464004E2C93 /* Table View Cells */ = {
 			isa = PBXGroup;
 			children = (
-				0FEF048729175F1800ADFB15 /* HomeScreenCollectionViewCell.swift */,
-				0FEF048829175F1800ADFB15 /* HomeScreenCollectionViewCell.xib */,
+				0FF08D92291C9C9800A7BB48 /* HomeScreenModalTableViewCell.swift */,
 			);
-			path = "Collection View Cells";
+			path = "Table View Cells";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -181,8 +175,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0FEF048A29175F1800ADFB15 /* HomeScreenCollectionViewCell.xib in Resources */,
-				0FEF048229175EA900ADFB15 /* HomeScreenTableViewCell.xib in Resources */,
 				0F36CD4429155B460059BC24 /* LaunchScreen.storyboard in Resources */,
 				0F36CD4129155B460059BC24 /* Assets.xcassets in Resources */,
 				0F36CD3F29155B460059BC24 /* Main.storyboard in Resources */,
@@ -200,11 +192,11 @@
 				0F36CD3829155B460059BC24 /* AppDelegate.swift in Sources */,
 				0F36CD512915602B0059BC24 /* SettingsScreenViewController.swift in Sources */,
 				0F36CD3A29155B460059BC24 /* SceneDelegate.swift in Sources */,
-				0FEF048129175EA900ADFB15 /* HomeScreenTableViewCell.swift in Sources */,
 				0F36CD4C29155F4B0059BC24 /* HomeScreenViewController.swift in Sources */,
+				0FF08D93291C9C9800A7BB48 /* HomeScreenModalTableViewCell.swift in Sources */,
 				0F36CD4F29155FDB0059BC24 /* HomeScreenModalViewController.swift in Sources */,
+				0F4A5AE529243BF0007944F3 /* PageIndicator.swift in Sources */,
 				0F36CD53291560A80059BC24 /* NotificationsScreenViewController.swift in Sources */,
-				0FEF048929175F1800ADFB15 /* HomeScreenCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
