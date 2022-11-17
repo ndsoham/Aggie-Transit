@@ -1,13 +1,13 @@
 //
-//  File.swift
+//  PageController.swift
 //  Aggie Transit
 //
-//  Created by Soham Nagawanshi on 11/15/22.
+//  Created by Soham Nagawanshi on 11/16/22.
 //
 
 import Foundation
 import UIKit
-class PageIndicator: UIView {
+class PageController: UIControl {
     let numPages: Int
     let pageNames: [String]
     var currentPage: Int = 0
@@ -22,7 +22,6 @@ class PageIndicator: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     override func layoutSubviews() {
-        // configure default properties
         self.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
         self.isUserInteractionEnabled = true
         let height = self.frame.height
@@ -50,23 +49,14 @@ class PageIndicator: UIView {
             button.setTitle(pageNames[i], for: .normal)
             button.setTitleColor(UIColor(named: "textColor"), for: .normal)
             button.tag = i
-            button.addTarget(self, action: #selector(handleButtonPress), for: .touchUpInside)
+            button.addTarget(self, action: #selector(handlePageIndicatorChange), for: .touchUpInside)
             stackView.addArrangedSubview(button)
             
         }
-        
     }
-    @objc func handleButtonPress(sender: UIButton){
-        if sender.tag != currentPage {
-            currentPage = sender.tag
-            let underlineAttribute = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.thick.rawValue]
-            let underlineAttributedString = NSAttributedString(string: sender.currentTitle ?? "error has occured", attributes: underlineAttribute)
-            sender.setAttributedTitle(underlineAttributedString, for: .normal)
-            
-            
-        }
-        else {
-            
+    @objc func handlePageIndicatorChange(sender: UIButton){
+        if let senderTitle = sender.currentTitle {
+            print(senderTitle)
         }
     }
 }
