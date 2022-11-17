@@ -81,13 +81,21 @@ class HomeScreenViewController: UIViewController {
       }
     }
     
-    @IBAction func presentHomeScreenMenu() {
+    func presentHomeScreenMenu() {
        
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let homeScreenMenu = storyboard.instantiateViewController(identifier: "HomeScreenModalViewController")
         homeScreenMenu.modalPresentationStyle = .popover
         self.present(homeScreenMenu, animated: false)
     }
+    func presentSettingsScreen() {
+        
+    }
+    func presentNotificationsScreen() {
+        
+    }
+    
+    
   
     
 }

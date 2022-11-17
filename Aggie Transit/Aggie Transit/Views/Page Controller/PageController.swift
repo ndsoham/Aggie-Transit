@@ -7,13 +7,36 @@
 
 import Foundation
 import UIKit
+protocol PageControllerDelegate {
+    func handlePageChanged(sender: UIButton)
+}
 class PageController: UIControl {
     let numPages: Int
     let pageNames: [String]
-    var currentPage: Int = 0
+    var currentPage: UIButton {
+        didSet {
+            // will use this to underline whichever page is selected
+
+            if let text = currentPage.currentTitle {
+                let underlineAttribute = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.thick.rawValue]
+                let underlineAttributedString = NSAttributedString(string: text, attributes: underlineAttribute)
+                currentPage.setAttributedTitle(underlineAttributedString, for: .normal)
+            }
+        }
+        willSet {
+            // will use this to un-underline whichever page is selected
+            if let text = currentPage.currentTitle {
+                let underlineAttributedString = NSAttributedString(string: text, attributes: .none)
+                currentPage.setAttributedTitle(underlineAttributedString, for: .normal)
+            }
+        }
+    }
+    var delegate: PageControllerDelegate? = nil
+    var pages: [UIButton] = []
     init(frame: CGRect, numPages: Int, pageNames: [String]) {
         self.numPages = numPages
         self.pageNames = pageNames
+        self.currentPage = UIButton()
         super.init(frame: frame)
         layoutSubviews()
     }
@@ -50,13 +73,18 @@ class PageController: UIControl {
             button.setTitleColor(UIColor(named: "textColor"), for: .normal)
             button.tag = i
             button.addTarget(self, action: #selector(handlePageIndicatorChange), for: .touchUpInside)
+            if i == 0 {
+                currentPage = button
+            }
+            pages.append(button)
             stackView.addArrangedSubview(button)
             
         }
     }
     @objc func handlePageIndicatorChange(sender: UIButton){
-        if let senderTitle = sender.currentTitle {
-            print(senderTitle)
+        currentPage = sender
+        if let delegate = delegate {
+            delegate.handlePageChanged(sender: sender)
         }
     }
 }

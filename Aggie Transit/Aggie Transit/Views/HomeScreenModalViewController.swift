@@ -12,7 +12,8 @@ class HomeScreenModalViewController: UIViewController {
     var recentsTableView: UITableView = UITableView()
     var favoritesTableView: UITableView = UITableView()
     var allRoutesTableView: UITableView = UITableView()
-    
+    var testScroll: UIScrollView = UIScrollView()
+    var testPage: PageController?
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
@@ -67,15 +68,18 @@ class HomeScreenModalViewController: UIViewController {
         // test out custom pageControl
         let pageControlHeight = height * (38/812)
         let pageControlWidth = searchBarWidth
-        let pageIndicator = PageIndicator(frame: CGRect(x: 0, y: 0, width: pageControlWidth, height: pageControlHeight), numPages: 3, pageNames: ["Recents","Favorites","All Routes"])
-        pageIndicator.translatesAutoresizingMaskIntoConstraints = false
-        pageIndicator.widthAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
-        pageIndicator.heightAnchor.constraint(equalToConstant: pageControlHeight).isActive = true
-        pageIndicator.isUserInteractionEnabled = true
+        let pageController = PageController(frame: CGRect(x: 0, y: 0, width: pageControlWidth, height: pageControlHeight), numPages: 3, pageNames: ["Recents","Favorites","All Routes"])
+        testPage = pageController
+        pageController.translatesAutoresizingMaskIntoConstraints = false
+        pageController.widthAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
+        pageController.heightAnchor.constraint(equalToConstant: pageControlHeight).isActive = true
+        pageController.isUserInteractionEnabled = true
+        pageController.delegate = self
         // Create and configure scrollview and add constraints to the table views
         let scrollViewHeight = height - searchBarHeight - pageControlHeight
         let scrollViewWidth = pageControlWidth
         let scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: scrollViewWidth, height: scrollViewHeight))
+        testScroll = scrollView
         scrollView.contentSize = CGSize(width: scrollViewWidth*3, height: scrollViewHeight)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.widthAnchor.constraint(equalToConstant: scrollViewWidth).isActive = true
@@ -87,6 +91,7 @@ class HomeScreenModalViewController: UIViewController {
 //        scrollView.addSubview(tableView)
 //        scrollView.addSubview(tableView2)
         scrollView.isPagingEnabled = true
+        scrollView.delegate = self
 //        tableView.leadingAnchor.constraint(equalTo: scrollMargins.leadingAnchor).isActive = true
 //        tableView.topAnchor.constraint(equalTo: scrollMargins.topAnchor).isActive = true
 //        tableView.bottomAnchor.constraint(equalTo: scrollMargins.bottomAnchor).isActive = true
@@ -109,7 +114,7 @@ class HomeScreenModalViewController: UIViewController {
         tableStackView.bottomAnchor.constraint(equalTo: scrollMargins.bottomAnchor).isActive = true
         tableStackView.translatesAutoresizingMaskIntoConstraints = false
         // configure stack view for entire modal
-        let stackview = UIStackView(arrangedSubviews: [searchBar,pageIndicator,scrollView])
+        let stackview = UIStackView(arrangedSubviews: [searchBar,pageController,scrollView])
         stackview.axis = .vertical
         stackview.spacing = 0
         stackview.alignment = .top
@@ -130,6 +135,7 @@ class HomeScreenModalViewController: UIViewController {
         
         
     }
+  
 }
 
 extension HomeScreenModalViewController: UITableViewDelegate, UITableViewDataSource {
@@ -158,4 +164,36 @@ extension HomeScreenModalViewController: UITableViewDelegate, UITableViewDataSou
         return 122
     }
 }
+
+extension HomeScreenModalViewController: PageControllerDelegate {
+    func handlePageChanged(sender: UIButton) {
+        let pageNumber = sender.tag
+        let height = self.view.frame.height
+        let width = self.view.frame.width
+        let searchBarHeight = height * (52/812)
+        let searchBarWidth = width
+        let pageControlHeight = height * (38/812)
+        let pageControlWidth = searchBarWidth
+        let scrollViewHeight = height - searchBarHeight - pageControlHeight
+        let scrollViewWidth = pageControlWidth
+        testScroll.scrollRectToVisible(CGRect(x: 0 + CGFloat(pageNumber)*searchBarWidth, y: 0, width: scrollViewWidth, height: scrollViewHeight), animated: true)
+    }
+    
+    
+}
+
+extension HomeScreenModalViewController: UIScrollViewDelegate {
+   
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let cp = Int(floor(scrollView.contentOffset.x/scrollView.frame.size.width))
+        if let testPage = testPage {
+            if   (cp == 0 || cp == 1 || cp == 2) {
+                testPage.currentPage = testPage.pages[cp]
+            }
+        }
+        
+    }
+   
+}
+
 

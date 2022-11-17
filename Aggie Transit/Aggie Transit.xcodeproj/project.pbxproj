@@ -17,7 +17,7 @@
 		0F36CD512915602B0059BC24 /* SettingsScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD502915602B0059BC24 /* SettingsScreenViewController.swift */; };
 		0F36CD53291560A80059BC24 /* NotificationsScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD52291560A80059BC24 /* NotificationsScreenViewController.swift */; };
 		0F36CD56291562C40059BC24 /* HomeScreenFAB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */; };
-		0F4A5AE529243BF0007944F3 /* PageIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4A5AE429243BF0007944F3 /* PageIndicator.swift */; };
+		0FB47F932925F727000234DC /* PageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB47F922925F727000234DC /* PageController.swift */; };
 		0FF08D93291C9C9800A7BB48 /* HomeScreenModalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF08D92291C9C9800A7BB48 /* HomeScreenModalTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -34,7 +34,7 @@
 		0F36CD502915602B0059BC24 /* SettingsScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenViewController.swift; sourceTree = "<group>"; };
 		0F36CD52291560A80059BC24 /* NotificationsScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsScreenViewController.swift; sourceTree = "<group>"; };
 		0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenFAB.swift; sourceTree = "<group>"; };
-		0F4A5AE429243BF0007944F3 /* PageIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageIndicator.swift; sourceTree = "<group>"; };
+		0FB47F922925F727000234DC /* PageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageController.swift; sourceTree = "<group>"; };
 		0FF08D92291C9C9800A7BB48 /* HomeScreenModalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenModalTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,7 +82,7 @@
 		0F36CD4D29155F560059BC24 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				0F4A5AE329243BDC007944F3 /* Page Indicator */,
+				0F4A5AE329243BDC007944F3 /* Page Controller */,
 				0FEE66092919E464004E2C93 /* Table View Cells */,
 				0F36CD54291562070059BC24 /* Buttons */,
 				0F36CD4B29155F4B0059BC24 /* HomeScreenViewController.swift */,
@@ -101,12 +101,12 @@
 			path = Buttons;
 			sourceTree = "<group>";
 		};
-		0F4A5AE329243BDC007944F3 /* Page Indicator */ = {
+		0F4A5AE329243BDC007944F3 /* Page Controller */ = {
 			isa = PBXGroup;
 			children = (
-				0F4A5AE429243BF0007944F3 /* PageIndicator.swift */,
+				0FB47F922925F727000234DC /* PageController.swift */,
 			);
-			path = "Page Indicator";
+			path = "Page Controller";
 			sourceTree = "<group>";
 		};
 		0FEE66092919E464004E2C93 /* Table View Cells */ = {
@@ -192,10 +192,10 @@
 				0F36CD3829155B460059BC24 /* AppDelegate.swift in Sources */,
 				0F36CD512915602B0059BC24 /* SettingsScreenViewController.swift in Sources */,
 				0F36CD3A29155B460059BC24 /* SceneDelegate.swift in Sources */,
+				0FB47F932925F727000234DC /* PageController.swift in Sources */,
 				0F36CD4C29155F4B0059BC24 /* HomeScreenViewController.swift in Sources */,
 				0FF08D93291C9C9800A7BB48 /* HomeScreenModalTableViewCell.swift in Sources */,
 				0F36CD4F29155FDB0059BC24 /* HomeScreenModalViewController.swift in Sources */,
-				0F4A5AE529243BF0007944F3 /* PageIndicator.swift in Sources */,
 				0F36CD53291560A80059BC24 /* NotificationsScreenViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
