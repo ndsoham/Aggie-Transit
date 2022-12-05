@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -23,25 +24,10 @@
             </objects>
             <point key="canvasLocation" x="-376" y="-35"/>
         </scene>
-        <!--Home Screen Modal View Controller-->
-        <scene sceneID="8k3-IK-9Oy">
-            <objects>
-                <viewController storyboardIdentifier="HomeScreenModalViewController" id="N5V-Oo-zTA" customClass="HomeScreenModalViewController" customModule="Aggie_Transit" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="lSE-Ag-Uoy">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="yTB-0X-HlO"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4lb-VU-ezv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="285" y="-35"/>
-        </scene>
         <!--Settings Screen View Controller-->
         <scene sceneID="eW9-6X-ldk">
             <objects>
-                <viewController id="EcY-5N-5dH" customClass="SettingsScreenViewController" customModule="Aggie_Transit" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SettingsScreenViewController" id="EcY-5N-5dH" customClass="SettingsScreenViewController" customModule="Aggie_Transit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xTb-96-b1E">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -51,12 +37,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Q3-uD-Oy7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="941" y="-35"/>
+            <point key="canvasLocation" x="303" y="-35"/>
         </scene>
         <!--Notifications Screen View Controller-->
         <scene sceneID="9Xg-tS-KT5">
             <objects>
-                <viewController id="lTe-Is-yyl" customClass="NotificationsScreenViewController" customModule="Aggie_Transit" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NotificationsScreenViewController" id="lTe-Is-yyl" customClass="NotificationsScreenViewController" customModule="Aggie_Transit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="p1v-Ge-Gzr">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -66,7 +52,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nNr-U7-wUV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1590" y="-35"/>
+            <point key="canvasLocation" x="1030" y="-35"/>
         </scene>
     </scenes>
     <resources>
