@@ -30,7 +30,7 @@ class HomeScreenMenuView: UIView {
     var tableViewStackWidth: Double?
     var scrollMargins: UILayoutGuide?
     var viewMargins: UILayoutGuide?
-    var pageController: PageControl?
+    var pageController: PageController?
     
     override init(frame: CGRect){
         super.init(frame: frame)
@@ -69,7 +69,7 @@ class HomeScreenMenuView: UIView {
                     pageControllerHeight = 38 * (height/200)
                     pageControllerWidth = width
                     if let pageControllerHeight = pageControllerHeight, let pageControllerWidth = pageControllerWidth {
-                        pageController = PageControl(frame: CGRect(x: 0,y: 0,width: pageControllerWidth,height: pageControllerHeight), pages: ["Recents","Favorites","All Routes"])
+                        pageController = PageController(frame: CGRect(x: 0,y: 0,width: pageControllerWidth,height: pageControllerHeight))
                         if let pageController = pageController{
                             pageController.translatesAutoresizingMaskIntoConstraints = false
                             pageController.delegate = self
@@ -90,12 +90,10 @@ class HomeScreenMenuView: UIView {
                                     scrollView.showsHorizontalScrollIndicator = false
                                     scrollView.isDirectionalLockEnabled = true
                                     scrollView.isPagingEnabled = true
-                                    scrollView.delegate = self
+                                    scrollView.delegate = pageController
                                     // constrain the scroll view
                                     scrollView.widthAnchor.constraint(equalToConstant: scrollViewWidth).isActive = true
                                     scrollView.heightAnchor.constraint(equalToConstant: scrollViewHeight).isActive = true
-                                    
-                                    
                                     // configure the table views
                                     tableViewHeight = height - pageControllerHeight - searchBarHeight
                                     tableViewWidth = width
@@ -221,29 +219,21 @@ extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate{
     
 }
 
-extension HomeScreenMenuView: UIScrollViewDelegate, PageControlDelegate {
-    func handlePageChanged(sender: UIButton) {
-        let page = sender.tag
-        if let scrollView = scrollView {
-            if page == scrollView.currentPage {
-                return
-            }
-            else {
-                let xpos = Double(page) * scrollView.frame.width
-                scrollView.scrollRectToVisible(CGRect(x: xpos, y: 0, width: scrollView.frame.width, height: scrollView.frame.height), animated: true)
-            }
-        }
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if let pageController = pageController {
-            pageController.currentPage = scrollView.currentPage
-        }
-    }
-}
 
 extension UIScrollView {
     var currentPage:Int{
         return Int((self.contentOffset.x+(0.5*self.frame.size.width))/self.frame.width)
     }
+}
+
+extension HomeScreenMenuView: PageControllerDelegate {
+    func handlePageChanged(sender: UIButton) {
+        if let scrollView = scrollView {
+            let xPos = scrollView.frame.width * Double(sender.tag)
+            let yPos = 0.0
+            scrollView.scrollRectToVisible(CGRect(x: xPos, y: yPos, width: scrollView.frame.width, height: scrollView.frame.height), animated: true)
+        }
+    }
+    
+    
 }
