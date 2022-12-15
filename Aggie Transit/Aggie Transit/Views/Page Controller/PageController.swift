@@ -107,7 +107,6 @@ class PageController:UIControl {
                         pageStack.addArrangedSubview(recentsButton)
                         pageStack.addArrangedSubview(favoritesButton)
                         pageStack.addArrangedSubview(allRoutesButton)
-                        
                     }
                     
                     

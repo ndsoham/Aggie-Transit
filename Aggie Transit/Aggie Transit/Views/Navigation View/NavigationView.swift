@@ -37,6 +37,7 @@ class NavigationView: UIView {
     override func layoutSubviews() {
         height = self.frame.height
         width = self.frame.width
+        self.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
         if let height = height, let width = width{
             // configure stackview
             stackView = UIStackView()
@@ -61,8 +62,9 @@ class NavigationView: UIView {
                         backButton.translatesAutoresizingMaskIntoConstraints = false
                         backButton.setBackgroundImage(UIImage(systemName: "chevron.left"), for: .normal)
                         backButton.addTarget(self, action: #selector(handleButtonPress), for: .touchUpInside)
-                        
+//                        backButton.configuration = UIButton.Configuration.plain()
                         backButton.tintColor = UIColor(named: "textColor")
+                        backButton.automaticallyUpdatesConfiguration = true
                         // constraint backbutton
                         backButton.widthAnchor.constraint(equalToConstant: CGFloat(backButtonWidth)).isActive = true
                         backButton.heightAnchor.constraint(equalToConstant: CGFloat(backButtonHeight)).isActive = true
@@ -93,9 +95,7 @@ class NavigationView: UIView {
         }
     }
     @objc func handleButtonPress(){
-        print(" im here")
         if let delegate = delegate {
-           
             delegate.handleBackButtonPressed()
         }
     }

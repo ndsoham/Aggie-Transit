@@ -43,6 +43,7 @@ class HomeScreenMenuView: UIView {
     override func layoutSubviews(){
         height = self.frame.height - self.safeAreaInsets.top - self.safeAreaInsets.bottom
         width = self.frame.width
+        self.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
         self.isUserInteractionEnabled = true
         if let height = height, let width = width {
             // configure search bar
@@ -56,12 +57,14 @@ class HomeScreenMenuView: UIView {
                     searchBar.translatesAutoresizingMaskIntoConstraints = false
                     if let searchField = searchBar.value(forKey: "searchField") as? UITextField {
                         if let borderColor = UIColor(named: "borderColor") {
+                            searchField.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                             searchField.layer.borderColor = borderColor.cgColor
                             searchField.layer.borderWidth = 2
                             searchField.layer.cornerRadius = 18
                             searchBar.isTranslucent = false
                         }
                     }
+                    
                     // constrain the search bar
                     searchBar.widthAnchor.constraint(equalToConstant: searchBarWidth).isActive = true
                     searchBar.heightAnchor.constraint(equalToConstant: searchBarHeight).isActive = true

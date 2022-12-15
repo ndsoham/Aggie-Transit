@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0F031B982929BA6000055421 /* Navigation View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F031B972929BA6000055421 /* Navigation View.swift */; };
+		0F031B982929BA6000055421 /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F031B972929BA6000055421 /* NavigationView.swift */; };
 		0F031B9A2929BAF800055421 /* SettingsScreenTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F031B992929BAF800055421 /* SettingsScreenTableViewCell.swift */; };
 		0F031B9C2929BB1200055421 /* NotificationsScreenTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F031B9B2929BB1200055421 /* NotificationsScreenTableViewCell.swift */; };
 		0F2F37FE29318150005998AF /* HomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F2F37FD29318150005998AF /* HomeScreenViewController.swift */; };
@@ -16,7 +16,6 @@
 		0F36CD3F29155B460059BC24 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F36CD3D29155B460059BC24 /* Main.storyboard */; };
 		0F36CD4129155B460059BC24 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F36CD4029155B460059BC24 /* Assets.xcassets */; };
 		0F36CD4429155B460059BC24 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F36CD4229155B460059BC24 /* LaunchScreen.storyboard */; };
-		0F36CD4F29155FDB0059BC24 /* HomeScreenModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD4E29155FDB0059BC24 /* HomeScreenModalViewController.swift */; };
 		0F36CD512915602B0059BC24 /* SettingsScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD502915602B0059BC24 /* SettingsScreenViewController.swift */; };
 		0F36CD53291560A80059BC24 /* NotificationsScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD52291560A80059BC24 /* NotificationsScreenViewController.swift */; };
 		0F36CD56291562C40059BC24 /* HomeScreenFAB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */; };
@@ -26,7 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0F031B972929BA6000055421 /* Navigation View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Navigation View.swift"; sourceTree = "<group>"; };
+		0F031B972929BA6000055421 /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
 		0F031B992929BAF800055421 /* SettingsScreenTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenTableViewCell.swift; sourceTree = "<group>"; };
 		0F031B9B2929BB1200055421 /* NotificationsScreenTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsScreenTableViewCell.swift; sourceTree = "<group>"; };
 		0F2F37FD29318150005998AF /* HomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewController.swift; sourceTree = "<group>"; };
@@ -37,7 +36,6 @@
 		0F36CD4029155B460059BC24 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0F36CD4329155B460059BC24 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0F36CD4529155B460059BC24 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0F36CD4E29155FDB0059BC24 /* HomeScreenModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenModalViewController.swift; sourceTree = "<group>"; };
 		0F36CD502915602B0059BC24 /* SettingsScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenViewController.swift; sourceTree = "<group>"; };
 		0F36CD52291560A80059BC24 /* NotificationsScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsScreenViewController.swift; sourceTree = "<group>"; };
 		0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenFAB.swift; sourceTree = "<group>"; };
@@ -60,7 +58,7 @@
 		0F031B962929BA4D00055421 /* Navigation View */ = {
 			isa = PBXGroup;
 			children = (
-				0F031B972929BA6000055421 /* Navigation View.swift */,
+				0F031B972929BA6000055421 /* NavigationView.swift */,
 			);
 			path = "Navigation View";
 			sourceTree = "<group>";
@@ -98,13 +96,12 @@
 		0F36CD4D29155F560059BC24 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0F62CD092938847700374C63 /* HomeScreenMenuView.swift */,
 				0F031B962929BA4D00055421 /* Navigation View */,
 				0F4A5AE329243BDC007944F3 /* Page Controller */,
 				0FEE66092919E464004E2C93 /* Table View Cells */,
 				0F36CD54291562070059BC24 /* Buttons */,
 				0F2F37FD29318150005998AF /* HomeScreenViewController.swift */,
-				0F62CD092938847700374C63 /* HomeScreenMenuView.swift */,
-				0F36CD4E29155FDB0059BC24 /* HomeScreenModalViewController.swift */,
 				0F36CD502915602B0059BC24 /* SettingsScreenViewController.swift */,
 				0F36CD52291560A80059BC24 /* NotificationsScreenViewController.swift */,
 			);
@@ -212,11 +209,10 @@
 				0F36CD56291562C40059BC24 /* HomeScreenFAB.swift in Sources */,
 				0F36CD3829155B460059BC24 /* AppDelegate.swift in Sources */,
 				0F36CD512915602B0059BC24 /* SettingsScreenViewController.swift in Sources */,
-				0F031B982929BA6000055421 /* Navigation View.swift in Sources */,
+				0F031B982929BA6000055421 /* NavigationView.swift in Sources */,
 				0F031B9A2929BAF800055421 /* SettingsScreenTableViewCell.swift in Sources */,
 				0F36CD3A29155B460059BC24 /* SceneDelegate.swift in Sources */,
 				0FF08D93291C9C9800A7BB48 /* HomeScreenModalTableViewCell.swift in Sources */,
-				0F36CD4F29155FDB0059BC24 /* HomeScreenModalViewController.swift in Sources */,
 				0F6273EF293E5B3D00F5232B /* PageController.swift in Sources */,
 				0F031B9C2929BB1200055421 /* NotificationsScreenTableViewCell.swift in Sources */,
 				0F36CD53291560A80059BC24 /* NotificationsScreenViewController.swift in Sources */,
