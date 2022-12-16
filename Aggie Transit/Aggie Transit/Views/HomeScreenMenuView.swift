@@ -105,12 +105,18 @@ class HomeScreenMenuView: UIView {
                                         favoritesTableView = UITableView(frame: CGRect(x: 0, y: 0, width: tableViewWidth, height: tableViewHeight))
                                         allRoutesTableView = UITableView(frame: CGRect(x: 0, y: 0, width: tableViewWidth, height: tableViewHeight))
                                         if let recentsTableView = recentsTableView, let favoritesTableView = favoritesTableView, let allRoutesTableView = allRoutesTableView {
+                                            // register the cell
+                                            recentsTableView.register(HomeScreenModalTableViewCell.self, forCellReuseIdentifier: "homeScreenModalTableViewCell")
+                                            favoritesTableView.register(HomeScreenModalTableViewCell.self, forCellReuseIdentifier: "homeScreenModalTableViewCell")
+                                            allRoutesTableView.register(HomeScreenModalTableViewCell.self, forCellReuseIdentifier: "homeScreenModalTableViewCell")
                                             // configure the recents table view
                                             recentsTableView.dataSource = self
                                             recentsTableView.delegate = self
                                             recentsTableView.translatesAutoresizingMaskIntoConstraints = false
                                             recentsTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                                            
+                                            recentsTableView.rowHeight = 122
+                                            recentsTableView.separatorStyle = .none
+                                            recentsTableView.allowsSelection = false
                                             // constrain the recents table view
                                             recentsTableView.widthAnchor.constraint(equalToConstant: tableViewWidth).isActive = true
                                             recentsTableView.heightAnchor.constraint(equalToConstant: tableViewHeight).isActive = true
@@ -119,6 +125,9 @@ class HomeScreenMenuView: UIView {
                                             favoritesTableView.delegate = self
                                             favoritesTableView.translatesAutoresizingMaskIntoConstraints = false
                                             favoritesTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                                            favoritesTableView.rowHeight = 122
+                                            favoritesTableView.separatorStyle = .none
+                                            favoritesTableView.allowsSelection = false
                                             // constrain the favorites table view
                                             favoritesTableView.widthAnchor.constraint(equalToConstant: tableViewWidth).isActive = true
                                             favoritesTableView.heightAnchor.constraint(equalToConstant: tableViewHeight).isActive = true
@@ -127,7 +136,10 @@ class HomeScreenMenuView: UIView {
                                             allRoutesTableView.delegate = self
                                             allRoutesTableView.translatesAutoresizingMaskIntoConstraints = false
                                             allRoutesTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                                            // constrain the favorites table view
+                                            allRoutesTableView.rowHeight = 122
+                                            allRoutesTableView.separatorStyle = .none
+                                            allRoutesTableView.allowsSelection = false
+                                            // constrain the all routes table view
                                             allRoutesTableView.widthAnchor.constraint(equalToConstant: tableViewWidth).isActive = true
                                             allRoutesTableView.heightAnchor.constraint(equalToConstant: tableViewHeight).isActive = true
                                             // configure the table stackview
@@ -202,17 +214,29 @@ extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            if let width = width{
+          
                 if tableView == allRoutesTableView {
-                    return HomeScreenModalTableViewCell(style: .default, reuseIdentifier: "homeScreenModalTableViewCell", icon: "01", text: "Bonfire", cellColor: .bonfirePurple, width: width)
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
+                    cell.icon = "01"
+                    cell.text = "Bonfire"
+                    cell.cellColor = .bonfirePurple
+                    return cell
                 }
                 else if tableView == favoritesTableView {
-                    return HomeScreenModalTableViewCell(style: .default, reuseIdentifier: "homeScreenModalTableViewCell", icon: "⭐️", text: "Favorite Location", cellColor: .favoriteLocationGold, width: width)
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
+                    cell.icon = "⭐️"
+                    cell.text = "Favorite Location"
+                    cell.cellColor = .favoriteLocationGold
+                    return cell
                 }
                 else if tableView == recentsTableView {
-                    return HomeScreenModalTableViewCell(style: .default, reuseIdentifier: "homeScreenModalTableViewCell", icon: "📍", text: "Recent Location", cellColor: .recentLocationRed, width: width)
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
+                    cell.icon = "📍"
+                    cell.text = "Recent Location"
+                    cell.cellColor = .recentLocationRed
+                    return cell
                 }
-            }
+            
         
         return UITableViewCell()
     }

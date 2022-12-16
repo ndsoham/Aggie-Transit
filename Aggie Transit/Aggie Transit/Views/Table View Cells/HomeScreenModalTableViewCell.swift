@@ -1,86 +1,103 @@
 //
-//  HomeScreenModalTableViewCell.swift
+//  Unnamed.swift
 //  Aggie Transit
 //
-//  Created by Soham Nagawanshi on 11/9/22.
+//  Created by Soham Nagawanshi on 12/16/22.
 //
 
 import UIKit
 
 class HomeScreenModalTableViewCell: UITableViewCell {
-    let icon: String
-    let text: String
-    let cellColor: cellBackgroundColor
-    var width: Double?
-    var height: Double?
-    var viewHeight: Double?
-    var viewWidth: Double?
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-    init(style: UITableViewCell.CellStyle, reuseIdentifier: String, icon: String, text: String, cellColor: cellBackgroundColor, width: Double, height: Double = 122) {
-        self.icon = icon
-        self.text = text
-        self.cellColor = cellColor
+    private let cornerRadius = 36.75
+    private let borderWidth = 2.0
+    private var width: Double?
+    private var height: Double?
+    private var view: UIView?
+    private var viewHeight: Double?
+    private var viewWidth: Double?
+    private var margins: UILayoutGuide?
+    private var viewMargins: UILayoutGuide?
+    private var iconLabel: UILabel?
+    private var customTextLabel: UILabel?
+    private var stackView: UIStackView?
+    var icon: String?
+    var text: String?
+    var cellColor: cellBackgroundColor?
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.contentView.frame = CGRect(x: 0, y: 0, width: width, height: height)
         layoutSubviews()
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    required init?(coder: NSCoder){
+        fatalError()
     }
-    
     override func layoutSubviews() {
-        // scale height and width appropriately based on modal's height and width
-            let cornerRadius = 36.75
-            // add a subview to the content view and shape it accordingly
+        // access the views width and height
         width = self.contentView.frame.width
         height = self.contentView.frame.height
-            if let width = width, let height = height{
-                viewHeight = 86.25 * (122/height)
-                viewWidth = 355 * (375/width)
-                if let viewHeight = viewHeight, let viewWidth = viewWidth{
-                    let view = UIView(frame: CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight))
+        self.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+        if let width = width, let height = height {
+            // add a subview to the view and shape it accordingly
+            viewHeight = 86.25 * (122/height)
+            viewWidth = 355 * (375/width)
+            if let viewHeight = viewHeight, let viewWidth = viewWidth {
+                view = UIView(frame: CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight))
+                if let view = view, let cellColor = cellColor {
+                    // configure the view
                     view.layer.cornerRadius = cornerRadius
-                    view.layer.borderWidth = 2
+                    view.layer.borderWidth = borderWidth
                     view.layer.borderColor = UIColor(named: "borderColor")?.cgColor
-                    view.backgroundColor = UIColor(named: self.cellColor.rawValue)
-                    // add view to hierarchy and constrain it
-                    let contentViewMargins = self.contentView.safeAreaLayoutGuide
-                    self.contentView.addSubview(view)
-                    view.heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
-                    view.widthAnchor.constraint(equalToConstant: viewWidth).isActive = true
-                    view.centerXAnchor.constraint(equalTo: contentViewMargins.centerXAnchor).isActive = true
-                    view.centerYAnchor.constraint(equalTo: contentViewMargins.centerYAnchor).isActive = true
+                    view.backgroundColor = UIColor(named: cellColor.rawValue)
                     view.translatesAutoresizingMaskIntoConstraints = false
-                    // create two labels and embed in horizontal stack view
-                    let iconLabel = UILabel()
-                    iconLabel.text = self.icon
-                    iconLabel.textColor = UIColor(named: "modalTableCellTextColor")
-                    let textLabel = UILabel()
-                    textLabel.text = self.text
-                    textLabel.textColor = UIColor(named: "modalTableCellTextColor")
-                    let stackview = UIStackView()
-                    stackview.addArrangedSubview(iconLabel)
-                    stackview.addArrangedSubview(textLabel)
-                    stackview.alignment = .leading
-                    stackview.distribution = .equalCentering
-                    stackview.axis = .horizontal
-                    stackview.spacing = 8
-                    // add stackview to view hierarchy and add constraints
-                    view.addSubview(stackview)
-                    let margins = view.layoutMarginsGuide
-                    stackview.leadingAnchor.constraint(equalTo: margins.leadingAnchor,constant: 10).isActive = true
-                    stackview.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
-                    stackview.translatesAutoresizingMaskIntoConstraints = false
+                    // add to the view hierarchy
+                    self.contentView.addSubview(view)
+                    // add constraints
+                    margins = self.safeAreaLayoutGuide
+                    if let margins = margins {
+                        view.heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
+                        view.widthAnchor.constraint(equalToConstant: viewWidth).isActive = true
+                        view.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
+                        view.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
+                    }
+                    // create stack view
+                    stackView = UIStackView()
+                    if let stackView = stackView{
+                    // configure stackView
+                        stackView.alignment = .leading
+                        stackView.distribution = .equalCentering
+                        stackView.axis = .horizontal
+                        stackView.spacing = 8
+                        stackView.translatesAutoresizingMaskIntoConstraints = false
+                        // add stackview to view hierarchy
+                        view.addSubview(stackView)
+                        // add constraints
+                        viewMargins = view.safeAreaLayoutGuide
+                        if let viewMargins = viewMargins {
+                            stackView.leadingAnchor.constraint(equalTo: viewMargins.leadingAnchor,constant: 10).isActive = true
+                            stackView.centerYAnchor.constraint(equalTo: viewMargins.centerYAnchor).isActive = true
+                        }
+                        // create icon label and text label
+                        iconLabel = UILabel()
+                        customTextLabel = UILabel()
+                        if let iconLabel = iconLabel, let customTextLabel = customTextLabel, let icon = icon, let text = text {
+                            iconLabel.text = icon
+                            iconLabel.textColor = UIColor(named: "modalTableCellTextColor")
+                            customTextLabel.text = text
+                            customTextLabel.textColor = UIColor(named: "modalTableCellTextColor")
+                            // add to view hierarchy
+                            stackView.addArrangedSubview(iconLabel)
+                            stackView.addArrangedSubview(customTextLabel)
+                            
+                        }
+                    }
+                    
                 }
             }
-        
+            
         }
-}
+        
+    }
 
+}
 enum cellBackgroundColor: String {
     case all = "all"
     case reveilleRed = "reveilleRed"

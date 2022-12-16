@@ -96,6 +96,9 @@ class NotificationsScreenViewController: UIViewController {
                                         tableView.layer.cornerRadius = 15
                                         tableView.translatesAutoresizingMaskIntoConstraints = false
                                         tableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                                        tableView.register(NotificationsScreenTableViewCell.self, forCellReuseIdentifier: "notificationsScreenViewControllerTableViewCell")
+                                        tableView.allowsSelection = false
+                                        tableView.separatorStyle = .none
                                         // add the table view to the view hierarchy
                                         tableSuperView.addSubview(tableView)
                                         // constrain the table view
@@ -129,8 +132,16 @@ extension NotificationsScreenViewController: UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return NotificationsScreenTableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "notificationsScreenViewControllerTableViewCell") as! NotificationsScreenTableViewCell
+        cell.notificationsHeaderText = "Notification"
+        cell.notificationsTextContent = "Notification Content"
+        return cell
     }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 112.31
+    }
+   
+    
     
     
 }

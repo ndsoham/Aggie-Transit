@@ -122,6 +122,9 @@ class SettingsScreenViewController: UIViewController {
                                             tableView.layer.cornerRadius = 15
                                             tableView.translatesAutoresizingMaskIntoConstraints = false
                                             tableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                                            tableView.allowsSelection = false
+                                            // register table cell
+                                            tableView.register(SettingsScreenTableViewCell.self, forCellReuseIdentifier: "settingsScreenTableViewCell")
                                             // add the table view to the view hierarchy
                                             tableSuperView.addSubview(tableView)
                                             // constrain the table view
@@ -149,16 +152,15 @@ extension SettingsScreenViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let width = width {
-            let cell = SettingsScreenTableViewCell(style: .default, reuseIdentifier: "settingsScreenTableViewCell", settingName: "Settings", settingIcon: "house", width: width)
-                return cell
-        }
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "settingsScreenTableViewCell") as! SettingsScreenTableViewCell
+        cell.settingName = "Settings"
+        return cell
         
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-            return 57.5
+        return 57.5
     }
+    
     
     
 }

@@ -21,7 +21,7 @@
 		0F36CD56291562C40059BC24 /* HomeScreenFAB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */; };
 		0F6273EF293E5B3D00F5232B /* PageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6273EE293E5B3D00F5232B /* PageController.swift */; };
 		0F62CD0A2938847700374C63 /* HomeScreenMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F62CD092938847700374C63 /* HomeScreenMenuView.swift */; };
-		0FF08D93291C9C9800A7BB48 /* HomeScreenModalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF08D92291C9C9800A7BB48 /* HomeScreenModalTableViewCell.swift */; };
+		0F770040294CB243008C421A /* HomeScreenModalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F77003F294CB243008C421A /* HomeScreenModalTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,7 +41,7 @@
 		0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenFAB.swift; sourceTree = "<group>"; };
 		0F6273EE293E5B3D00F5232B /* PageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageController.swift; sourceTree = "<group>"; };
 		0F62CD092938847700374C63 /* HomeScreenMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenMenuView.swift; sourceTree = "<group>"; };
-		0FF08D92291C9C9800A7BB48 /* HomeScreenModalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenModalTableViewCell.swift; sourceTree = "<group>"; };
+		0F77003F294CB243008C421A /* HomeScreenModalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenModalTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,7 +127,7 @@
 		0FEE66092919E464004E2C93 /* Table View Cells */ = {
 			isa = PBXGroup;
 			children = (
-				0FF08D92291C9C9800A7BB48 /* HomeScreenModalTableViewCell.swift */,
+				0F77003F294CB243008C421A /* HomeScreenModalTableViewCell.swift */,
 				0F031B992929BAF800055421 /* SettingsScreenTableViewCell.swift */,
 				0F031B9B2929BB1200055421 /* NotificationsScreenTableViewCell.swift */,
 			);
@@ -212,7 +212,7 @@
 				0F031B982929BA6000055421 /* NavigationView.swift in Sources */,
 				0F031B9A2929BAF800055421 /* SettingsScreenTableViewCell.swift in Sources */,
 				0F36CD3A29155B460059BC24 /* SceneDelegate.swift in Sources */,
-				0FF08D93291C9C9800A7BB48 /* HomeScreenModalTableViewCell.swift in Sources */,
+				0F770040294CB243008C421A /* HomeScreenModalTableViewCell.swift in Sources */,
 				0F6273EF293E5B3D00F5232B /* PageController.swift in Sources */,
 				0F031B9C2929BB1200055421 /* NotificationsScreenTableViewCell.swift in Sources */,
 				0F36CD53291560A80059BC24 /* NotificationsScreenViewController.swift in Sources */,

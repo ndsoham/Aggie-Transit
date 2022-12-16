@@ -11,8 +11,8 @@ class SettingsScreenTableViewCell: UITableViewCell {
     private var icon: UIImageView?
     private var settingLabel: UILabel?
     private var stackView: UIStackView?
-    private let settingName: String
-    private let settingIcon: String
+    public var settingName: String?
+    public var settingIcon: String?
     private var cellHeight: Double?
     private var cellWidth: Double?
     private var stackViewSpacing: Double?
@@ -22,11 +22,8 @@ class SettingsScreenTableViewCell: UITableViewCell {
     private var labelHeight: Double?
     private var labelWidth: Double?
 
-    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, settingName: String, settingIcon: String, width: Double) {
-        self.settingName = settingName
-        self.settingIcon = settingIcon
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.contentView.frame = CGRect(x: 0, y: 0, width: width, height: 57.5)
         layoutSubviews()
     }
     
@@ -37,7 +34,9 @@ class SettingsScreenTableViewCell: UITableViewCell {
         // scale the height appropriately
         cellHeight = self.contentView.frame.height
         cellWidth = self.contentView.frame.width
-        self.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+        self.contentView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+        self.layer.borderColor = UIColor(named: "borderColor")?.cgColor
+        self.layer.borderWidth = 0.5
         if let cellHeight = cellHeight, let cellWidth = cellWidth {
             // configure the stackview
             stackViewSpacing = 10 * (375/cellWidth)
