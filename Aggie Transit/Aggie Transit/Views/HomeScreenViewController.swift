@@ -30,6 +30,7 @@ class HomeScreenViewController: UIViewController {
         super.viewDidLoad()
         layoutSubviews()
     }
+    
     func layoutSubviews() {
         // decide the height and width of items based on view size
         safeAreaHeight = self.view.safeAreaInsets.bottom + self.view.safeAreaInsets.top

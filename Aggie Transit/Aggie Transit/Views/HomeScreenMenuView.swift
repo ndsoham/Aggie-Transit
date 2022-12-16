@@ -9,29 +9,28 @@ import Foundation
 import UIKit
 
 class HomeScreenMenuView: UIView {
-    var searchBar: UISearchBar?
-    var recentsTableView: UITableView?
-    var favoritesTableView: UITableView?
-    var allRoutesTableView: UITableView?
-    var scrollView: UIScrollView?
-    var height: Double?
-    var width: Double?
-    var searchBarHeight: Double?
-    var searchBarWidth: Double?
-    var tableViewHeight: Double?
-    var tableViewWidth: Double?
-    var pageControllerHeight: Double?
-    var pageControllerWidth: Double?
-    var scrollViewHeight: Double?
-    var scrollViewWidth: Double?
-    var superViewStack: UIStackView?
-    var tableViewStack: UIStackView?
-    var tableViewStackHeight: Double?
-    var tableViewStackWidth: Double?
-    var scrollMargins: UILayoutGuide?
-    var viewMargins: UILayoutGuide?
-    var pageController: PageController?
-    
+    private var searchBar: UISearchBar?
+    private var recentsTableView: UITableView?
+    private var favoritesTableView: UITableView?
+    private var allRoutesTableView: UITableView?
+    private var scrollView: UIScrollView?
+    private var height: Double?
+    private var width: Double?
+    private var searchBarHeight: Double?
+    private var searchBarWidth: Double?
+    private var tableViewHeight: Double?
+    private var tableViewWidth: Double?
+    private var pageControllerHeight: Double?
+    private var pageControllerWidth: Double?
+    private var scrollViewHeight: Double?
+    private var scrollViewWidth: Double?
+    private var superViewStack: UIStackView?
+    private var tableViewStack: UIStackView?
+    private var tableViewStackHeight: Double?
+    private var tableViewStackWidth: Double?
+    private var scrollMargins: UILayoutGuide?
+    private var viewMargins: UILayoutGuide?
+    private var pageController: UISegmentedControl?
     override init(frame: CGRect){
         super.init(frame: frame)
         layoutSubviews()
@@ -40,6 +39,7 @@ class HomeScreenMenuView: UIView {
     required init?(coder: NSCoder){
         fatalError("init(coder:) has not been implemented")
     }
+    
     override func layoutSubviews(){
         height = self.frame.height - self.safeAreaInsets.top - self.safeAreaInsets.bottom
         width = self.frame.width
@@ -69,14 +69,19 @@ class HomeScreenMenuView: UIView {
                     searchBar.widthAnchor.constraint(equalToConstant: searchBarWidth).isActive = true
                     searchBar.heightAnchor.constraint(equalToConstant: searchBarHeight).isActive = true
                     // configure the page controller
-                    pageControllerHeight = 38 * (height/200)
-                    pageControllerWidth = width
+                    pageControllerHeight = 24 * (height/200)
+                    pageControllerWidth = width - 16
                     if let pageControllerHeight = pageControllerHeight, let pageControllerWidth = pageControllerWidth {
-                        pageController = PageController(frame: CGRect(x: 0,y: 0,width: pageControllerWidth,height: pageControllerHeight))
+                        pageController = UISegmentedControl(frame: CGRect(x: 0, y: 0, width: pageControllerWidth, height: pageControllerHeight))
                         if let pageController = pageController{
+                            pageController.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                            pageController.insertSegment(withTitle: "Recents", at: 0, animated: false)
+                            pageController.insertSegment(withTitle: "Favorites", at: 1, animated: false)
+                            pageController.insertSegment(withTitle: "All Routes", at: 2, animated: false)
+                            pageController.selectedSegmentIndex = 0
                             pageController.translatesAutoresizingMaskIntoConstraints = false
-                            pageController.delegate = self
                             pageController.isUserInteractionEnabled = true
+                            pageController.addTarget(self, action: #selector(handleControlPageChanged), for: .valueChanged)
                             // constrain the page controller
                             pageController.widthAnchor.constraint(equalToConstant: pageControllerWidth).isActive = true
                             pageController.heightAnchor.constraint(equalToConstant: pageControllerHeight).isActive = true
@@ -173,7 +178,7 @@ class HomeScreenMenuView: UIView {
                                                     if let superViewStack = superViewStack{
                                                         superViewStack.axis = .vertical
                                                         superViewStack.spacing = 0
-                                                        superViewStack.alignment = .top
+                                                        superViewStack.alignment = .center
                                                         superViewStack.distribution = .fill
                                                         superViewStack.isUserInteractionEnabled = true
                                                         superViewStack.translatesAutoresizingMaskIntoConstraints = false
@@ -253,14 +258,20 @@ extension UIScrollView {
     }
 }
 
-extension HomeScreenMenuView: PageControllerDelegate {
-    func handlePageChanged(sender: UIButton) {
+extension HomeScreenMenuView {
+
+    @objc func handleControlPageChanged(sender: UISegmentedControl){
         if let scrollView = scrollView {
-            let xPos = scrollView.frame.width * Double(sender.tag)
+            let xPos = scrollView.frame.width * Double(sender.selectedSegmentIndex)
             let yPos = 0.0
             scrollView.scrollRectToVisible(CGRect(x: xPos, y: yPos, width: scrollView.frame.width, height: scrollView.frame.height), animated: true)
         }
     }
     
-    
+}
+
+extension UISegmentedControl: UIScrollViewDelegate {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.selectedSegmentIndex = scrollView.currentPage
+    }
 }
