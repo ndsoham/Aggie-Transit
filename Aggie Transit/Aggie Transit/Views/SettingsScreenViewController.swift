@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 class SettingsScreenViewController: UIViewController {
-    private var navigationView: NavigationView?
     private var searchBar: UISearchBar?
     private var tableSuperView: UIView?
     private var tableView: UITableView?
@@ -26,11 +25,17 @@ class SettingsScreenViewController: UIViewController {
     private var searchBarHeight:Double?
     private var tableSuperViewWidth: Double?
     private var tableSuperViewHeight: Double?
+    private var navigationBar: UINavigationBar?
     override func viewDidLoad() {
         layoutSubviews()
         super.viewDidLoad()
     }
     func layoutSubviews(){
+        // configure navigation bar
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.tintColor = UIColor(named: "textColor")
+            navigationItem.title = "Settings"
+        }
         safeAreaHeight = self.view.safeAreaInsets.bottom + self.view.safeAreaInsets.top
         self.view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
         if let safeAreaHeight = safeAreaHeight{
@@ -59,21 +64,6 @@ class SettingsScreenViewController: UIViewController {
                             stackView.leadingAnchor.constraint(equalTo: viewControllerMargins.leadingAnchor).isActive = true
                             stackView.trailingAnchor.constraint(equalTo: viewControllerMargins.trailingAnchor).isActive = true
                         }
-                        // configure the navigation view
-                        navigationViewWidth = width - padding
-                        navigationViewHeight = 44 * (height/812)
-                        if let navigationViewWidth = navigationViewWidth, let navigationViewHeight = navigationViewHeight{
-                            navigationView = NavigationView(frame: CGRect(x: 0, y: 0, width: navigationViewWidth, height: navigationViewHeight), screenName: "Settings")
-                            if let navigationView = navigationView{
-                                
-                                navigationView.translatesAutoresizingMaskIntoConstraints = false
-                                navigationView.delegate = self
-                                // constrain the navigation view
-                                navigationView.widthAnchor.constraint(equalToConstant: navigationViewWidth).isActive = true
-                                navigationView.heightAnchor.constraint(equalToConstant: navigationViewHeight).isActive = true
-                                // add navigation view to the stackview
-                                stackView.addArrangedSubview(navigationView)
-                            }
                             // configure the searchbar
                              searchBarWidth = width - padding
                              searchBarHeight = 52 * (812/height)
@@ -102,7 +92,7 @@ class SettingsScreenViewController: UIViewController {
                                 }
                                 // configure table superview
                                  tableSuperViewWidth = searchBarWidth - 16
-                                 tableSuperViewHeight = height - searchBarHeight - navigationViewHeight - padding
+                                 tableSuperViewHeight = height - searchBarHeight - padding
                                 if let tableSuperViewWidth = tableSuperViewWidth, let tableSuperViewHeight = tableSuperViewHeight{
                                     tableSuperView = UIView(frame: CGRect(x: 0, y: 0, width: tableSuperViewWidth, height: tableSuperViewHeight))
                                     if let tableSuperView = tableSuperView{
@@ -144,7 +134,7 @@ class SettingsScreenViewController: UIViewController {
         }
         
     }
-}
+
 
 extension SettingsScreenViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -167,7 +157,7 @@ extension SettingsScreenViewController: UITableViewDelegate, UITableViewDataSour
 
 extension SettingsScreenViewController: BackButtonDelegate {
     func handleBackButtonPressed() {
-        self.dismiss(animated: false)
+        self.dismiss(animated: true)
     }
     
     

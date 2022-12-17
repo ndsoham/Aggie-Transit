@@ -57,7 +57,9 @@ class HomeScreenMenuView: UIView {
                     searchBar.translatesAutoresizingMaskIntoConstraints = false
                     if let searchField = searchBar.value(forKey: "searchField") as? UITextField {
                         if let borderColor = UIColor(named: "borderColor") {
-                            searchField.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+//                            searchField.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                            searchField.tintColor = .clear
+                            searchField.backgroundColor = .clear
                             searchField.layer.borderColor = borderColor.cgColor
                             searchField.layer.borderWidth = 2
                             searchField.layer.cornerRadius = 18

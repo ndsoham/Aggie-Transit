@@ -96,7 +96,6 @@
 			children = (
 				0F62CD092938847700374C63 /* HomeScreenMenuView.swift */,
 				0F031B962929BA4D00055421 /* Navigation View */,
-				0F4A5AE329243BDC007944F3 /* Page Controller */,
 				0FEE66092919E464004E2C93 /* Table View Cells */,
 				0F36CD54291562070059BC24 /* Buttons */,
 				0F2F37FD29318150005998AF /* HomeScreenViewController.swift */,
@@ -112,13 +111,6 @@
 				0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */,
 			);
 			path = Buttons;
-			sourceTree = "<group>";
-		};
-		0F4A5AE329243BDC007944F3 /* Page Controller */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Page Controller";
 			sourceTree = "<group>";
 		};
 		0FEE66092919E464004E2C93 /* Table View Cells */ = {

@@ -12,7 +12,6 @@ class NotificationsScreenViewController: UIViewController {
     private var tableSuperView: UIView?
     private var tableView: UITableView?
     private var stackView: UIStackView?
-    private var navigationView: NavigationView?
     private var width: Double?
     private var height: Double?
     private var padding: Double?
@@ -23,11 +22,19 @@ class NotificationsScreenViewController: UIViewController {
     private var navigationViewHeight: Double?
     private var tableSuperViewWidth: Double?
     private var tableSuperViewHeight: Double?
+    private var navigationBar: UINavigationBar?
     override func viewDidLoad() {
         layoutSubviews()
         super.viewDidLoad()
     }
     func layoutSubviews() {
+        // configure navigation bar
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.tintColor = UIColor(named: "textColor")
+            navigationBar.compactAppearance = UINavigationBarAppearance()
+            navigationBar.prefersLargeTitles = true
+            navigationItem.title = "Notifications"
+        }
         safeAreaHeight = self.view.safeAreaInsets.bottom + self.view.safeAreaInsets.top
         self.view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
         if let safeAreaHeight = safeAreaHeight{
@@ -52,31 +59,15 @@ class NotificationsScreenViewController: UIViewController {
                         viewControllerMargins = self.view.safeAreaLayoutGuide
                         stackViewBottomMargin = padding
                         if let viewControllerMargins = viewControllerMargins, let stackViewBottomMargin = stackViewBottomMargin {
-                            stackView.topAnchor.constraint(equalTo: viewControllerMargins.topAnchor).isActive = true
+                            stackView.topAnchor.constraint(equalTo: viewControllerMargins.topAnchor, constant: stackViewBottomMargin).isActive = true
                             stackView.bottomAnchor.constraint(equalTo: viewControllerMargins.bottomAnchor, constant: -stackViewBottomMargin).isActive = true
                             stackView.leadingAnchor.constraint(equalTo: viewControllerMargins.leadingAnchor).isActive = true
                             stackView.trailingAnchor.constraint(equalTo: viewControllerMargins.trailingAnchor).isActive = true
                         }
-                        // configure the navigation view
-                        navigationViewWidth = width - padding
-                        navigationViewHeight = 44 * (height/812)
-                        
-                        if let navigationViewWidth = navigationViewWidth, let navigationViewHeight = navigationViewHeight {
-                            navigationView = NavigationView(frame: CGRect(x: 0, y: 0, width: navigationViewWidth, height: navigationViewHeight), screenName: "Notifications")
 
-                            if let navigationView = navigationView {
-                                // configure the navigation view
-                                navigationView.translatesAutoresizingMaskIntoConstraints = false
-                                navigationView.delegate = self
-                                // constrain the navigation view
-                                navigationView.widthAnchor.constraint(equalToConstant: navigationViewWidth).isActive = true
-                                navigationView.heightAnchor.constraint(equalToConstant: navigationViewHeight).isActive = true
-                                // add to view hierarchy
-                                stackView.addArrangedSubview(navigationView)
-                            }
                             // configure table super view
-                            tableSuperViewWidth = navigationViewWidth - 16
-                            tableSuperViewHeight = height - navigationViewHeight - padding
+                            tableSuperViewWidth = width - 16
+                            tableSuperViewHeight = height - padding
                             if let tableSuperViewWidth = tableSuperViewWidth, let tableSuperViewHeight = tableSuperViewHeight {
                                 tableSuperView = UIView(frame: CGRect(x: 0, y: 0, width: tableSuperViewWidth, height: tableSuperViewHeight))
                                 if let tableSuperView = tableSuperView {
@@ -120,11 +111,10 @@ class NotificationsScreenViewController: UIViewController {
         
     }
     
-}
 
 extension NotificationsScreenViewController: UITableViewDataSource, UITableViewDelegate, BackButtonDelegate{
     func handleBackButtonPressed() {
-        self.dismiss(animated: false)
+        self.dismiss(animated: true)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

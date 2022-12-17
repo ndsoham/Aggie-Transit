@@ -10,28 +10,48 @@ import UIKit
 import MapKit
 
 class HomeScreenViewController: UIViewController {
-    var safeAreaHeight:Double?
-    var height: Double?
-    var width: Double?
-    var buttonSpacing = 0.0
-    var fabHeight: Double?
-    var fabWidth: Double?
-    var map: MKMapView?
-    var superViewMargins: UILayoutGuide?
-    var homeScreenNotificationsFAB: HomeScreenFAB?
-    var homeScreenSettingsFAB: HomeScreenFAB?
-    let buttonStack = UIStackView()
-    var mapMargins: UILayoutGuide?
-    var homeScreenMenu: HomeScreenMenuView?
-    var homeScreenMenuHeight: Double?
-    var homeScreenMenuWidth: Double?
+    private var safeAreaHeight:Double?
+    private var height: Double?
+    private var width: Double?
+    private var buttonSpacing = 0.0
+    private var fabHeight: Double?
+    private var fabWidth: Double?
+    private var map: MKMapView?
+    private var superViewMargins: UILayoutGuide?
+    private var homeScreenNotificationsFAB: HomeScreenFAB?
+    private var homeScreenSettingsFAB: HomeScreenFAB?
+    private var buttonStack: UIStackView?
+    private var mapMargins: UILayoutGuide?
+    private var homeScreenMenu: HomeScreenMenuView?
+    private var homeScreenMenuHeight: Double?
+    private var homeScreenMenuWidth: Double?
     private var animationDuration:TimeInterval = 0.5
+    private var navigationBar: UINavigationBar?
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        // hide the navigation bar
+        if let navigationController = navigationController {
+            navigationController.setNavigationBarHidden(true, animated: false)
+        }
+        super.viewWillAppear(animated)
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        // show the navigation bar
+        if let navigationController = navigationController {
+            navigationController.setNavigationBarHidden(false, animated: true)
+        }
+        super.viewWillDisappear(animated)
+    }
     func layoutSubviews() {
+        // configure navigation bar
+        if let navigationBar = navigationController?.navigationBar, let _ = navigationController {
+            navigationBar.barTintColor = UIColor(named: "textColor")
+            navigationBar.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+            navigationBar.prefersLargeTitles = true
+        }
         // decide the height and width of items based on view size
         safeAreaHeight = self.view.safeAreaInsets.bottom + self.view.safeAreaInsets.top
         if let safeAreaHeight = safeAreaHeight{
@@ -58,44 +78,47 @@ class HomeScreenViewController: UIViewController {
                     }
                 }
                 // configure the buttons
-                fabHeight = 54.85 * (height/812)
-                fabWidth = fabHeight
-                    if let fabHeight = fabHeight, let fabWidth  = fabWidth{
-                        // configure settings button
-                    homeScreenSettingsFAB = HomeScreenFAB(frame:  CGRect(x: 0, y: 0, width: fabWidth, height: fabHeight), backgroundImage: .settings, buttonName: .settings)
-                    if let homeScreenSettingsFAB = homeScreenSettingsFAB{
-                        homeScreenSettingsFAB.translatesAutoresizingMaskIntoConstraints = false
-                            // constrain settings button
-                        homeScreenSettingsFAB.widthAnchor.constraint(equalToConstant: fabWidth).isActive = true
-                        homeScreenSettingsFAB.heightAnchor.constraint(equalToConstant: fabHeight).isActive = true
+                buttonStack = UIStackView()
+                if let buttonStack = buttonStack{
+                    fabHeight = 54.85 * (height/812)
+                    fabWidth = fabHeight
+                        if let fabHeight = fabHeight, let fabWidth  = fabWidth{
+                            // configure settings button
+                        homeScreenSettingsFAB = HomeScreenFAB(frame:  CGRect(x: 0, y: 0, width: fabWidth, height: fabHeight), backgroundImage: .settings, buttonName: .settings)
+                        if let homeScreenSettingsFAB = homeScreenSettingsFAB{
+                            homeScreenSettingsFAB.translatesAutoresizingMaskIntoConstraints = false
+                                // constrain settings button
+                            homeScreenSettingsFAB.widthAnchor.constraint(equalToConstant: fabWidth).isActive = true
+                            homeScreenSettingsFAB.heightAnchor.constraint(equalToConstant: fabHeight).isActive = true
+                        }
+                            // configure notifications button
+                        homeScreenNotificationsFAB = HomeScreenFAB(frame: CGRect(x: 0, y: 0, width: fabWidth, height: fabHeight), backgroundImage: .notifications, buttonName: .notifications)
+                        if let homeScreenNotificationsFAB = homeScreenNotificationsFAB, let homeScreenSettingsFAB = homeScreenSettingsFAB{
+                            homeScreenNotificationsFAB.translatesAutoresizingMaskIntoConstraints = false
+                                // constrain the notifications button
+                            homeScreenNotificationsFAB.widthAnchor.constraint(equalToConstant: fabWidth).isActive = true
+                            homeScreenNotificationsFAB.heightAnchor.constraint(equalToConstant: fabHeight).isActive = true
+                            // add event handlers to the buttons
+                            homeScreenSettingsFAB.addTarget(self, action: #selector(handleButtonPress), for: .touchUpInside)
+                            homeScreenNotificationsFAB.addTarget(self, action: #selector(handleButtonPress), for: .touchUpInside)
+                            // add the buttons to a stackview
+                            buttonStack.addArrangedSubview(homeScreenNotificationsFAB)
+                            buttonStack.addArrangedSubview(homeScreenSettingsFAB)
+                        }
+                        }
+                    // configure the stackview
+                    buttonStack.axis = .vertical
+                    buttonStack.spacing = buttonSpacing
+                    buttonStack.alignment = .center
+                    buttonStack.translatesAutoresizingMaskIntoConstraints = false
+                    // add the button stack to the view hierarchy
+                    map?.addSubview(buttonStack)
+                    // constrain the button stack
+                    mapMargins = map?.safeAreaLayoutGuide
+                    if let mapMargins = mapMargins{
+                        buttonStack.trailingAnchor.constraint(equalTo: mapMargins.trailingAnchor, constant: -10).isActive = true
+                        buttonStack.topAnchor.constraint(equalTo: mapMargins.topAnchor,constant: 10).isActive = true
                     }
-                        // configure notifications button
-                    homeScreenNotificationsFAB = HomeScreenFAB(frame: CGRect(x: 0, y: 0, width: fabWidth, height: fabHeight), backgroundImage: .notifications, buttonName: .notifications)
-                    if let homeScreenNotificationsFAB = homeScreenNotificationsFAB, let homeScreenSettingsFAB = homeScreenSettingsFAB{
-                        homeScreenNotificationsFAB.translatesAutoresizingMaskIntoConstraints = false
-                            // constrain the notifications button
-                        homeScreenNotificationsFAB.widthAnchor.constraint(equalToConstant: fabWidth).isActive = true
-                        homeScreenNotificationsFAB.heightAnchor.constraint(equalToConstant: fabHeight).isActive = true
-                        // add event handlers to the buttons
-                        homeScreenSettingsFAB.addTarget(self, action: #selector(handleButtonPress), for: .touchUpInside)
-                        homeScreenNotificationsFAB.addTarget(self, action: #selector(handleButtonPress), for: .touchUpInside)
-                        // add the buttons to a stackview
-                        buttonStack.addArrangedSubview(homeScreenNotificationsFAB)
-                        buttonStack.addArrangedSubview(homeScreenSettingsFAB)
-                    }
-                    }
-                // configure the stackview
-                buttonStack.axis = .vertical
-                buttonStack.spacing = buttonSpacing
-                buttonStack.alignment = .center
-                buttonStack.translatesAutoresizingMaskIntoConstraints = false
-                // add the button stack to the view hierarchy
-                map?.addSubview(buttonStack)
-                // constrain the button stack
-                mapMargins = map?.safeAreaLayoutGuide
-                if let mapMargins = mapMargins{
-                    buttonStack.trailingAnchor.constraint(equalTo: mapMargins.trailingAnchor, constant: -10).isActive = true
-                    buttonStack.topAnchor.constraint(equalTo: mapMargins.topAnchor,constant: 10).isActive = true
                 }
                 // configure home screen menu view
                 homeScreenMenuHeight = 200 * (height/812)
@@ -135,43 +158,23 @@ class HomeScreenViewController: UIViewController {
         }
     }
     func presentSettingsScreen() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let settingsViewController = storyboard.instantiateViewController(withIdentifier: "SettingsScreenViewController")
-        settingsViewController.modalPresentationStyle = .custom
-        settingsViewController.transitioningDelegate = self
-        self.present(settingsViewController, animated: false)
+        if let navigationController = navigationController{
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let settingsViewController = storyboard.instantiateViewController(withIdentifier: "SettingsScreenViewController") as! SettingsScreenViewController
+            navigationController.pushViewController(settingsViewController, animated: true)
+        }
     }
     func presentNotificationsScreen() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let notificationsViewController = storyboard.instantiateViewController(withIdentifier: "NotificationsScreenViewController")
-        notificationsViewController.modalPresentationStyle = .custom
-        notificationsViewController.transitioningDelegate = self
-        self.present(notificationsViewController, animated: false)
+        if let navigationController = navigationController{
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let notificationsViewController = storyboard.instantiateViewController(withIdentifier: "NotificationsScreenViewController") as! NotificationsScreenViewController
+            navigationController.pushViewController(notificationsViewController, animated: true)
+        }
     }
 }
 
-extension HomeScreenViewController: UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning {
-    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return animationDuration
-    }
-    
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        guard let toView = transitionContext.view(forKey: .to) else {
-            transitionContext.completeTransition(false)
-            return
-        }
-        let containerView = transitionContext.containerView
-        containerView.addSubview(toView)
-        
-        let bounds = containerView.bounds
-        toView.frame = bounds.offsetBy(dx: bounds.width, dy: 0)
-        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: animationDuration, delay: 0, options: .curveEaseIn) {
-            toView.frame = bounds
-        }
-    }
-    
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return self
-    }
+
+extension HomeScreenViewController {
+  
 }
 
