@@ -31,6 +31,7 @@ class HomeScreenMenuView: UIView {
     private var scrollMargins: UILayoutGuide?
     private var viewMargins: UILayoutGuide?
     private var pageController: UISegmentedControl?
+    private var stackViewSpacing: Double?
     override init(frame: CGRect){
         super.init(frame: frame)
         layoutSubviews()
@@ -54,17 +55,14 @@ class HomeScreenMenuView: UIView {
                 if let searchBar = searchBar {
                     searchBar.placeholder = "Memorial Student Center (MSC)"
                     searchBar.searchBarStyle = .minimal
+                    searchBar.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                     searchBar.translatesAutoresizingMaskIntoConstraints = false
                     if let searchField = searchBar.value(forKey: "searchField") as? UITextField {
-                        if let borderColor = UIColor(named: "borderColor") {
-//                            searchField.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                            searchField.tintColor = .clear
-                            searchField.backgroundColor = .clear
-                            searchField.layer.borderColor = borderColor.cgColor
-                            searchField.layer.borderWidth = 2
-                            searchField.layer.cornerRadius = 18
-                            searchBar.isTranslucent = false
-                        }
+                        searchField.textColor = UIColor(named: "textColor")
+                        searchField.layer.borderWidth = 2
+                        searchField.clipsToBounds = true
+                        searchField.layer.cornerRadius = 18
+                        searchField.layer.borderColor = UIColor(named: "borderColor")?.cgColor
                     }
                     
                     // constrain the search bar
@@ -76,6 +74,10 @@ class HomeScreenMenuView: UIView {
                     if let pageControllerHeight = pageControllerHeight, let pageControllerWidth = pageControllerWidth {
                         pageController = UISegmentedControl(frame: CGRect(x: 0, y: 0, width: pageControllerWidth, height: pageControllerHeight))
                         if let pageController = pageController{
+                            pageController.clipsToBounds = true
+                            pageController.layer.cornerRadius = 18
+                            pageController.layer.borderWidth = 2
+                            pageController.layer.borderColor = UIColor(named: "borderColor")?.cgColor
                             pageController.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                             pageController.insertSegment(withTitle: "Recents", at: 0, animated: false)
                             pageController.insertSegment(withTitle: "Favorites", at: 1, animated: false)
@@ -177,9 +179,10 @@ class HomeScreenMenuView: UIView {
                                                     // configure the super table view
                                                    
                                                     superViewStack = UIStackView(arrangedSubviews: [searchBar, pageController, scrollView])
-                                                    if let superViewStack = superViewStack{
+                                                    stackViewSpacing = 4.0 * (height/812)
+                                                    if let superViewStack = superViewStack, let stackViewSpacing = stackViewSpacing{
                                                         superViewStack.axis = .vertical
-                                                        superViewStack.spacing = 0
+                                                        superViewStack.spacing = stackViewSpacing
                                                         superViewStack.alignment = .center
                                                         superViewStack.distribution = .fill
                                                         superViewStack.isUserInteractionEnabled = true

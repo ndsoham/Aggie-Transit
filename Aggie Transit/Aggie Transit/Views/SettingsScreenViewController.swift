@@ -78,6 +78,7 @@ class SettingsScreenViewController: UIViewController {
                                             searchField.layer.borderColor = borderColor.cgColor
                                             searchField.layer.borderWidth = 2
                                             searchField.layer.cornerRadius = 15
+                                            searchField.clipsToBounds = true
                                             searchField.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                                         }
                                         
@@ -100,6 +101,7 @@ class SettingsScreenViewController: UIViewController {
                                         tableSuperView.layer.borderColor = UIColor(named: "borderColor")?.cgColor
                                         tableSuperView.layer.borderWidth = 2
                                         tableSuperView.translatesAutoresizingMaskIntoConstraints = false
+                                        tableSuperView.clipsToBounds = true
                                         // constrain the table superview
                                         tableSuperView.widthAnchor.constraint(equalToConstant: tableSuperViewWidth).isActive = true
                                         // add the table super view to the view hierarchy
