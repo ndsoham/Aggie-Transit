@@ -69,15 +69,15 @@ class HomeScreenMenuView: UIView {
                     searchBar.widthAnchor.constraint(equalToConstant: searchBarWidth).isActive = true
                     searchBar.heightAnchor.constraint(equalToConstant: searchBarHeight).isActive = true
                     // configure the page controller
-                    pageControllerHeight = 24 * (height/200)
+                    pageControllerHeight = 30 * (height/200)
                     pageControllerWidth = width - 16
                     if let pageControllerHeight = pageControllerHeight, let pageControllerWidth = pageControllerWidth {
                         pageController = UISegmentedControl(frame: CGRect(x: 0, y: 0, width: pageControllerWidth, height: pageControllerHeight))
                         if let pageController = pageController{
-                            pageController.clipsToBounds = true
-                            pageController.layer.cornerRadius = 18
-                            pageController.layer.borderWidth = 2
-                            pageController.layer.borderColor = UIColor(named: "borderColor")?.cgColor
+//                            pageController.clipsToBounds = true
+//                            pageController.layer.cornerRadius = 18
+//                            pageController.layer.borderWidth = 2
+//                            pageController.layer.borderColor = UIColor(named: "borderColor")?.cgColor
                             pageController.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                             pageController.insertSegment(withTitle: "Recents", at: 0, animated: false)
                             pageController.insertSegment(withTitle: "Favorites", at: 1, animated: false)
