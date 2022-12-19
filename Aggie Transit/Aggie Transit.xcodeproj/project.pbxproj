@@ -10,6 +10,7 @@
 		0F031B982929BA6000055421 /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F031B972929BA6000055421 /* NavigationView.swift */; };
 		0F031B9A2929BAF800055421 /* SettingsScreenTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F031B992929BAF800055421 /* SettingsScreenTableViewCell.swift */; };
 		0F031B9C2929BB1200055421 /* NotificationsScreenTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F031B9B2929BB1200055421 /* NotificationsScreenTableViewCell.swift */; };
+		0F1AF87E2950E46100BE0C85 /* BusRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F1AF87D2950E46100BE0C85 /* BusRoute.swift */; };
 		0F2F37FE29318150005998AF /* HomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F2F37FD29318150005998AF /* HomeScreenViewController.swift */; };
 		0F36CD3829155B460059BC24 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD3729155B460059BC24 /* AppDelegate.swift */; };
 		0F36CD3A29155B460059BC24 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD3929155B460059BC24 /* SceneDelegate.swift */; };
@@ -21,12 +22,14 @@
 		0F36CD56291562C40059BC24 /* HomeScreenFAB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */; };
 		0F62CD0A2938847700374C63 /* HomeScreenMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F62CD092938847700374C63 /* HomeScreenMenuView.swift */; };
 		0F770040294CB243008C421A /* HomeScreenModalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F77003F294CB243008C421A /* HomeScreenModalTableViewCell.swift */; };
+		0F933383294FC09100180E0E /* DataGatherer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F933382294FC09100180E0E /* DataGatherer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0F031B972929BA6000055421 /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
 		0F031B992929BAF800055421 /* SettingsScreenTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenTableViewCell.swift; sourceTree = "<group>"; };
 		0F031B9B2929BB1200055421 /* NotificationsScreenTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsScreenTableViewCell.swift; sourceTree = "<group>"; };
+		0F1AF87D2950E46100BE0C85 /* BusRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusRoute.swift; sourceTree = "<group>"; };
 		0F2F37FD29318150005998AF /* HomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewController.swift; sourceTree = "<group>"; };
 		0F36CD3429155B460059BC24 /* Aggie Transit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Aggie Transit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F36CD3729155B460059BC24 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -40,6 +43,7 @@
 		0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenFAB.swift; sourceTree = "<group>"; };
 		0F62CD092938847700374C63 /* HomeScreenMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenMenuView.swift; sourceTree = "<group>"; };
 		0F77003F294CB243008C421A /* HomeScreenModalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenModalTableViewCell.swift; sourceTree = "<group>"; };
+		0F933382294FC09100180E0E /* DataGatherer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataGatherer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +86,7 @@
 			children = (
 				0F36CD3729155B460059BC24 /* AppDelegate.swift */,
 				0F36CD3929155B460059BC24 /* SceneDelegate.swift */,
+				0F933381294FC07D00180E0E /* Model */,
 				0F36CD4D29155F560059BC24 /* Views */,
 				0F36CD3D29155B460059BC24 /* Main.storyboard */,
 				0F36CD4029155B460059BC24 /* Assets.xcassets */,
@@ -111,6 +116,15 @@
 				0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */,
 			);
 			path = Buttons;
+			sourceTree = "<group>";
+		};
+		0F933381294FC07D00180E0E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0F933382294FC09100180E0E /* DataGatherer.swift */,
+				0F1AF87D2950E46100BE0C85 /* BusRoute.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		0FEE66092919E464004E2C93 /* Table View Cells */ = {
@@ -196,6 +210,7 @@
 			files = (
 				0F2F37FE29318150005998AF /* HomeScreenViewController.swift in Sources */,
 				0F36CD56291562C40059BC24 /* HomeScreenFAB.swift in Sources */,
+				0F933383294FC09100180E0E /* DataGatherer.swift in Sources */,
 				0F36CD3829155B460059BC24 /* AppDelegate.swift in Sources */,
 				0F36CD512915602B0059BC24 /* SettingsScreenViewController.swift in Sources */,
 				0F031B982929BA6000055421 /* NavigationView.swift in Sources */,
@@ -203,6 +218,7 @@
 				0F36CD3A29155B460059BC24 /* SceneDelegate.swift in Sources */,
 				0F770040294CB243008C421A /* HomeScreenModalTableViewCell.swift in Sources */,
 				0F031B9C2929BB1200055421 /* NotificationsScreenTableViewCell.swift in Sources */,
+				0F1AF87E2950E46100BE0C85 /* BusRoute.swift in Sources */,
 				0F36CD53291560A80059BC24 /* NotificationsScreenViewController.swift in Sources */,
 				0F62CD0A2938847700374C63 /* HomeScreenMenuView.swift in Sources */,
 			);

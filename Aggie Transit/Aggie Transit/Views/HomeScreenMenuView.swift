@@ -32,9 +32,14 @@ class HomeScreenMenuView: UIView {
     private var viewMargins: UILayoutGuide?
     private var pageController: UISegmentedControl?
     private var stackViewSpacing: Double?
+    private var dataGatherer: DataGatherer?
     override init(frame: CGRect){
         super.init(frame: frame)
         layoutSubviews()
+        dataGatherer = DataGatherer()
+        if let dataGatherer = dataGatherer {
+            dataGatherer.gatherData(endpoint: "Routes")
+        }
     }
     
     required init?(coder: NSCoder){
@@ -251,16 +256,8 @@ extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate{
     }
     
 }
-
-
-extension UIScrollView {
-    var currentPage:Int{
-        return Int((self.contentOffset.x+(0.5*self.frame.size.width))/self.frame.width)
-    }
-}
-
 extension HomeScreenMenuView {
-
+    
     @objc func handleControlPageChanged(sender: UISegmentedControl){
         if let scrollView = scrollView {
             let xPos = scrollView.frame.width * Double(sender.selectedSegmentIndex)
@@ -270,6 +267,14 @@ extension HomeScreenMenuView {
     }
     
 }
+
+extension UIScrollView {
+    var currentPage:Int{
+        return Int((self.contentOffset.x+(0.5*self.frame.size.width))/self.frame.width)
+    }
+}
+
+
 
 extension UISegmentedControl: UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
