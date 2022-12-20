@@ -30,6 +30,9 @@ class HomeScreenModalTableViewCell: UITableViewCell {
     required init?(coder: NSCoder){
         fatalError()
     }
+    override func prepareForReuse() {
+        
+    }
     override func layoutSubviews() {
         // access the views width and height
         width = self.contentView.frame.width

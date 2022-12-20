@@ -33,11 +33,13 @@ class HomeScreenMenuView: UIView {
     private var pageController: UISegmentedControl?
     private var stackViewSpacing: Double?
     private var dataGatherer: DataGatherer?
+    private var busRoutes: [BusRoute]?
     override init(frame: CGRect){
         super.init(frame: frame)
         layoutSubviews()
         dataGatherer = DataGatherer()
         if let dataGatherer = dataGatherer {
+            dataGatherer.delegate = self
             dataGatherer.gatherData(endpoint: "Routes")
         }
     }
@@ -219,19 +221,20 @@ class HomeScreenMenuView: UIView {
         }
     }
 }
-extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate{
+extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return busRoutes?.count ?? 10
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-          
                 if tableView == allRoutesTableView {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
-                    cell.icon = "01"
-                    cell.text = "Bonfire"
-                    cell.cellColor = .bonfirePurple
-                    return cell
+                    if let busRoutes = busRoutes{
+                        let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
+                        cell.icon = busRoutes[indexPath.row].Number
+                        cell.text = busRoutes[indexPath.row].Name
+                        cell.cellColor = .bonfirePurple
+                        return cell
+                    }
                 }
                 else if tableView == favoritesTableView {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
@@ -268,6 +271,7 @@ extension HomeScreenMenuView {
     
 }
 
+
 extension UIScrollView {
     var currentPage:Int{
         return Int((self.contentOffset.x+(0.5*self.frame.size.width))/self.frame.width)
@@ -280,4 +284,15 @@ extension UISegmentedControl: UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.selectedSegmentIndex = scrollView.currentPage
     }
+}
+
+extension HomeScreenMenuView: DataGathererDelegate {
+    func didGatherBusRoutes(data: [BusRoute]) {
+        self.busRoutes = data
+        DispatchQueue.main.async {
+            self.allRoutesTableView?.reloadData()
+        }
+    }
+    
+    
 }

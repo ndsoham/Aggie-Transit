@@ -31,6 +31,9 @@ class NotificationsScreenTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    override func prepareForReuse() {
+        
+    }
     override func layoutSubviews() {
         cellHeight = self.contentView.frame.height
         cellWidth = self.contentView.frame.width
