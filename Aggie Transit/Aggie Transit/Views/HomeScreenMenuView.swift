@@ -33,7 +33,8 @@ class HomeScreenMenuView: UIView {
     private var pageController: UISegmentedControl?
     private var stackViewSpacing: Double?
     private var dataGatherer: DataGatherer?
-    private var busRoutes: [BusRoute]?
+    private var onCampusRoutes: [BusRoute]?
+    private var offCampusRoutes: [BusRoute]?
     override init(frame: CGRect){
         super.init(frame: frame)
         layoutSubviews()
@@ -223,40 +224,68 @@ class HomeScreenMenuView: UIView {
 }
 extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return busRoutes?.count ?? 10
+        if tableView == allRoutesTableView {
+            if section == 0 {
+                if let onCampusRoutes = self.onCampusRoutes {
+                    return onCampusRoutes.count
+                }
+            }
+            else if section == 1 {
+                if let offCampusRoutes = self.offCampusRoutes {
+                    return offCampusRoutes.count
+                }
+            }
+        }
+        else if tableView == favoritesTableView {
+            return 10
+        }
+        else if tableView == recentsTableView {
+            return 10
+        }
+        return -1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
                 if tableView == allRoutesTableView {
-                    if let busRoutes = busRoutes{
-                        let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
-                        cell.icon = busRoutes[indexPath.row].Number
-                        cell.text = busRoutes[indexPath.row].Name
-                        if busRoutes[indexPath.row].Color.contains("rgb") {
-                            cell.cellColor = UIColor.colorFromRGBString(string: busRoutes[indexPath.row].Color)
-                        } else {
-                            // this will handle all the undeclared colors
-                            if busRoutes[indexPath.row].Name == "Reveille" {
-                                cell.cellColor = UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1.0)
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
+                    if let onCampusRoutes = onCampusRoutes, let offCampusRoutes = offCampusRoutes {
+                        if indexPath.section == 0 {
+                            cell.icon = onCampusRoutes[indexPath.row].Number
+                            cell.text = onCampusRoutes[indexPath.row].Name
+                            if onCampusRoutes[indexPath.row].Color.contains("rgb"){
+                                cell.cellColor = UIColor.colorFromRGBString(string: onCampusRoutes[indexPath.row].Color)
+                            } else {
+                                if onCampusRoutes[indexPath.row].Number == "01-04" {
+                                    cell.cellColor = UIColor(red: 153/255, green: 50/255, blue: 204/255, alpha: 1.0)
+                                }
+                                else {
+                                    cell.cellColor = .gray
+                                }
                             }
-                            else if busRoutes[indexPath.row].Name == "E-Walk" {
-                                cell.cellColor = UIColor(red: 128/255, green: 4/255, blue: 128/255, alpha: 1.0)
-                            }
-                            else if busRoutes[indexPath.row].Name == "RELLIS" {
-                                cell.cellColor = UIColor(red: 65/255, green: 105/255, blue: 225/255, alpha: 1.0)
-                            }
-                            // will use short name for the nights and weekends ones
-                            else if busRoutes[indexPath.row].Number == "47-48" {
-                                cell.cellColor = UIColor(red: 220/255, green: 20/255, blue: 61/255, alpha: 1.0)
-                            }
-                            else if busRoutes[indexPath.row].Number == "01-04" {
-                                cell.cellColor = UIColor(red: 153/255, green: 50/255, blue: 204/255, alpha: 1.0)
-                            }
-                            else {
-                                cell.cellColor = .gray
-                            }
+                            return cell
                         }
-                        return cell
+                        else if indexPath.section == 1 {
+                            cell.icon = offCampusRoutes[indexPath.row].Number
+                            cell.text = offCampusRoutes[indexPath.row].Name
+                            if offCampusRoutes[indexPath.row].Color.contains("rgb"){
+                                cell.cellColor = UIColor.colorFromRGBString(string: offCampusRoutes[indexPath.row].Color)
+                            } else {
+                                if offCampusRoutes[indexPath.row].Name == "Reveille" {
+                                    cell.cellColor = UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1.0)
+                                }
+                                else if offCampusRoutes[indexPath.row].Name == "E-Walk" {
+                                    cell.cellColor = UIColor(red: 128/255, green: 4/255, blue: 128/255, alpha: 1.0)
+                                }
+                                else if offCampusRoutes[indexPath.row].Name == "RELLIS" {
+                                    cell.cellColor = UIColor(red: 65/255, green: 105/255, blue: 225/255, alpha: 1.0)
+                                }
+                                // will use short name for the nights and weekends ones
+                                else if offCampusRoutes[indexPath.row].Number == "47-48" {
+                                    cell.cellColor = UIColor(red: 220/255, green: 20/255, blue: 61/255, alpha: 1.0)
+                                }
+                            }
+                            return cell
+                        }
                     }
                 }
                 else if tableView == favoritesTableView {
@@ -279,6 +308,31 @@ extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate {
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 122
+    }
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if tableView == allRoutesTableView {
+            return 2
+        }
+        else if tableView == recentsTableView {
+            return 1
+        }
+        else if tableView == favoritesTableView {
+            return 1
+        }
+        return -1
+    }
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if tableView == allRoutesTableView {
+            if section == 0 {
+                return "On-Campus"
+            }
+            else {
+                return "Off-Campus"
+            }
+        }
+        else {
+            return ""
+        }
     }
     
 }
@@ -310,12 +364,12 @@ extension UISegmentedControl: UIScrollViewDelegate {
 }
 
 extension HomeScreenMenuView: DataGathererDelegate {
-    func didGatherBusRoutes(data: [BusRoute]) {
-        self.busRoutes = data
+    func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute]) {
+        self.onCampusRoutes = onCampusRoutes
+        self.offCampusRoutes = offCampusRoutes
         DispatchQueue.main.async {
             self.allRoutesTableView?.reloadData()
         }
     }
-    
     
 }

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 protocol DataGathererDelegate {
-    func didGatherBusRoutes(data: [BusRoute])
+    func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute])
 }
 class DataGatherer {
     private let baseUrl = "https://transport.tamu.edu/BusRoutesFeed/api/"
@@ -30,8 +30,9 @@ class DataGatherer {
                         let decoder = JSONDecoder()
                         if endpoint == "Routes" {
                             let routes = try decoder.decode([RouteData].self, from: data)
-                            let busRoutes = self.busRoutes(data: routes)
-                            self.delegate?.didGatherBusRoutes(data: busRoutes)
+                            let onCampusRoutes = self.gatherOnCampusBusRoutes(data: routes)
+                            let offCampusRoutes = self.gatherOffCampusBusRoutes(data: routes)
+                            self.delegate?.didGatherBusRoutes(onCampusRoutes: onCampusRoutes, offCampusRoutes: offCampusRoutes)
                         }
                     } catch {
                         print("An error has occured: \(error)")
@@ -41,11 +42,23 @@ class DataGatherer {
             task.resume()
         }
     }
-    func busRoutes(data: [RouteData]) -> [BusRoute] {
+    func gatherOnCampusBusRoutes(data: [RouteData]) -> [BusRoute] {
         var routes: [BusRoute] = []
         for route in data {
-            let busRoute = BusRoute(Name: route.Name, Number: route.ShortName, Color: route.Color, Campus: route.Group.Name)
-            routes.append(busRoute)
+            if route.Group.Name == "On Campus" {
+                let busRoute = BusRoute(Name: route.Name, Number: route.ShortName, Color: route.Color, Campus: route.Group.Name)
+                routes.append(busRoute)
+            }
+        }
+        return routes
+    }
+    func gatherOffCampusBusRoutes(data: [RouteData]) -> [BusRoute] {
+        var routes: [BusRoute] = []
+        for route in data {
+            if route.Group.Name == "Off Campus" {
+                let busRoute = BusRoute(Name: route.Name, Number: route.ShortName, Color: route.Color, Campus: route.Group.Name)
+                routes.append(busRoute)
+            }
         }
         return routes
     }
