@@ -22,7 +22,7 @@ class HomeScreenModalTableViewCell: UITableViewCell {
     private var stackView: UIStackView?
     var icon: String?
     var text: String?
-    var cellColor: cellBackgroundColor?
+    var cellColor: UIColor?
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layoutSubviews()
@@ -31,7 +31,7 @@ class HomeScreenModalTableViewCell: UITableViewCell {
         fatalError()
     }
     override func prepareForReuse() {
-        
+        self.clearsContextBeforeDrawing = true
     }
     override func layoutSubviews() {
         // access the views width and height
@@ -49,7 +49,7 @@ class HomeScreenModalTableViewCell: UITableViewCell {
                     view.layer.cornerRadius = cornerRadius
                     view.layer.borderWidth = borderWidth
                     view.layer.borderColor = UIColor(named: "borderColor")?.cgColor
-                    view.backgroundColor = UIColor(named: cellColor.rawValue)
+                    view.backgroundColor = cellColor
                     view.translatesAutoresizingMaskIntoConstraints = false
                     // add to the view hierarchy
                     self.contentView.addSubview(view)

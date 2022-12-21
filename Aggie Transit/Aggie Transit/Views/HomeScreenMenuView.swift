@@ -232,7 +232,30 @@ extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate {
                         let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
                         cell.icon = busRoutes[indexPath.row].Number
                         cell.text = busRoutes[indexPath.row].Name
-                        cell.cellColor = .bonfirePurple
+                        if busRoutes[indexPath.row].Color.contains("rgb") {
+                            cell.cellColor = UIColor.colorFromRGBString(string: busRoutes[indexPath.row].Color)
+                        } else {
+                            // this will handle all the undeclared colors
+                            if busRoutes[indexPath.row].Name == "Reveille" {
+                                cell.cellColor = UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1.0)
+                            }
+                            else if busRoutes[indexPath.row].Name == "E-Walk" {
+                                cell.cellColor = UIColor(red: 128/255, green: 4/255, blue: 128/255, alpha: 1.0)
+                            }
+                            else if busRoutes[indexPath.row].Name == "RELLIS" {
+                                cell.cellColor = UIColor(red: 65/255, green: 105/255, blue: 225/255, alpha: 1.0)
+                            }
+                            // will use short name for the nights and weekends ones
+                            else if busRoutes[indexPath.row].Number == "47-48" {
+                                cell.cellColor = UIColor(red: 220/255, green: 20/255, blue: 61/255, alpha: 1.0)
+                            }
+                            else if busRoutes[indexPath.row].Number == "01-04" {
+                                cell.cellColor = UIColor(red: 153/255, green: 50/255, blue: 204/255, alpha: 1.0)
+                            }
+                            else {
+                                cell.cellColor = .gray
+                            }
+                        }
                         return cell
                     }
                 }
@@ -240,14 +263,14 @@ extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
                     cell.icon = "⭐️"
                     cell.text = "Favorite Location"
-                    cell.cellColor = .favoriteLocationGold
+                    cell.cellColor = UIColor(named: cellBackgroundColor.favoriteLocationGold.rawValue)
                     return cell
                 }
                 else if tableView == recentsTableView {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
                     cell.icon = "📍"
                     cell.text = "Recent Location"
-                    cell.cellColor = .recentLocationRed
+                    cell.cellColor = UIColor(named: cellBackgroundColor.recentLocationRed.rawValue)
                     return cell
                 }
             
