@@ -12,6 +12,8 @@
 		0F031B9C2929BB1200055421 /* NotificationsScreenTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F031B9B2929BB1200055421 /* NotificationsScreenTableViewCell.swift */; };
 		0F0F8C922952398600BB617E /* BusRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C912952398600BB617E /* BusRoute.swift */; };
 		0F0F8C95295293E300BB617E /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C94295293E300BB617E /* Color.swift */; };
+		0F0F8C972953F95800BB617E /* StopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C962953F95800BB617E /* StopData.swift */; };
+		0F0F8C992953FBAB00BB617E /* BusStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C982953FBAB00BB617E /* BusStop.swift */; };
 		0F1AF87E2950E46100BE0C85 /* RouteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F1AF87D2950E46100BE0C85 /* RouteData.swift */; };
 		0F2F37FE29318150005998AF /* HomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F2F37FD29318150005998AF /* HomeScreenViewController.swift */; };
 		0F36CD3829155B460059BC24 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD3729155B460059BC24 /* AppDelegate.swift */; };
@@ -33,6 +35,8 @@
 		0F031B9B2929BB1200055421 /* NotificationsScreenTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsScreenTableViewCell.swift; sourceTree = "<group>"; };
 		0F0F8C912952398600BB617E /* BusRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusRoute.swift; sourceTree = "<group>"; };
 		0F0F8C94295293E300BB617E /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		0F0F8C962953F95800BB617E /* StopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopData.swift; sourceTree = "<group>"; };
+		0F0F8C982953FBAB00BB617E /* BusStop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusStop.swift; sourceTree = "<group>"; };
 		0F1AF87D2950E46100BE0C85 /* RouteData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteData.swift; sourceTree = "<group>"; };
 		0F2F37FD29318150005998AF /* HomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewController.swift; sourceTree = "<group>"; };
 		0F36CD3429155B460059BC24 /* Aggie Transit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Aggie Transit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,6 +78,7 @@
 			children = (
 				0F933382294FC09100180E0E /* DataGatherer.swift */,
 				0F1AF87D2950E46100BE0C85 /* RouteData.swift */,
+				0F0F8C962953F95800BB617E /* StopData.swift */,
 			);
 			path = APIData;
 			sourceTree = "<group>";
@@ -145,6 +150,7 @@
 			children = (
 				0F0F8C90295238E300BB617E /* APIData */,
 				0F0F8C912952398600BB617E /* BusRoute.swift */,
+				0F0F8C982953FBAB00BB617E /* BusStop.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -239,11 +245,13 @@
 				0F031B982929BA6000055421 /* NavigationView.swift in Sources */,
 				0F031B9A2929BAF800055421 /* SettingsScreenTableViewCell.swift in Sources */,
 				0F0F8C95295293E300BB617E /* Color.swift in Sources */,
+				0F0F8C972953F95800BB617E /* StopData.swift in Sources */,
 				0F36CD3A29155B460059BC24 /* SceneDelegate.swift in Sources */,
 				0F770040294CB243008C421A /* HomeScreenModalTableViewCell.swift in Sources */,
 				0F031B9C2929BB1200055421 /* NotificationsScreenTableViewCell.swift in Sources */,
 				0F1AF87E2950E46100BE0C85 /* RouteData.swift in Sources */,
 				0F36CD53291560A80059BC24 /* NotificationsScreenViewController.swift in Sources */,
+				0F0F8C992953FBAB00BB617E /* BusStop.swift in Sources */,
 				0F62CD0A2938847700374C63 /* HomeScreenMenuView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
