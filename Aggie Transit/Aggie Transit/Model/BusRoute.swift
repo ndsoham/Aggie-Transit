@@ -8,12 +8,8 @@
 import Foundation
 import UIKit
 struct BusRoute {
-    var Name: String
-    var Number: String
-    var Color: String
-    var Campus: String
-    
-    func displayRouteOnMap(name: String) {
-        print(name, "was selected")
-    }
+    var name: String
+    var number: String
+    var color: String
+    var campus: String
 }

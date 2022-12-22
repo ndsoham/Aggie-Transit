@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 protocol DataGathererDelegate {
     func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute])
+    func didGatherBusStops(stops: [BusStop])
 }
 class DataGatherer {
     private let baseUrl = "https://transport.tamu.edu/BusRoutesFeed/api/"
@@ -34,6 +35,11 @@ class DataGatherer {
                             let offCampusRoutes = self.gatherOffCampusBusRoutes(data: routes)
                             self.delegate?.didGatherBusRoutes(onCampusRoutes: onCampusRoutes, offCampusRoutes: offCampusRoutes)
                         }
+                        else if endpoint.split(separator: "/").last == "stops" {
+                            let stops = try decoder.decode([StopData].self, from: data)
+                            let busStops = self.gatherBusStops(data: stops)
+                            self.delegate?.didGatherBusStops(stops: busStops)
+                        }
                     } catch {
                         print("An error has occured: \(error)")
                     }
@@ -46,7 +52,7 @@ class DataGatherer {
         var routes: [BusRoute] = []
         for route in data {
             if route.Group.Name == "On Campus" {
-                let busRoute = BusRoute(Name: route.Name, Number: route.ShortName, Color: route.Color, Campus: route.Group.Name)
+                let busRoute = BusRoute(name: route.Name, number: route.ShortName, color: route.Color, campus: route.Group.Name)
                 routes.append(busRoute)
             }
         }
@@ -56,11 +62,19 @@ class DataGatherer {
         var routes: [BusRoute] = []
         for route in data {
             if route.Group.Name == "Off Campus" {
-                let busRoute = BusRoute(Name: route.Name, Number: route.ShortName, Color: route.Color, Campus: route.Group.Name)
+                let busRoute = BusRoute(name: route.Name, number: route.ShortName, color: route.Color, campus: route.Group.Name)
                 routes.append(busRoute)
             }
         }
         return routes
+    }
+    func gatherBusStops(data: [StopData]) -> [BusStop] {
+        var stops: [BusStop] = []
+        for stop in data {
+            let busStop = BusStop(name: stop.Name, latitude: stop.Latitude, longitude: stop.Longtitude, isTimePoint: stop.Stop.IsTimePoint)
+            stops.append(busStop)
+        }
+        return stops
     }
 }
 

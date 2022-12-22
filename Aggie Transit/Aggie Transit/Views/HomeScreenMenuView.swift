@@ -229,13 +229,17 @@ extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == allRoutesTableView {
             if indexPath.section == 0 {
-                if let onCampusRoutes = onCampusRoutes {
-                    onCampusRoutes[indexPath.row].displayRouteOnMap(name: onCampusRoutes[indexPath.row].Name)
+                if let onCampusRoutes = onCampusRoutes, let dataGatherer = dataGatherer {
+                    var endpoint = "route/{route}/stops"
+                    endpoint = endpoint.replacingOccurrences(of: "{route}", with: onCampusRoutes[indexPath.row].number)
+                    dataGatherer.gatherData(endpoint: endpoint)
                 }
             }
             else if indexPath.section == 1 {
-                if let offCampusRoutes = offCampusRoutes {
-                    offCampusRoutes[indexPath.row].displayRouteOnMap(name: offCampusRoutes[indexPath.row].Name)
+                if let offCampusRoutes = offCampusRoutes, let dataGatherer = dataGatherer {
+                    var endpoint = "route/{route}/stops"
+                    endpoint = endpoint.replacingOccurrences(of: "{route}", with: offCampusRoutes[indexPath.row].number)
+                    dataGatherer.gatherData(endpoint: endpoint)
                 }
             }
         }
@@ -267,12 +271,12 @@ extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
                     if let onCampusRoutes = onCampusRoutes, let offCampusRoutes = offCampusRoutes {
                         if indexPath.section == 0 {
-                            cell.icon = onCampusRoutes[indexPath.row].Number
-                            cell.text = onCampusRoutes[indexPath.row].Name
-                            if onCampusRoutes[indexPath.row].Color.contains("rgb"){
-                                cell.cellColor = UIColor.colorFromRGBString(string: onCampusRoutes[indexPath.row].Color)
+                            cell.icon = onCampusRoutes[indexPath.row].number
+                            cell.text = onCampusRoutes[indexPath.row].name
+                            if onCampusRoutes[indexPath.row].color.contains("rgb"){
+                                cell.cellColor = UIColor.colorFromRGBString(string: onCampusRoutes[indexPath.row].color)
                             } else {
-                                if onCampusRoutes[indexPath.row].Number == "01-04" {
+                                if onCampusRoutes[indexPath.row].number == "01-04" {
                                     cell.cellColor = UIColor(red: 153/255, green: 50/255, blue: 204/255, alpha: 1.0)
                                 }
                                 else {
@@ -282,22 +286,22 @@ extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate {
                             return cell
                         }
                         else if indexPath.section == 1 {
-                            cell.icon = offCampusRoutes[indexPath.row].Number
-                            cell.text = offCampusRoutes[indexPath.row].Name
-                            if offCampusRoutes[indexPath.row].Color.contains("rgb"){
-                                cell.cellColor = UIColor.colorFromRGBString(string: offCampusRoutes[indexPath.row].Color)
+                            cell.icon = offCampusRoutes[indexPath.row].number
+                            cell.text = offCampusRoutes[indexPath.row].name
+                            if offCampusRoutes[indexPath.row].color.contains("rgb"){
+                                cell.cellColor = UIColor.colorFromRGBString(string: offCampusRoutes[indexPath.row].color)
                             } else {
-                                if offCampusRoutes[indexPath.row].Name == "Reveille" {
+                                if offCampusRoutes[indexPath.row].name == "Reveille" {
                                     cell.cellColor = UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1.0)
                                 }
-                                else if offCampusRoutes[indexPath.row].Name == "E-Walk" {
+                                else if offCampusRoutes[indexPath.row].name == "E-Walk" {
                                     cell.cellColor = UIColor(red: 128/255, green: 4/255, blue: 128/255, alpha: 1.0)
                                 }
-                                else if offCampusRoutes[indexPath.row].Name == "RELLIS" {
+                                else if offCampusRoutes[indexPath.row].name == "RELLIS" {
                                     cell.cellColor = UIColor(red: 65/255, green: 105/255, blue: 225/255, alpha: 1.0)
                                 }
                                 // will use short name for the nights and weekends ones
-                                else if offCampusRoutes[indexPath.row].Number == "47-48" {
+                                else if offCampusRoutes[indexPath.row].number == "47-48" {
                                     cell.cellColor = UIColor(red: 220/255, green: 20/255, blue: 61/255, alpha: 1.0)
                                 }
                             }
@@ -387,6 +391,10 @@ extension UISegmentedControl: UIScrollViewDelegate {
 }
 
 extension HomeScreenMenuView: DataGathererDelegate {
+    func didGatherBusStops(stops: [BusStop]) {
+        
+    }
+    
     func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute]) {
         self.onCampusRoutes = onCampusRoutes
         self.offCampusRoutes = offCampusRoutes
@@ -394,5 +402,6 @@ extension HomeScreenMenuView: DataGathererDelegate {
             self.allRoutesTableView?.reloadData()
         }
     }
+    
     
 }
