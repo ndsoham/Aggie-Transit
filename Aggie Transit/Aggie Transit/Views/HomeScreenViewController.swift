@@ -65,8 +65,10 @@ class HomeScreenViewController: UIViewController {
                 // configure the map
                 map = MKMapView(frame: CGRect(x: 0, y: 0, width: width, height: height))
                 if let map = map{
+                    // configure the map
                     map.translatesAutoresizingMaskIntoConstraints = false
-                    
+                    let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 30.614965, longitude: -96.340584), span: MKCoordinateSpan(latitudeDelta: 0.0125, longitudeDelta: 0.0125))
+                    map.setRegion(region, animated: false)
                     // add the map to the view hierarchy
                     self.view.addSubview(map)
                     // constrain the map
