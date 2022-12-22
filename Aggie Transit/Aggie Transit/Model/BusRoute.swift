@@ -12,4 +12,8 @@ struct BusRoute {
     var Number: String
     var Color: String
     var Campus: String
+    
+    func displayRouteOnMap(name: String) {
+        print(name, "was selected")
+    }
 }

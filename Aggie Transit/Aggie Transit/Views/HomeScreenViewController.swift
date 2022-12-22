@@ -66,6 +66,7 @@ class HomeScreenViewController: UIViewController {
                 map = MKMapView(frame: CGRect(x: 0, y: 0, width: width, height: height))
                 if let map = map{
                     map.translatesAutoresizingMaskIntoConstraints = false
+                    
                     // add the map to the view hierarchy
                     self.view.addSubview(map)
                     // constrain the map
@@ -121,7 +122,7 @@ class HomeScreenViewController: UIViewController {
                     }
                 }
                 // configure home screen menu view
-                homeScreenMenuHeight = 200 * (height/812)
+                homeScreenMenuHeight = 225 * (height/812)
                 homeScreenMenuWidth = width
                 if let homeScreenMenuWidth = homeScreenMenuWidth, let homeScreenMenuHeight = homeScreenMenuHeight{
                     homeScreenMenu = HomeScreenMenuView(frame: CGRect(x: 0, y: 0, width: homeScreenMenuWidth, height: homeScreenMenuHeight))

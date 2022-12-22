@@ -145,13 +145,15 @@ class HomeScreenMenuView: UIView {
                                             favoritesTableView.widthAnchor.constraint(equalToConstant: tableViewWidth).isActive = true
                                             favoritesTableView.heightAnchor.constraint(equalToConstant: tableViewHeight).isActive = true
                                             // configure the all routes table view
+                                            allRoutesTableView.allowsMultipleSelection = false
+                                            allRoutesTableView.allowsSelection = true
                                             allRoutesTableView.dataSource = self
                                             allRoutesTableView.delegate = self
                                             allRoutesTableView.translatesAutoresizingMaskIntoConstraints = false
                                             allRoutesTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                                             allRoutesTableView.rowHeight = 122
                                             allRoutesTableView.separatorStyle = .none
-                                            allRoutesTableView.allowsSelection = false
+                                            
                                             // constrain the all routes table view
                                             allRoutesTableView.widthAnchor.constraint(equalToConstant: tableViewWidth).isActive = true
                                             allRoutesTableView.heightAnchor.constraint(equalToConstant: tableViewHeight).isActive = true
@@ -223,6 +225,20 @@ class HomeScreenMenuView: UIView {
     }
 }
 extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == allRoutesTableView {
+            if indexPath.section == 0 {
+                if let onCampusRoutes = onCampusRoutes {
+                    onCampusRoutes[indexPath.row].displayRouteOnMap(name: onCampusRoutes[indexPath.row].Name)
+                }
+            }
+            else if indexPath.section == 1 {
+                if let offCampusRoutes = offCampusRoutes {
+                    offCampusRoutes[indexPath.row].displayRouteOnMap(name: offCampusRoutes[indexPath.row].Name)
+                }
+            }
+        }
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == allRoutesTableView {
             if section == 0 {

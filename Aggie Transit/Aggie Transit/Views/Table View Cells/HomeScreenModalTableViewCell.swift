@@ -34,6 +34,7 @@ class HomeScreenModalTableViewCell: UITableViewCell {
         self.clearsContextBeforeDrawing = true
     }
     override func layoutSubviews() {
+        self.selectedBackgroundView = nil
         // access the views width and height
         width = self.contentView.frame.width
         height = self.contentView.frame.height
