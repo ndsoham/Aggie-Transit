@@ -35,6 +35,7 @@ class HomeScreenMenuView: UIView {
     private var dataGatherer: DataGatherer?
     private var onCampusRoutes: [BusRoute]?
     private var offCampusRoutes: [BusRoute]?
+    private var programmedScroll: Bool = false
     override init(frame: CGRect){
         super.init(frame: frame)
         layoutSubviews()
@@ -358,7 +359,13 @@ extension HomeScreenMenuView {
         if let scrollView = scrollView {
             let xPos = scrollView.frame.width * Double(sender.selectedSegmentIndex)
             let yPos = 0.0
-            scrollView.scrollRectToVisible(CGRect(x: xPos, y: yPos, width: scrollView.frame.width, height: scrollView.frame.height), animated: true)
+            self.programmedScroll = true
+            UIView.animate(withDuration: 0.3) {
+                scrollView.scrollRectToVisible(CGRect(x: xPos, y: yPos, width: scrollView.frame.width, height: scrollView.frame.height), animated: false)
+            } completion: { _ in
+                self.programmedScroll = false
+            }
+
         }
     }
     
