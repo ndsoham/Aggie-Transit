@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 protocol DataGathererDelegate {
     func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute])
-    func didGatherBusStops(stops: [BusStop])
+    func didGatherBusStops(stops: [BusPattern])
 }
 class DataGatherer {
     private let baseUrl = "https://transport.tamu.edu/BusRoutesFeed/api/"
@@ -35,8 +35,8 @@ class DataGatherer {
                             let offCampusRoutes = self.gatherOffCampusBusRoutes(data: routes)
                             self.delegate?.didGatherBusRoutes(onCampusRoutes: onCampusRoutes, offCampusRoutes: offCampusRoutes)
                         }
-                        else if endpoint.split(separator: "/").last == "stops" {
-                            let stops = try decoder.decode([StopData].self, from: data)
+                        else if endpoint.split(separator: "/").last == "pattern" {
+                            let stops = try decoder.decode([PatternData].self, from: data)
                             let busStops = self.gatherBusStops(data: stops)
                             self.delegate?.didGatherBusStops(stops: busStops)
                         }
@@ -68,10 +68,10 @@ class DataGatherer {
         }
         return routes
     }
-    func gatherBusStops(data: [StopData]) -> [BusStop] {
-        var stops: [BusStop] = []
+    func gatherBusStops(data: [PatternData]) -> [BusPattern] {
+        var stops: [BusPattern] = []
         for stop in data {
-            let busStop = BusStop(name: stop.Name, latitude: stop.Latitude, longitude: stop.Longtitude, isTimePoint: stop.Stop.IsTimePoint)
+            let busStop = BusPattern(name: stop.Name, latitude: stop.Latitude, longitude: stop.Longtitude)
             stops.append(busStop)
         }
         return stops

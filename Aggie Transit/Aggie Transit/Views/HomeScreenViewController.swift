@@ -66,6 +66,7 @@ class HomeScreenViewController: UIViewController {
                 map = MKMapView(frame: CGRect(x: 0, y: 0, width: width, height: height))
                 if let map = map{
                     // configure the map
+                    map.delegate = self
                     map.translatesAutoresizingMaskIntoConstraints = false
                     let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 30.614965, longitude: -96.340584), span: MKCoordinateSpan(latitudeDelta: 0.0125, longitudeDelta: 0.0125))
                     map.setRegion(region, animated: false)
@@ -131,6 +132,7 @@ class HomeScreenViewController: UIViewController {
                     if let homeScreenMenu = homeScreenMenu {
                         homeScreenMenu.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                         homeScreenMenu.translatesAutoresizingMaskIntoConstraints = false
+                        homeScreenMenu.pathDelegate = self
                         // add the home screen menu to the view hierarchy
                         map?.addSubview(homeScreenMenu)
                         // constrain the home screen menu
@@ -177,7 +179,26 @@ class HomeScreenViewController: UIViewController {
 }
 
 
-extension HomeScreenViewController {
-  
+extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if overlay is MKPolyline {
+            let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
+            renderer.strokeColor = .orange
+            renderer.lineWidth = 2
+            return renderer
+        }
+        fatalError("Overlay is of the wrong type")
+    }
+   
+    func didGatherStopPoints(stops: [CLLocationCoordinate2D]) {
+        if let map = map {
+            let boundedLine = MKPolyline(coordinates: stops, count: stops.count)
+            DispatchQueue.main.async {
+                map.addOverlay(boundedLine)
+            }
+        }
+    }
+    
+    
 }
 
