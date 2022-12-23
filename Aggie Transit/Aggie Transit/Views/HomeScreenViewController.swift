@@ -27,6 +27,9 @@ class HomeScreenViewController: UIViewController {
     private var homeScreenMenuWidth: Double?
     private var animationDuration:TimeInterval = 0.5
     private var navigationBar: UINavigationBar?
+    private var currentDisplayedRoute: MKPolyline?
+    private var longitudeDelta: Double?
+    private var latitudeDelta: Double?
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
@@ -64,10 +67,13 @@ class HomeScreenViewController: UIViewController {
                 self.view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                 // configure the map
                 map = MKMapView(frame: CGRect(x: 0, y: 0, width: width, height: height))
-                if let map = map{
+                longitudeDelta = 0.0125
+                latitudeDelta = 0.0125
+                if let map = map, let longitudeDelta = longitudeDelta, let latitudeDelta = latitudeDelta{
                     // configure the map
+                    map.delegate = self
                     map.translatesAutoresizingMaskIntoConstraints = false
-                    let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 30.614965, longitude: -96.340584), span: MKCoordinateSpan(latitudeDelta: 0.0125, longitudeDelta: 0.0125))
+                    let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 30.614965, longitude: -96.340584), span: MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta))
                     map.setRegion(region, animated: false)
                     // add the map to the view hierarchy
                     self.view.addSubview(map)
@@ -79,68 +85,71 @@ class HomeScreenViewController: UIViewController {
                         map.topAnchor.constraint(equalTo: superViewMargins.topAnchor).isActive = true
                         map.bottomAnchor.constraint(equalTo: superViewMargins.bottomAnchor).isActive = true
                     }
-                }
-                // configure the buttons
-                buttonStack = UIStackView()
-                if let buttonStack = buttonStack{
-                    fabHeight = 54.85 * (height/812)
-                    fabWidth = fabHeight
+                    
+                    // configure the buttons
+                    buttonStack = UIStackView()
+                    if let buttonStack = buttonStack{
+                        fabHeight = 54.85 * (height/812)
+                        fabWidth = fabHeight
                         if let fabHeight = fabHeight, let fabWidth  = fabWidth{
                             // configure settings button
-                        homeScreenSettingsFAB = HomeScreenFAB(frame:  CGRect(x: 0, y: 0, width: fabWidth, height: fabHeight), backgroundImage: .settings, buttonName: .settings)
-                        if let homeScreenSettingsFAB = homeScreenSettingsFAB{
-                            homeScreenSettingsFAB.translatesAutoresizingMaskIntoConstraints = false
+                            homeScreenSettingsFAB = HomeScreenFAB(frame:  CGRect(x: 0, y: 0, width: fabWidth, height: fabHeight), backgroundImage: .settings, buttonName: .settings)
+                            if let homeScreenSettingsFAB = homeScreenSettingsFAB{
+                                homeScreenSettingsFAB.translatesAutoresizingMaskIntoConstraints = false
                                 // constrain settings button
-                            homeScreenSettingsFAB.widthAnchor.constraint(equalToConstant: fabWidth).isActive = true
-                            homeScreenSettingsFAB.heightAnchor.constraint(equalToConstant: fabHeight).isActive = true
-                        }
+                                homeScreenSettingsFAB.widthAnchor.constraint(equalToConstant: fabWidth).isActive = true
+                                homeScreenSettingsFAB.heightAnchor.constraint(equalToConstant: fabHeight).isActive = true
+                            }
                             // configure notifications button
-                        homeScreenNotificationsFAB = HomeScreenFAB(frame: CGRect(x: 0, y: 0, width: fabWidth, height: fabHeight), backgroundImage: .notifications, buttonName: .notifications)
-                        if let homeScreenNotificationsFAB = homeScreenNotificationsFAB, let homeScreenSettingsFAB = homeScreenSettingsFAB{
-                            homeScreenNotificationsFAB.translatesAutoresizingMaskIntoConstraints = false
+                            homeScreenNotificationsFAB = HomeScreenFAB(frame: CGRect(x: 0, y: 0, width: fabWidth, height: fabHeight), backgroundImage: .notifications, buttonName: .notifications)
+                            if let homeScreenNotificationsFAB = homeScreenNotificationsFAB, let homeScreenSettingsFAB = homeScreenSettingsFAB{
+                                homeScreenNotificationsFAB.translatesAutoresizingMaskIntoConstraints = false
                                 // constrain the notifications button
-                            homeScreenNotificationsFAB.widthAnchor.constraint(equalToConstant: fabWidth).isActive = true
-                            homeScreenNotificationsFAB.heightAnchor.constraint(equalToConstant: fabHeight).isActive = true
-                            // add event handlers to the buttons
-                            homeScreenSettingsFAB.addTarget(self, action: #selector(handleButtonPress), for: .touchUpInside)
-                            homeScreenNotificationsFAB.addTarget(self, action: #selector(handleButtonPress), for: .touchUpInside)
-                            // add the buttons to a stackview
-                            buttonStack.addArrangedSubview(homeScreenNotificationsFAB)
-                            buttonStack.addArrangedSubview(homeScreenSettingsFAB)
+                                homeScreenNotificationsFAB.widthAnchor.constraint(equalToConstant: fabWidth).isActive = true
+                                homeScreenNotificationsFAB.heightAnchor.constraint(equalToConstant: fabHeight).isActive = true
+                                // add event handlers to the buttons
+                                homeScreenSettingsFAB.addTarget(self, action: #selector(handleButtonPress), for: .touchUpInside)
+                                homeScreenNotificationsFAB.addTarget(self, action: #selector(handleButtonPress), for: .touchUpInside)
+                                // add the buttons to a stackview
+                                buttonStack.addArrangedSubview(homeScreenNotificationsFAB)
+                                buttonStack.addArrangedSubview(homeScreenSettingsFAB)
+                            }
                         }
+                        // configure the stackview
+                        buttonStack.axis = .vertical
+                        buttonStack.spacing = buttonSpacing
+                        buttonStack.alignment = .center
+                        buttonStack.translatesAutoresizingMaskIntoConstraints = false
+                        // add the button stack to the view hierarchy
+                        map.addSubview(buttonStack)
+                        // constrain the button stack
+                        mapMargins = map.safeAreaLayoutGuide
+                        if let mapMargins = mapMargins{
+                            buttonStack.trailingAnchor.constraint(equalTo: mapMargins.trailingAnchor, constant: -10).isActive = true
+                            buttonStack.topAnchor.constraint(equalTo: mapMargins.topAnchor,constant: 10).isActive = true
                         }
-                    // configure the stackview
-                    buttonStack.axis = .vertical
-                    buttonStack.spacing = buttonSpacing
-                    buttonStack.alignment = .center
-                    buttonStack.translatesAutoresizingMaskIntoConstraints = false
-                    // add the button stack to the view hierarchy
-                    map?.addSubview(buttonStack)
-                    // constrain the button stack
-                    mapMargins = map?.safeAreaLayoutGuide
-                    if let mapMargins = mapMargins{
-                        buttonStack.trailingAnchor.constraint(equalTo: mapMargins.trailingAnchor, constant: -10).isActive = true
-                        buttonStack.topAnchor.constraint(equalTo: mapMargins.topAnchor,constant: 10).isActive = true
                     }
-                }
-                // configure home screen menu view
-                homeScreenMenuHeight = 225 * (height/812)
-                homeScreenMenuWidth = width
-                if let homeScreenMenuWidth = homeScreenMenuWidth, let homeScreenMenuHeight = homeScreenMenuHeight{
-                    homeScreenMenu = HomeScreenMenuView(frame: CGRect(x: 0, y: 0, width: homeScreenMenuWidth, height: homeScreenMenuHeight))
-                    if let homeScreenMenu = homeScreenMenu {
-                        homeScreenMenu.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                        homeScreenMenu.translatesAutoresizingMaskIntoConstraints = false
-                        // add the home screen menu to the view hierarchy
-                        map?.addSubview(homeScreenMenu)
-                        // constrain the home screen menu
-                        if let mapMargins = mapMargins {
-                            homeScreenMenu.leadingAnchor.constraint(equalTo: mapMargins.leadingAnchor).isActive = true
-                            homeScreenMenu.trailingAnchor.constraint(equalTo: mapMargins.trailingAnchor).isActive = true
-                            homeScreenMenu.bottomAnchor.constraint(equalTo: mapMargins.bottomAnchor).isActive = true
-                            homeScreenMenu.heightAnchor.constraint(equalToConstant: homeScreenMenuHeight).isActive = true
-                }
-                }
+                    // configure home screen menu view
+                    homeScreenMenuHeight = 225 * (height/812)
+                    homeScreenMenuWidth = width
+                    if let homeScreenMenuWidth = homeScreenMenuWidth, let homeScreenMenuHeight = homeScreenMenuHeight{
+                        homeScreenMenu = HomeScreenMenuView(frame: CGRect(x: 0, y: 0, width: homeScreenMenuWidth, height: homeScreenMenuHeight))
+                        if let homeScreenMenu = homeScreenMenu {
+                            homeScreenMenu.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                            homeScreenMenu.translatesAutoresizingMaskIntoConstraints = false
+                            homeScreenMenu.pathDelegate = self
+                            // add the home screen menu to the view hierarchy
+                            map.addSubview(homeScreenMenu)
+                            // constrain the home screen menu
+                            if let mapMargins = mapMargins {
+                                homeScreenMenu.leadingAnchor.constraint(equalTo: mapMargins.leadingAnchor).isActive = true
+                                homeScreenMenu.trailingAnchor.constraint(equalTo: mapMargins.trailingAnchor).isActive = true
+                                homeScreenMenu.bottomAnchor.constraint(equalTo: mapMargins.bottomAnchor).isActive = true
+                                homeScreenMenu.heightAnchor.constraint(equalToConstant: homeScreenMenuHeight).isActive = true
+                            }
+                        }
+                    }
+                    
                 }
             }
            
@@ -177,7 +186,46 @@ class HomeScreenViewController: UIViewController {
 }
 
 
-extension HomeScreenViewController {
-  
+extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if overlay is MKPolyline {
+            let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
+            renderer.strokeColor = UIColor(named: cellBackgroundColor.bonfirePurple.rawValue)
+            renderer.lineWidth = 3
+            return renderer
+        }
+        fatalError("Overlay is of the wrong type")
+    }
+   
+    func didGatherStopPoints(stops: [CLLocationCoordinate2D]) {
+        if let map = map, let longitudeDelta = longitudeDelta, let latitudeDelta = latitudeDelta {
+            if let currentDisplayedRoute = currentDisplayedRoute {
+                DispatchQueue.main.async {
+                    map.removeOverlay(currentDisplayedRoute)
+                }
+                let boundedLine = MKPolyline(coordinates: stops, count: stops.count)
+                
+                self.currentDisplayedRoute = boundedLine
+                DispatchQueue.main.async {
+                    map.addOverlay(boundedLine)
+                    // change the region of the map based on currently displayed bus route
+                    let region = MKCoordinateRegion(center: boundedLine.coordinate, span: MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta))
+                    map.setRegion(region, animated: true)
+                }
+            }
+            else {
+                let boundedLine = MKPolyline(coordinates: stops, count: stops.count)
+                currentDisplayedRoute = boundedLine
+                DispatchQueue.main.async {
+                    map.addOverlay(boundedLine)
+                    // change the region of the map based on currently displayed bus route
+                    let region = MKCoordinateRegion(center: boundedLine.coordinate, span: MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta))
+                    map.setRegion(region, animated: true)
+                }
+            }
+        }
+    }
+    
+    
 }
 

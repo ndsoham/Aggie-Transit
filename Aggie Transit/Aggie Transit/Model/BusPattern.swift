@@ -6,9 +6,8 @@
 //
 
 import Foundation
-struct BusStop {
+struct BusPattern{
     var name: String
-    var latitude: Float
-    var longitude: Float
-    var isTimePoint: Bool
+    var latitude: Double
+    var longitude: Double
 }

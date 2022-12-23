@@ -7,6 +7,10 @@
 
 import Foundation
 import UIKit
+import MapKit
+protocol PathMakerDelegate {
+    func didGatherStopPoints(stops: [CLLocationCoordinate2D])
+}
 
 class HomeScreenMenuView: UIView {
     private var searchBar: UISearchBar?
@@ -36,6 +40,7 @@ class HomeScreenMenuView: UIView {
     private var onCampusRoutes: [BusRoute]?
     private var offCampusRoutes: [BusRoute]?
     private var programmedScroll: Bool = false
+    public var pathDelegate: PathMakerDelegate?
     override init(frame: CGRect){
         super.init(frame: frame)
         layoutSubviews()
@@ -230,14 +235,14 @@ extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate {
         if tableView == allRoutesTableView {
             if indexPath.section == 0 {
                 if let onCampusRoutes = onCampusRoutes, let dataGatherer = dataGatherer {
-                    var endpoint = "route/{route}/stops"
+                    var endpoint = "route/{route}/pattern"
                     endpoint = endpoint.replacingOccurrences(of: "{route}", with: onCampusRoutes[indexPath.row].number)
                     dataGatherer.gatherData(endpoint: endpoint)
                 }
             }
             else if indexPath.section == 1 {
                 if let offCampusRoutes = offCampusRoutes, let dataGatherer = dataGatherer {
-                    var endpoint = "route/{route}/stops"
+                    var endpoint = "route/{route}/pattern"
                     endpoint = endpoint.replacingOccurrences(of: "{route}", with: offCampusRoutes[indexPath.row].number)
                     dataGatherer.gatherData(endpoint: endpoint)
                 }
@@ -391,7 +396,15 @@ extension UISegmentedControl: UIScrollViewDelegate {
 }
 
 extension HomeScreenMenuView: DataGathererDelegate {
-    func didGatherBusStops(stops: [BusStop]) {
+    func didGatherBusStops(stops: [BusPattern]) {
+        var stopPoints: [CLLocationCoordinate2D] = []
+        for stop in stops {
+            let latitude = CoordinateConverter(latitude: stop.latitude, longitude: stop.longitude).0
+            let longitude = CoordinateConverter(latitude: stop.latitude, longitude: stop.longitude).1
+            let point = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+            stopPoints.append(point)
+        }
+        self.pathDelegate?.didGatherStopPoints(stops: stopPoints)
         
     }
     
@@ -401,6 +414,7 @@ extension HomeScreenMenuView: DataGathererDelegate {
         DispatchQueue.main.async {
             self.allRoutesTableView?.reloadData()
         }
+        
     }
     
     
