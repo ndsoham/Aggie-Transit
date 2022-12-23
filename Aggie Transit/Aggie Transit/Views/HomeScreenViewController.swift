@@ -166,6 +166,10 @@ class HomeScreenViewController: UIViewController {
         }
         
     }
+}
+//MARK: - top right buttons pressed
+
+extension HomeScreenViewController{
     @objc func handleButtonPress(sender: HomeScreenFAB) {
         if sender.buttonName.rawValue == "Settings Button"{
             presentSettingsScreen()
