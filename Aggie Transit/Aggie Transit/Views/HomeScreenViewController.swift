@@ -30,6 +30,7 @@ class HomeScreenViewController: UIViewController {
     private var currentDisplayedRoute: MKPolyline?
     private var longitudeDelta: Double?
     private var latitudeDelta: Double?
+    private var menuCollapsed: Bool?
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
@@ -135,9 +136,16 @@ class HomeScreenViewController: UIViewController {
                     if let homeScreenMenuWidth = homeScreenMenuWidth, let homeScreenMenuHeight = homeScreenMenuHeight{
                         homeScreenMenu = HomeScreenMenuView(frame: CGRect(x: 0, y: 0, width: homeScreenMenuWidth, height: homeScreenMenuHeight))
                         if let homeScreenMenu = homeScreenMenu {
+                            menuCollapsed = false
                             homeScreenMenu.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                             homeScreenMenu.translatesAutoresizingMaskIntoConstraints = false
                             homeScreenMenu.pathDelegate = self
+                            let downSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(homeScreenMenuSwiped))
+                            downSwipeGesture.direction = .down
+                            let upSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(homeScreenMenuSwiped))
+                            upSwipeGesture.direction = .up
+                            homeScreenMenu.addGestureRecognizer(downSwipeGesture)
+                            homeScreenMenu.addGestureRecognizer(upSwipeGesture)
                             // add the home screen menu to the view hierarchy
                             map.addSubview(homeScreenMenu)
                             // constrain the home screen menu
@@ -147,6 +155,7 @@ class HomeScreenViewController: UIViewController {
                                 homeScreenMenu.bottomAnchor.constraint(equalTo: mapMargins.bottomAnchor).isActive = true
                                 homeScreenMenu.heightAnchor.constraint(equalToConstant: homeScreenMenuHeight).isActive = true
                             }
+                            
                         }
                     }
                     
@@ -185,7 +194,7 @@ class HomeScreenViewController: UIViewController {
     }
 }
 
-
+//MARK: - handle the map and creating paths
 extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if overlay is MKPolyline {
@@ -227,5 +236,33 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
     }
     
     
+}
+//MARK: - handle home screen menu gestures
+extension HomeScreenViewController {
+    @objc func homeScreenMenuSwiped(sender: UISwipeGestureRecognizer) {
+        if sender.direction == .up {
+                if let homeScreenMenu = homeScreenMenu, let menuCollapsed = menuCollapsed, let height = height, let width = width, let homeScreenMenuHeight = homeScreenMenuHeight {
+                    if menuCollapsed {
+                        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseIn) {
+                            homeScreenMenu.frame = CGRect(x: 0, y: height - homeScreenMenuHeight, width: width, height: homeScreenMenu.frame.height)
+                        }completion: { _ in
+                            self.menuCollapsed = false
+                        }
+                    }
+                }
+            
+        }
+        else if sender.direction == .down {
+            if let homeScreenMenu = homeScreenMenu, let menuCollapsed = menuCollapsed, let height = height, let width = width{
+                if !menuCollapsed {
+                    UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut) {
+                        homeScreenMenu.frame = CGRect(x: 0, y: height - (0.33)*(homeScreenMenu.frame.height), width: width, height: homeScreenMenu.frame.height)
+                    } completion: { _ in
+                        self.menuCollapsed = true
+                    }
+                }
+            }
+        }
+    }
 }
 
