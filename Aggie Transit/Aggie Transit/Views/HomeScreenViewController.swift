@@ -34,6 +34,8 @@ class HomeScreenViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
+        print(homeScreenMenu?.frame.origin)
+
     }
     override func viewWillAppear(_ animated: Bool) {
         // hide the navigation bar
@@ -244,11 +246,13 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
 //MARK: - handle home screen menu gestures
 extension HomeScreenViewController {
     @objc func homeScreenMenuSwiped(sender: UISwipeGestureRecognizer) {
+       
+
         if sender.direction == .up {
-                if let homeScreenMenu = homeScreenMenu, let menuCollapsed = menuCollapsed, let height = height, let width = width, let homeScreenMenuHeight = homeScreenMenuHeight {
+                if let homeScreenMenu = homeScreenMenu, let menuCollapsed = menuCollapsed, let height = height, let width = width, let homeScreenMenuHeight = homeScreenMenuHeight, let safeAreaHeight = safeAreaHeight {
                     if menuCollapsed {
-                        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseIn) {
-                            homeScreenMenu.frame = CGRect(x: 0, y: height - homeScreenMenuHeight, width: width, height: homeScreenMenu.frame.height)
+                        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn) {
+                            homeScreenMenu.frame.origin.y -= homeScreenMenuHeight/2
                         }completion: { _ in
                             self.menuCollapsed = false
                         }
@@ -259,8 +263,8 @@ extension HomeScreenViewController {
         else if sender.direction == .down {
             if let homeScreenMenu = homeScreenMenu, let menuCollapsed = menuCollapsed, let height = height, let width = width{
                 if !menuCollapsed {
-                    UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut) {
-                        homeScreenMenu.frame = CGRect(x: 0, y: height - (0.33)*(homeScreenMenu.frame.height), width: width, height: homeScreenMenu.frame.height)
+                    UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
+                        homeScreenMenu.frame.origin.y += self.homeScreenMenuHeight!/2
                     } completion: { _ in
                         self.menuCollapsed = true
                     }
