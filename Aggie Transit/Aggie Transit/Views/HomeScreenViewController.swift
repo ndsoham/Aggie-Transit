@@ -30,7 +30,7 @@ class HomeScreenViewController: UIViewController {
     private var currentlyDisplayedPattern: MKPolyline?
     private var longitudeDelta: Double?
     private var latitudeDelta: Double?
-    private var menuCollapsed: Bool?
+    public var menuCollapsed: Bool?
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
@@ -256,7 +256,7 @@ extension HomeScreenViewController {
 }
 //MARK: - Create methods to dismiss and present the menu
 extension HomeScreenViewController {
-    func dismissMenu() {
+    func dismissMenu(){
         if let homeScreenMenu = homeScreenMenu, let menuCollapsed = menuCollapsed, let homeScreenMenuHeight = homeScreenMenuHeight{
             if !menuCollapsed {
                 DispatchQueue.main.async {
@@ -283,4 +283,7 @@ extension HomeScreenViewController {
         }
     }
 }
-
+//MARK: - manage when the app comes into the foreground
+extension HomeScreenViewController {
+    
+}
