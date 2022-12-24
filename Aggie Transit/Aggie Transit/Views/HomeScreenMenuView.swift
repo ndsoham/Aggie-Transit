@@ -275,7 +275,7 @@ extension HomeScreenMenuView: UITableViewDataSource {
             }
         }
         else {
-            return "On-Campus"
+            return "Routes"
         }
     }
     // provide number of rows in section

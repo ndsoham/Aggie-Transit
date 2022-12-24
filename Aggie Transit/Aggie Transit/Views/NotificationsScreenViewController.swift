@@ -31,7 +31,6 @@ class NotificationsScreenViewController: UIViewController {
             let appearance = UINavigationBarAppearance()
             appearance.shadowColor = .clear
             appearance.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-            navigationItem.compactScrollEdgeAppearance = appearance
             navigationItem.scrollEdgeAppearance = appearance
             navigationItem.compactAppearance = appearance
             navigationItem.standardAppearance = appearance
@@ -80,10 +79,7 @@ class NotificationsScreenViewController: UIViewController {
     }
 }
 
-extension NotificationsScreenViewController: UITableViewDataSource, UITableViewDelegate, BackButtonDelegate{
-    func handleBackButtonPressed() {
-        self.dismiss(animated: true)
-    }
+extension NotificationsScreenViewController: UITableViewDataSource, UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 20
