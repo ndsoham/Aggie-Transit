@@ -11,7 +11,7 @@
 		0F031B9A2929BAF800055421 /* SettingsScreenTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F031B992929BAF800055421 /* SettingsScreenTableViewCell.swift */; };
 		0F031B9C2929BB1200055421 /* NotificationsScreenTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F031B9B2929BB1200055421 /* NotificationsScreenTableViewCell.swift */; };
 		0F0F8C922952398600BB617E /* BusRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C912952398600BB617E /* BusRoute.swift */; };
-		0F0F8C95295293E300BB617E /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C94295293E300BB617E /* Color.swift */; };
+		0F0F8C95295293E300BB617E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C94295293E300BB617E /* Extensions.swift */; };
 		0F0F8C972953F95800BB617E /* PatternData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C962953F95800BB617E /* PatternData.swift */; };
 		0F0F8C992953FBAB00BB617E /* BusPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C982953FBAB00BB617E /* BusPattern.swift */; };
 		0F1AF87E2950E46100BE0C85 /* RouteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F1AF87D2950E46100BE0C85 /* RouteData.swift */; };
@@ -35,7 +35,7 @@
 		0F031B992929BAF800055421 /* SettingsScreenTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenTableViewCell.swift; sourceTree = "<group>"; };
 		0F031B9B2929BB1200055421 /* NotificationsScreenTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsScreenTableViewCell.swift; sourceTree = "<group>"; };
 		0F0F8C912952398600BB617E /* BusRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusRoute.swift; sourceTree = "<group>"; };
-		0F0F8C94295293E300BB617E /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		0F0F8C94295293E300BB617E /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		0F0F8C962953F95800BB617E /* PatternData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternData.swift; sourceTree = "<group>"; };
 		0F0F8C982953FBAB00BB617E /* BusPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusPattern.swift; sourceTree = "<group>"; };
 		0F1AF87D2950E46100BE0C85 /* RouteData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteData.swift; sourceTree = "<group>"; };
@@ -85,12 +85,12 @@
 			path = APIData;
 			sourceTree = "<group>";
 		};
-		0F0F8C93295293D300BB617E /* Color Extension */ = {
+		0F0F8C93295293D300BB617E /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				0F0F8C94295293E300BB617E /* Color.swift */,
+				0F0F8C94295293E300BB617E /* Extensions.swift */,
 			);
-			path = "Color Extension";
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		0F36CD2B29155B460059BC24 = {
@@ -127,11 +127,11 @@
 		0F36CD4D29155F560059BC24 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				0F0F8C93295293D300BB617E /* Color Extension */,
-				0F62CD092938847700374C63 /* HomeScreenMenuView.swift */,
+				0F0F8C93295293D300BB617E /* Extensions */,
 				0F031B962929BA4D00055421 /* Navigation View */,
 				0FEE66092919E464004E2C93 /* Table View Cells */,
 				0F36CD54291562070059BC24 /* Buttons */,
+				0F62CD092938847700374C63 /* HomeScreenMenuView.swift */,
 				0F2F37FD29318150005998AF /* HomeScreenViewController.swift */,
 				0F36CD502915602B0059BC24 /* SettingsScreenViewController.swift */,
 				0F36CD52291560A80059BC24 /* NotificationsScreenViewController.swift */,
@@ -256,7 +256,7 @@
 				0F36CD512915602B0059BC24 /* SettingsScreenViewController.swift in Sources */,
 				0F031B982929BA6000055421 /* NavigationView.swift in Sources */,
 				0F031B9A2929BAF800055421 /* SettingsScreenTableViewCell.swift in Sources */,
-				0F0F8C95295293E300BB617E /* Color.swift in Sources */,
+				0F0F8C95295293E300BB617E /* Extensions.swift in Sources */,
 				0F0F8C972953F95800BB617E /* PatternData.swift in Sources */,
 				0F36CD3A29155B460059BC24 /* SceneDelegate.swift in Sources */,
 				0F770040294CB243008C421A /* HomeScreenModalTableViewCell.swift in Sources */,

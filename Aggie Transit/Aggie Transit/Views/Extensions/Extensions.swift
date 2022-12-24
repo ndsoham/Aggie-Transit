@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-
+//MARK: - UI Color Extension to create rgb color from string
 extension UIColor {
     class func colorFromRGBString(string: String) -> UIColor {
         let alpha = 1.0
@@ -27,8 +27,19 @@ extension UIColor {
             return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: alpha)
 
         }
-        return UIColor()
+        return UIColor(red: 80/255, green: 0, blue: 0, alpha: 1.0)
         
     }
 }
-
+//MARK: - UISegementedControl extension to conform to UIScrollViewDelegate
+extension UISegmentedControl: UIScrollViewDelegate {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.selectedSegmentIndex = scrollView.currentPage
+    }
+}
+//MARK: - UIScrollView Extension to create a page property
+extension UIScrollView {
+    var currentPage:Int{
+        return Int((self.contentOffset.x+(0.5*self.frame.size.width))/self.frame.width)
+    }
+}

@@ -9,13 +9,13 @@ import Foundation
 import UIKit
 protocol DataGathererDelegate {
     func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute])
-    func didGatherBusStops(stops: [BusPattern])
+    func didGatherBusStops(stops: [BusPattern], route: BusRoute)
 }
 class DataGatherer {
     private let baseUrl = "https://transport.tamu.edu/BusRoutesFeed/api/"
     public var delegate: DataGathererDelegate?
     init(){}
-    func gatherData(endpoint: String){
+    func gatherData(endpoint: String, route: BusRoute = BusRoute(name: "error", number: "error", color: "error", campus: "error")){
         let url = URL(string: baseUrl+endpoint)
         if let url = url{
             let task = URLSession.shared.dataTask(with: url) { data, response, error in
@@ -38,7 +38,7 @@ class DataGatherer {
                         else if endpoint.split(separator: "/").last == "pattern" {
                             let stops = try decoder.decode([PatternData].self, from: data)
                             let busStops = self.gatherBusStops(data: stops)
-                            self.delegate?.didGatherBusStops(stops: busStops)
+                            self.delegate?.didGatherBusStops(stops: busStops, route: route)
                         }
                     } catch {
                         print("An error has occured: \(error)")

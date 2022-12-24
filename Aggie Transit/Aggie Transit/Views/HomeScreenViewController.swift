@@ -27,14 +27,14 @@ class HomeScreenViewController: UIViewController {
     private var homeScreenMenuWidth: Double?
     private var animationDuration:TimeInterval = 0.5
     private var navigationBar: UINavigationBar?
-    private var currentDisplayedRoute: MKPolyline?
+    private var currentlyDisplayedPattern: MKPolyline?
+    private var currentlyDisplayedBusRoute: BusRoute?
     private var longitudeDelta: Double?
     private var latitudeDelta: Double?
     private var menuCollapsed: Bool?
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
-        print(homeScreenMenu?.frame.origin)
 
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -133,7 +133,7 @@ class HomeScreenViewController: UIViewController {
                         }
                     }
                     // configure home screen menu view
-                    homeScreenMenuHeight = 225 * (height/812)
+                    homeScreenMenuHeight = (812/3) * (height/812)
                     homeScreenMenuWidth = width
                     if let homeScreenMenuWidth = homeScreenMenuWidth, let homeScreenMenuHeight = homeScreenMenuHeight{
                         homeScreenMenu = HomeScreenMenuView(frame: CGRect(x: 0, y: 0, width: homeScreenMenuWidth, height: homeScreenMenuHeight))
@@ -204,38 +204,40 @@ extension HomeScreenViewController{
 extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if overlay is MKPolyline {
-            let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
-            renderer.strokeColor = UIColor(named: cellBackgroundColor.bonfirePurple.rawValue)
-            renderer.lineWidth = 3
-            return renderer
+            if let currentlyDisplayedBusRoute = currentlyDisplayedBusRoute{
+                let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
+                renderer.strokeColor = UIColor.colorFromRGBString(string: currentlyDisplayedBusRoute.color)
+                renderer.lineWidth = 3
+                return renderer
+            }
         }
         fatalError("Overlay is of the wrong type")
     }
    
-    func didGatherStopPoints(stops: [CLLocationCoordinate2D]) {
-        if let map = map, let longitudeDelta = longitudeDelta, let latitudeDelta = latitudeDelta {
-            if let currentDisplayedRoute = currentDisplayedRoute {
+    func didGatherStopPoints(stops: [CLLocationCoordinate2D], route: BusRoute) {
+        if let map = map, let homeScreenMenuHeight = homeScreenMenuHeight {
+            self.dismissMenu()
+            if let currentlyDisplayedPattern = currentlyDisplayedPattern, let _ = currentlyDisplayedBusRoute {
                 DispatchQueue.main.async {
-                    map.removeOverlay(currentDisplayedRoute)
+                    map.removeOverlay(currentlyDisplayedPattern)
                 }
                 let boundedLine = MKPolyline(coordinates: stops, count: stops.count)
-                
-                self.currentDisplayedRoute = boundedLine
+                self.currentlyDisplayedBusRoute = route
+                self.currentlyDisplayedPattern = boundedLine
                 DispatchQueue.main.async {
                     map.addOverlay(boundedLine)
                     // change the region of the map based on currently displayed bus route
-                    let region = MKCoordinateRegion(center: boundedLine.coordinate, span: MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta))
-                    map.setRegion(region, animated: true)
+                    map.visibleMapRect = map.mapRectThatFits(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: homeScreenMenuHeight * 0.33, left: 5, bottom: homeScreenMenuHeight * 0.33, right: 5))
                 }
             }
             else {
                 let boundedLine = MKPolyline(coordinates: stops, count: stops.count)
-                currentDisplayedRoute = boundedLine
+                currentlyDisplayedPattern = boundedLine
+                currentlyDisplayedBusRoute = route
                 DispatchQueue.main.async {
                     map.addOverlay(boundedLine)
                     // change the region of the map based on currently displayed bus route
-                    let region = MKCoordinateRegion(center: boundedLine.coordinate, span: MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta))
-                    map.setRegion(region, animated: true)
+                    map.visibleMapRect = map.mapRectThatFits(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: homeScreenMenuHeight * 0.33, left: 5, bottom: homeScreenMenuHeight * 0.33, right: 5))
                 }
             }
         }
@@ -246,27 +248,37 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
 //MARK: - handle home screen menu gestures
 extension HomeScreenViewController {
     @objc func homeScreenMenuSwiped(sender: UISwipeGestureRecognizer) {
-       
-
         if sender.direction == .up {
-                if let homeScreenMenu = homeScreenMenu, let menuCollapsed = menuCollapsed, let height = height, let width = width, let homeScreenMenuHeight = homeScreenMenuHeight, let safeAreaHeight = safeAreaHeight {
-                    if menuCollapsed {
-                        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn) {
-                            homeScreenMenu.frame.origin.y -= homeScreenMenuHeight/2
-                        }completion: { _ in
-                            self.menuCollapsed = false
-                        }
-                    }
-                }
-            
+            self.presentMenu()
         }
         else if sender.direction == .down {
-            if let homeScreenMenu = homeScreenMenu, let menuCollapsed = menuCollapsed, let height = height, let width = width{
-                if !menuCollapsed {
+            self.dismissMenu()
+        }
+    }
+}
+//MARK: - Create methods to dismiss and present the menu
+extension HomeScreenViewController {
+    func dismissMenu() {
+        if let homeScreenMenu = homeScreenMenu, let menuCollapsed = menuCollapsed, let homeScreenMenuHeight = homeScreenMenuHeight{
+            if !menuCollapsed {
+                DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
-                        homeScreenMenu.frame.origin.y += self.homeScreenMenuHeight!/2
+                        homeScreenMenu.frame.origin.y += homeScreenMenuHeight/1.33
                     } completion: { _ in
                         self.menuCollapsed = true
+                    }
+                }
+            }
+        }
+    }
+    func presentMenu(){
+        if let homeScreenMenu = homeScreenMenu, let menuCollapsed = menuCollapsed, let homeScreenMenuHeight = homeScreenMenuHeight {
+            if menuCollapsed {
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn) {
+                        homeScreenMenu.frame.origin.y -= homeScreenMenuHeight/1.33
+                    }completion: { _ in
+                        self.menuCollapsed = false
                     }
                 }
             }

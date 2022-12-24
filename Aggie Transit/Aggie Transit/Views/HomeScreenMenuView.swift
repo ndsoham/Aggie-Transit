@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import MapKit
 protocol PathMakerDelegate {
-    func didGatherStopPoints(stops: [CLLocationCoordinate2D])
+    func didGatherStopPoints(stops: [CLLocationCoordinate2D], route: BusRoute)
 }
 
 class HomeScreenMenuView: UIView {
@@ -41,6 +41,9 @@ class HomeScreenMenuView: UIView {
     private var offCampusRoutes: [BusRoute]?
     private var programmedScroll: Bool = false
     public var pathDelegate: PathMakerDelegate?
+    private var grabber: UIView?
+    private var grabberHeight: Double?
+    private var grabberWidth: Double?
     override init(frame: CGRect){
         super.init(frame: frame)
         layoutSubviews()
@@ -60,195 +63,222 @@ class HomeScreenMenuView: UIView {
         width = self.frame.width
         self.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
         self.isUserInteractionEnabled = true
+        self.layer.cornerRadius = 15
         if let height = height, let width = width {
-            // configure search bar
-            searchBarHeight = 52 * (height/200)
-            searchBarWidth = width
-            if let searchBarHeight = searchBarHeight, let searchBarWidth = searchBarWidth {
-                searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: searchBarWidth, height: searchBarHeight))
-                if let searchBar = searchBar {
-                    searchBar.placeholder = "Memorial Student Center (MSC)"
-                    searchBar.searchBarStyle = .minimal
-                    searchBar.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                    searchBar.translatesAutoresizingMaskIntoConstraints = false
-                    if let searchField = searchBar.value(forKey: "searchField") as? UITextField {
-                        searchField.textColor = UIColor(named: "textColor")
-                        searchField.layer.borderWidth = 2
-                        searchField.clipsToBounds = true
-                        searchField.layer.cornerRadius = 18
-                        searchField.layer.borderColor = UIColor(named: "borderColor")?.cgColor
-                    }
-                    
-                    // constrain the search bar
-                    searchBar.widthAnchor.constraint(equalToConstant: searchBarWidth).isActive = true
-                    searchBar.heightAnchor.constraint(equalToConstant: searchBarHeight).isActive = true
-                    // configure the page controller
-                    pageControllerHeight = 30 * (height/200)
-                    pageControllerWidth = width - 16
-                    if let pageControllerHeight = pageControllerHeight, let pageControllerWidth = pageControllerWidth {
-                        pageController = UISegmentedControl(frame: CGRect(x: 0, y: 0, width: pageControllerWidth, height: pageControllerHeight))
-                        if let pageController = pageController{
-                            pageController.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                            pageController.insertSegment(withTitle: "Recents", at: 0, animated: false)
-                            pageController.insertSegment(withTitle: "Favorites", at: 1, animated: false)
-                            pageController.insertSegment(withTitle: "All Routes", at: 2, animated: false)
-                            pageController.selectedSegmentIndex = 0
-                            pageController.translatesAutoresizingMaskIntoConstraints = false
-                            pageController.isUserInteractionEnabled = true
-                            pageController.addTarget(self, action: #selector(handleControlPageChanged), for: .valueChanged)
-                            // constrain the page controller
-                            pageController.widthAnchor.constraint(equalToConstant: pageControllerWidth).isActive = true
-                            pageController.heightAnchor.constraint(equalToConstant: pageControllerHeight).isActive = true
-                            // configure the scroll view
-                            scrollViewHeight = height - pageControllerHeight - searchBarHeight
-                            scrollViewWidth = width
-                            if let scrollViewHeight = scrollViewHeight, let scrollViewWidth = scrollViewWidth {
-                                scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: scrollViewWidth, height: scrollViewHeight))
-                                if let scrollView = scrollView {
-                                    scrollView.contentSize = CGSize(width: scrollViewWidth*3, height: scrollViewHeight)
-                                    scrollView.translatesAutoresizingMaskIntoConstraints = false
-                                    scrollView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                                    scrollView.showsVerticalScrollIndicator = false
-                                    scrollView.showsHorizontalScrollIndicator = false
-                                    scrollView.isDirectionalLockEnabled = true
-                                    scrollView.isPagingEnabled = true
-                                    scrollView.delegate = pageController
-                                    // constrain the scroll view
-                                    scrollView.widthAnchor.constraint(equalToConstant: scrollViewWidth).isActive = true
-                                    scrollView.heightAnchor.constraint(equalToConstant: scrollViewHeight).isActive = true
-                                    // configure the table views
-                                    tableViewHeight = height - pageControllerHeight - searchBarHeight
-                                    tableViewWidth = width
-                                    if let tableViewHeight = tableViewHeight, let tableViewWidth = tableViewWidth {
-                                        recentsTableView = UITableView(frame: CGRect(x: 0, y: 0, width: tableViewWidth, height: tableViewHeight))
-                                        favoritesTableView = UITableView(frame: CGRect(x: 0, y: 0, width: tableViewWidth, height: tableViewHeight))
-                                        allRoutesTableView = UITableView(frame: CGRect(x: 0, y: 0, width: tableViewWidth, height: tableViewHeight))
-                                        if let recentsTableView = recentsTableView, let favoritesTableView = favoritesTableView, let allRoutesTableView = allRoutesTableView {
-                                            // register the cell
-                                            recentsTableView.register(HomeScreenModalTableViewCell.self, forCellReuseIdentifier: "homeScreenModalTableViewCell")
-                                            favoritesTableView.register(HomeScreenModalTableViewCell.self, forCellReuseIdentifier: "homeScreenModalTableViewCell")
-                                            allRoutesTableView.register(HomeScreenModalTableViewCell.self, forCellReuseIdentifier: "homeScreenModalTableViewCell")
-                                            // configure the recents table view
-                                            recentsTableView.dataSource = self
-                                            recentsTableView.delegate = self
-                                            recentsTableView.translatesAutoresizingMaskIntoConstraints = false
-                                            recentsTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                                            recentsTableView.rowHeight = 122
-                                            recentsTableView.separatorStyle = .none
-                                            recentsTableView.allowsSelection = false
-                                            // constrain the recents table view
-                                            recentsTableView.widthAnchor.constraint(equalToConstant: tableViewWidth).isActive = true
-                                            recentsTableView.heightAnchor.constraint(equalToConstant: tableViewHeight).isActive = true
-                                            // configure the favorites table view
-                                            favoritesTableView.dataSource = self
-                                            favoritesTableView.delegate = self
-                                            favoritesTableView.translatesAutoresizingMaskIntoConstraints = false
-                                            favoritesTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                                            favoritesTableView.rowHeight = 122
-                                            favoritesTableView.separatorStyle = .none
-                                            favoritesTableView.allowsSelection = false
-                                            // constrain the favorites table view
-                                            favoritesTableView.widthAnchor.constraint(equalToConstant: tableViewWidth).isActive = true
-                                            favoritesTableView.heightAnchor.constraint(equalToConstant: tableViewHeight).isActive = true
-                                            // configure the all routes table view
-                                            allRoutesTableView.allowsMultipleSelection = false
-                                            allRoutesTableView.allowsSelection = true
-                                            allRoutesTableView.dataSource = self
-                                            allRoutesTableView.delegate = self
-                                            allRoutesTableView.translatesAutoresizingMaskIntoConstraints = false
-                                            allRoutesTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                                            allRoutesTableView.rowHeight = 122
-                                            allRoutesTableView.separatorStyle = .none
-                                            
-                                            // constrain the all routes table view
-                                            allRoutesTableView.widthAnchor.constraint(equalToConstant: tableViewWidth).isActive = true
-                                            allRoutesTableView.heightAnchor.constraint(equalToConstant: tableViewHeight).isActive = true
-                                            // configure the table stackview
-                                            tableViewStackWidth = width
-                                            tableViewStackHeight = scrollViewHeight
-                                            if let tableViewStackWidth = tableViewStackWidth, let tableViewStackHeight = tableViewStackHeight {
-                                                tableViewStack = UIStackView(frame: CGRect(x: 0, y: 0, width: tableViewStackWidth, height: tableViewStackHeight))
-                                                if let tableViewStack = tableViewStack {
-                                                    tableViewStack.axis = .horizontal
-                                                    tableViewStack.distribution = .fill
-                                                    tableViewStack.alignment = .leading
-                                                    tableViewStack.translatesAutoresizingMaskIntoConstraints = false
+            // create a grabber
+           grabberHeight = 5
+            grabberWidth = 50
+            if let grabberHeight = grabberHeight, let grabberWidth = grabberWidth{
+                grabber = UIView(frame: CGRect(x: 0, y: 0, width: grabberWidth, height: grabberHeight))
+                if let grabber = grabber{
+                    // configure the grabber
+                    grabber.backgroundColor = .lightGray
+                    grabber.alpha = 0.5
+                    grabber.layer.cornerRadius = 3
+                    // constrain the grabber
+                    grabber.widthAnchor.constraint(equalToConstant: grabberWidth).isActive = true
+                    grabber.heightAnchor.constraint(equalToConstant: grabberHeight).isActive = true
+                    // configure search bar
+                    searchBarHeight = 52 * (height/(812/3))
+                    searchBarWidth = width
+                    if let searchBarHeight = searchBarHeight, let searchBarWidth = searchBarWidth {
+                        searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: searchBarWidth, height: searchBarHeight))
+                        if let searchBar = searchBar {
+                            searchBar.placeholder = "Memorial Student Center (MSC)"
+                            searchBar.searchBarStyle = .minimal
+                            searchBar.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                            searchBar.translatesAutoresizingMaskIntoConstraints = false
+                            if let searchField = searchBar.value(forKey: "searchField") as? UITextField {
+                                searchField.textColor = UIColor(named: "textColor")
+                                searchField.layer.borderWidth = 2
+                                searchField.clipsToBounds = true
+                                searchField.layer.cornerRadius = 18
+                                searchField.layer.borderColor = UIColor(named: "borderColor")?.cgColor
+                            }
+                            
+                            // constrain the search bar
+                            searchBar.widthAnchor.constraint(equalToConstant: searchBarWidth).isActive = true
+                            searchBar.heightAnchor.constraint(equalToConstant: searchBarHeight).isActive = true
+                            // configure the page controller
+                            pageControllerHeight = 30 * (height/(812/3))
+                            pageControllerWidth = width - 16
+                            if let pageControllerHeight = pageControllerHeight, let pageControllerWidth = pageControllerWidth {
+                                pageController = UISegmentedControl(frame: CGRect(x: 0, y: 0, width: pageControllerWidth, height: pageControllerHeight))
+                                if let pageController = pageController{
+                                    pageController.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                                    pageController.insertSegment(withTitle: "Recents", at: 0, animated: false)
+                                    pageController.insertSegment(withTitle: "Favorites", at: 1, animated: false)
+                                    pageController.insertSegment(withTitle: "All Routes", at: 2, animated: false)
+                                    pageController.selectedSegmentIndex = 0
+                                    pageController.translatesAutoresizingMaskIntoConstraints = false
+                                    pageController.isUserInteractionEnabled = true
+                                    pageController.addTarget(self, action: #selector(handleControlPageChanged), for: .valueChanged)
+                                    // constrain the page controller
+                                    pageController.widthAnchor.constraint(equalToConstant: pageControllerWidth).isActive = true
+                                    pageController.heightAnchor.constraint(equalToConstant: pageControllerHeight).isActive = true
+                                    // configure the scroll view
+                                    scrollViewHeight = height - pageControllerHeight - searchBarHeight - grabberHeight
+                                    scrollViewWidth = width
+                                    if let scrollViewHeight = scrollViewHeight, let scrollViewWidth = scrollViewWidth {
+                                        scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: scrollViewWidth, height: scrollViewHeight))
+                                        if let scrollView = scrollView {
+                                            scrollView.contentSize = CGSize(width: scrollViewWidth*3, height: scrollViewHeight)
+                                            scrollView.translatesAutoresizingMaskIntoConstraints = false
+                                            scrollView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                                            scrollView.showsVerticalScrollIndicator = false
+                                            scrollView.showsHorizontalScrollIndicator = false
+                                            scrollView.isDirectionalLockEnabled = true
+                                            scrollView.isPagingEnabled = true
+                                            scrollView.delegate = pageController
+                                            // constrain the scroll view
+                                            scrollView.widthAnchor.constraint(equalToConstant: scrollViewWidth).isActive = true
+                                            scrollView.heightAnchor.constraint(equalToConstant: scrollViewHeight).isActive = true
+                                            // configure the table views
+                                            tableViewHeight = height - pageControllerHeight - searchBarHeight
+                                            tableViewWidth = width
+                                            if let tableViewHeight = tableViewHeight, let tableViewWidth = tableViewWidth {
+                                                recentsTableView = UITableView(frame: CGRect(x: 0, y: 0, width: tableViewWidth, height: tableViewHeight))
+                                                favoritesTableView = UITableView(frame: CGRect(x: 0, y: 0, width: tableViewWidth, height: tableViewHeight))
+                                                allRoutesTableView = UITableView(frame: CGRect(x: 0, y: 0, width: tableViewWidth, height: tableViewHeight))
+                                                if let recentsTableView = recentsTableView, let favoritesTableView = favoritesTableView, let allRoutesTableView = allRoutesTableView {
+                                                    // register the cell
+                                                    recentsTableView.register(HomeScreenModalTableViewCell.self, forCellReuseIdentifier: "homeScreenModalTableViewCell")
+                                                    favoritesTableView.register(HomeScreenModalTableViewCell.self, forCellReuseIdentifier: "homeScreenModalTableViewCell")
+                                                    allRoutesTableView.register(HomeScreenModalTableViewCell.self, forCellReuseIdentifier: "homeScreenModalTableViewCell")
+                                                    // configure the recents table view
+                                                    recentsTableView.dataSource = self
+                                                    recentsTableView.delegate = self
+                                                    recentsTableView.translatesAutoresizingMaskIntoConstraints = false
+                                                    recentsTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                                                    recentsTableView.rowHeight = 122
+                                                    recentsTableView.separatorStyle = .none
+                                                    recentsTableView.allowsSelection = false
+                                                    // constrain the recents table view
+                                                    recentsTableView.widthAnchor.constraint(equalToConstant: tableViewWidth).isActive = true
+                                                    recentsTableView.heightAnchor.constraint(equalToConstant: tableViewHeight).isActive = true
+                                                    // configure the favorites table view
+                                                    favoritesTableView.dataSource = self
+                                                    favoritesTableView.delegate = self
+                                                    favoritesTableView.translatesAutoresizingMaskIntoConstraints = false
+                                                    favoritesTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                                                    favoritesTableView.rowHeight = 122
+                                                    favoritesTableView.separatorStyle = .none
+                                                    favoritesTableView.allowsSelection = false
+                                                    // constrain the favorites table view
+                                                    favoritesTableView.widthAnchor.constraint(equalToConstant: tableViewWidth).isActive = true
+                                                    favoritesTableView.heightAnchor.constraint(equalToConstant: tableViewHeight).isActive = true
+                                                    // configure the all routes table view
+                                                    allRoutesTableView.allowsMultipleSelection = false
+                                                    allRoutesTableView.allowsSelection = true
+                                                    allRoutesTableView.dataSource = self
+                                                    allRoutesTableView.delegate = self
+                                                    allRoutesTableView.translatesAutoresizingMaskIntoConstraints = false
+                                                    allRoutesTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                                                    allRoutesTableView.rowHeight = 122
+                                                    allRoutesTableView.separatorStyle = .none
                                                     
-                                                    // add the table view stack
-                                                    scrollView.addSubview(tableViewStack)
-                                                    // constrain the table stack view
-                                                    scrollMargins = scrollView.contentLayoutGuide
-                                                    if let scrollMargins = scrollMargins{
-                                                        tableViewStack.leadingAnchor.constraint(equalTo: scrollMargins.leadingAnchor).isActive = true
-                                                        tableViewStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-                                                        tableViewStack.topAnchor.constraint(equalTo: scrollMargins.topAnchor).isActive = true
-                                                        tableViewStack.bottomAnchor.constraint(equalTo: scrollMargins.bottomAnchor).isActive = true
-                                                    }
-                                                    // add the table views to the stack view
-                                                    tableViewStack.addArrangedSubview(recentsTableView)
-                                                    tableViewStack.addArrangedSubview(favoritesTableView)
-                                                    tableViewStack.addArrangedSubview(allRoutesTableView)
-                                                    // configure the super table view
-                                                   
-                                                    superViewStack = UIStackView(arrangedSubviews: [searchBar, pageController, scrollView])
-                                                    stackViewSpacing = 4.0 * (height/812)
-                                                    if let superViewStack = superViewStack, let stackViewSpacing = stackViewSpacing{
-                                                        superViewStack.axis = .vertical
-                                                        superViewStack.spacing = stackViewSpacing
-                                                        superViewStack.alignment = .center
-                                                        superViewStack.distribution = .fill
-                                                        superViewStack.isUserInteractionEnabled = true
-                                                        superViewStack.translatesAutoresizingMaskIntoConstraints = false
-                                                        // add the super view stack to the hierarchy
-                                                        self.addSubview(superViewStack)
-                                                        // constrain the super view stack
-                                                        viewMargins = self.safeAreaLayoutGuide
-                                                        if let viewMargins = viewMargins{
-                                                            superViewStack.leadingAnchor.constraint(equalTo: viewMargins.leadingAnchor).isActive = true
-                                                            superViewStack.trailingAnchor.constraint(equalTo: viewMargins.trailingAnchor).isActive = true
-                                                            superViewStack.topAnchor.constraint(equalTo: viewMargins.topAnchor).isActive = true
+                                                    // constrain the all routes table view
+                                                    allRoutesTableView.widthAnchor.constraint(equalToConstant: tableViewWidth).isActive = true
+                                                    allRoutesTableView.heightAnchor.constraint(equalToConstant: tableViewHeight).isActive = true
+                                                    // configure the table stackview
+                                                    tableViewStackWidth = width
+                                                    tableViewStackHeight = scrollViewHeight
+                                                    if let tableViewStackWidth = tableViewStackWidth, let tableViewStackHeight = tableViewStackHeight {
+                                                        tableViewStack = UIStackView(frame: CGRect(x: 0, y: 0, width: tableViewStackWidth, height: tableViewStackHeight))
+                                                        if let tableViewStack = tableViewStack {
+                                                            tableViewStack.axis = .horizontal
+                                                            tableViewStack.distribution = .fill
+                                                            tableViewStack.alignment = .leading
+                                                            tableViewStack.translatesAutoresizingMaskIntoConstraints = false
+                                                            
+                                                            // add the table view stack
+                                                            scrollView.addSubview(tableViewStack)
+                                                            // constrain the table stack view
+                                                            scrollMargins = scrollView.contentLayoutGuide
+                                                            if let scrollMargins = scrollMargins{
+                                                                tableViewStack.leadingAnchor.constraint(equalTo: scrollMargins.leadingAnchor).isActive = true
+                                                                tableViewStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+                                                                tableViewStack.topAnchor.constraint(equalTo: scrollMargins.topAnchor).isActive = true
+                                                                tableViewStack.bottomAnchor.constraint(equalTo: scrollMargins.bottomAnchor).isActive = true
+                                                            }
+                                                            // add the table views to the stack view
+                                                            tableViewStack.addArrangedSubview(recentsTableView)
+                                                            tableViewStack.addArrangedSubview(favoritesTableView)
+                                                            tableViewStack.addArrangedSubview(allRoutesTableView)
+                                                            // configure the super table view
                                                            
+                                                            superViewStack = UIStackView(arrangedSubviews: [grabber, searchBar, pageController, scrollView])
+                                                            stackViewSpacing = 4.0 * (height/(812/3))
+                                                            if let superViewStack = superViewStack, let stackViewSpacing = stackViewSpacing{
+                                                                superViewStack.axis = .vertical
+                                                                superViewStack.spacing = stackViewSpacing
+                                                                superViewStack.alignment = .center
+                                                                superViewStack.distribution = .equalSpacing
+                                                                superViewStack.isUserInteractionEnabled = true
+                                                                superViewStack.translatesAutoresizingMaskIntoConstraints = false
+                                                                // add the super view stack to the hierarchy
+                                                                self.addSubview(superViewStack)
+                                                                // constrain the super view stack
+                                                                viewMargins = self.safeAreaLayoutGuide
+                                                                if let viewMargins = viewMargins{
+                                                                    superViewStack.leadingAnchor.constraint(equalTo: viewMargins.leadingAnchor).isActive = true
+                                                                    superViewStack.trailingAnchor.constraint(equalTo: viewMargins.trailingAnchor).isActive = true
+                                                                    superViewStack.topAnchor.constraint(equalTo: viewMargins.topAnchor, constant: 8).isActive = true
+                                                                   
+                                                                }
+                                                                
+                                                            }
+                                                            
                                                         }
                                                         
                                                     }
-                                                    
                                                 }
                                                 
                                             }
                                         }
-                                        
-                                    }
                                 }
-                        }
+                                    
+                                }
+                            }
+                            
                             
                         }
                     }
-                    
-                    
                 }
             }
         }
     }
 }
-extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//MARK: - Provide Table View with data
+extension HomeScreenMenuView: UITableViewDataSource {
+    // provide the number of sections
+    func numberOfSections(in tableView: UITableView) -> Int {
         if tableView == allRoutesTableView {
-            if indexPath.section == 0 {
-                if let onCampusRoutes = onCampusRoutes, let dataGatherer = dataGatherer {
-                    var endpoint = "route/{route}/pattern"
-                    endpoint = endpoint.replacingOccurrences(of: "{route}", with: onCampusRoutes[indexPath.row].number)
-                    dataGatherer.gatherData(endpoint: endpoint)
-                }
+            return 2
+        }
+        else if tableView == recentsTableView {
+            return 1
+        }
+        else if tableView == favoritesTableView {
+            return 1
+        }
+        return -1
+    }
+    // provide the title for each section
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if tableView == allRoutesTableView {
+            if section == 0 {
+                return "On-Campus"
             }
-            else if indexPath.section == 1 {
-                if let offCampusRoutes = offCampusRoutes, let dataGatherer = dataGatherer {
-                    var endpoint = "route/{route}/pattern"
-                    endpoint = endpoint.replacingOccurrences(of: "{route}", with: offCampusRoutes[indexPath.row].number)
-                    dataGatherer.gatherData(endpoint: endpoint)
-                }
+            else {
+                return "Off-Campus"
             }
         }
+        else {
+            return "On-Campus"
+        }
     }
+    // provide number of rows in section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == allRoutesTableView {
             if section == 0 {
@@ -270,100 +300,97 @@ extension HomeScreenMenuView: UITableViewDataSource, UITableViewDelegate {
         }
         return -1
     }
-    
+    // provide a cell for each row
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-                if tableView == allRoutesTableView {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
-                    if let onCampusRoutes = onCampusRoutes, let offCampusRoutes = offCampusRoutes {
-                        if indexPath.section == 0 {
-                            cell.icon = onCampusRoutes[indexPath.row].number
-                            cell.text = onCampusRoutes[indexPath.row].name
-                            if onCampusRoutes[indexPath.row].color.contains("rgb"){
-                                cell.cellColor = UIColor.colorFromRGBString(string: onCampusRoutes[indexPath.row].color)
-                            } else {
-                                if onCampusRoutes[indexPath.row].number == "01-04" {
-                                    cell.cellColor = UIColor(red: 153/255, green: 50/255, blue: 204/255, alpha: 1.0)
-                                }
-                                else {
-                                    cell.cellColor = .gray
-                                }
-                            }
-                            return cell
+        if tableView == allRoutesTableView {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
+            if let onCampusRoutes = onCampusRoutes, let offCampusRoutes = offCampusRoutes {
+                if indexPath.section == 0 {
+                    cell.icon = onCampusRoutes[indexPath.row].number
+                    cell.text = onCampusRoutes[indexPath.row].name
+                    if onCampusRoutes[indexPath.row].color.contains("rgb"){
+                        cell.cellColor = UIColor.colorFromRGBString(string: onCampusRoutes[indexPath.row].color)
+                    } else {
+                        if onCampusRoutes[indexPath.row].number == "01-04" {
+                            cell.cellColor = UIColor(red: 153/255, green: 50/255, blue: 204/255, alpha: 1.0)
                         }
-                        else if indexPath.section == 1 {
-                            cell.icon = offCampusRoutes[indexPath.row].number
-                            cell.text = offCampusRoutes[indexPath.row].name
-                            if offCampusRoutes[indexPath.row].color.contains("rgb"){
-                                cell.cellColor = UIColor.colorFromRGBString(string: offCampusRoutes[indexPath.row].color)
-                            } else {
-                                if offCampusRoutes[indexPath.row].name == "Reveille" {
-                                    cell.cellColor = UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1.0)
-                                }
-                                else if offCampusRoutes[indexPath.row].name == "E-Walk" {
-                                    cell.cellColor = UIColor(red: 128/255, green: 4/255, blue: 128/255, alpha: 1.0)
-                                }
-                                else if offCampusRoutes[indexPath.row].name == "RELLIS" {
-                                    cell.cellColor = UIColor(red: 65/255, green: 105/255, blue: 225/255, alpha: 1.0)
-                                }
-                                // will use short name for the nights and weekends ones
-                                else if offCampusRoutes[indexPath.row].number == "47-48" {
-                                    cell.cellColor = UIColor(red: 220/255, green: 20/255, blue: 61/255, alpha: 1.0)
-                                }
-                            }
-                            return cell
+                        else {
+                            cell.cellColor = .gray
                         }
                     }
-                }
-                else if tableView == favoritesTableView {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
-                    cell.icon = "⭐️"
-                    cell.text = "Favorite Location"
-                    cell.cellColor = UIColor(named: cellBackgroundColor.favoriteLocationGold.rawValue)
                     return cell
                 }
-                else if tableView == recentsTableView {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
-                    cell.icon = "📍"
-                    cell.text = "Recent Location"
-                    cell.cellColor = UIColor(named: cellBackgroundColor.recentLocationRed.rawValue)
+                else if indexPath.section == 1 {
+                    cell.icon = offCampusRoutes[indexPath.row].number
+                    cell.text = offCampusRoutes[indexPath.row].name
+                    if offCampusRoutes[indexPath.row].color.contains("rgb"){
+                        cell.cellColor = UIColor.colorFromRGBString(string: offCampusRoutes[indexPath.row].color)
+                    } else {
+                        if offCampusRoutes[indexPath.row].name == "Reveille" {
+                            cell.cellColor = UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1.0)
+                        }
+                        else if offCampusRoutes[indexPath.row].name == "E-Walk" {
+                            cell.cellColor = UIColor(red: 128/255, green: 4/255, blue: 128/255, alpha: 1.0)
+                        }
+                        else if offCampusRoutes[indexPath.row].name == "RELLIS" {
+                            cell.cellColor = UIColor(red: 65/255, green: 105/255, blue: 225/255, alpha: 1.0)
+                        }
+                        // will use short name for the nights and weekends ones
+                        else if offCampusRoutes[indexPath.row].number == "47-48" {
+                            cell.cellColor = UIColor(red: 220/255, green: 20/255, blue: 61/255, alpha: 1.0)
+                        }
+                    }
                     return cell
                 }
-            
+            }
+        }
+        else if tableView == favoritesTableView {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
+            cell.icon = "⭐️"
+            cell.text = "Favorite Location"
+            cell.cellColor = UIColor(named: cellBackgroundColor.favoriteLocationGold.rawValue)
+            return cell
+        }
+        else if tableView == recentsTableView {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
+            cell.icon = "📍"
+            cell.text = "Recent Location"
+            cell.cellColor = UIColor(named: cellBackgroundColor.recentLocationRed.rawValue)
+            return cell
+        }
+        
         
         return UITableViewCell()
     }
+    // provide a height for each row
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 122
     }
-    func numberOfSections(in tableView: UITableView) -> Int {
-        if tableView == allRoutesTableView {
-            return 2
-        }
-        else if tableView == recentsTableView {
-            return 1
-        }
-        else if tableView == favoritesTableView {
-            return 1
-        }
-        return -1
-    }
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if tableView == allRoutesTableView {
-            if section == 0 {
-                return "On-Campus"
-            }
-            else {
-                return "Off-Campus"
-            }
-        }
-        else {
-            return ""
-        }
-    }
-    
 }
+//MARK: - Conform to Table View's Delegate
+extension HomeScreenMenuView: UITableViewDelegate {
+    // manage selection of rows
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == allRoutesTableView {
+            if indexPath.section == 0 {
+                if let onCampusRoutes = onCampusRoutes, let dataGatherer = dataGatherer {
+                    var endpoint = "route/{route}/pattern"
+                    endpoint = endpoint.replacingOccurrences(of: "{route}", with: onCampusRoutes[indexPath.row].number)
+                    dataGatherer.gatherData(endpoint: endpoint, route: onCampusRoutes[indexPath.row])
+                }
+            }
+            else if indexPath.section == 1 {
+                if let offCampusRoutes = offCampusRoutes, let dataGatherer = dataGatherer {
+                    var endpoint = "route/{route}/pattern"
+                    endpoint = endpoint.replacingOccurrences(of: "{route}", with: offCampusRoutes[indexPath.row].number)
+                    dataGatherer.gatherData(endpoint: endpoint, route: offCampusRoutes[indexPath.row])
+                }
+            }
+        }
+    }
+}
+//MARK: - Handle Page Control Page Changed
 extension HomeScreenMenuView {
-    
     @objc func handleControlPageChanged(sender: UISegmentedControl){
         if let scrollView = scrollView {
             let xPos = scrollView.frame.width * Double(sender.selectedSegmentIndex)
@@ -377,26 +404,10 @@ extension HomeScreenMenuView {
 
         }
     }
-    
 }
-
-
-extension UIScrollView {
-    var currentPage:Int{
-        return Int((self.contentOffset.x+(0.5*self.frame.size.width))/self.frame.width)
-    }
-}
-
-
-
-extension UISegmentedControl: UIScrollViewDelegate {
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.selectedSegmentIndex = scrollView.currentPage
-    }
-}
-
+//MARK: - Handle Data Gathering/ etc.
 extension HomeScreenMenuView: DataGathererDelegate {
-    func didGatherBusStops(stops: [BusPattern]) {
+    func didGatherBusStops(stops: [BusPattern], route: BusRoute) {
         var stopPoints: [CLLocationCoordinate2D] = []
         for stop in stops {
             let latitude = CoordinateConverter(latitude: stop.latitude, longitude: stop.longitude).0
@@ -404,7 +415,7 @@ extension HomeScreenMenuView: DataGathererDelegate {
             let point = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
             stopPoints.append(point)
         }
-        self.pathDelegate?.didGatherStopPoints(stops: stopPoints)
+        self.pathDelegate?.didGatherStopPoints(stops: stopPoints, route: route)
         
     }
     
