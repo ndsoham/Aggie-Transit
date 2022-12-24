@@ -11,7 +11,7 @@ import MapKit
 struct BusRoute {
     var name: String
     var number: String
-    var color: String
+    var color: UIColor
     var campus: String
 }
 

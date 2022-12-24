@@ -9,13 +9,13 @@ import Foundation
 import UIKit
 protocol DataGathererDelegate {
     func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute])
-    func didGatherBusStops(stops: [BusPattern], route: BusRoute)
+    func didGatherBusPattern(points: [BusPattern])
 }
 class DataGatherer {
     private let baseUrl = "https://transport.tamu.edu/BusRoutesFeed/api/"
     public var delegate: DataGathererDelegate?
     init(){}
-    func gatherData(endpoint: String, route: BusRoute = BusRoute(name: "error", number: "error", color: "error", campus: "error")){
+    func gatherData(endpoint: String){
         let url = URL(string: baseUrl+endpoint)
         if let url = url{
             let task = URLSession.shared.dataTask(with: url) { data, response, error in
@@ -38,7 +38,7 @@ class DataGatherer {
                         else if endpoint.split(separator: "/").last == "pattern" {
                             let stops = try decoder.decode([PatternData].self, from: data)
                             let busStops = self.gatherBusStops(data: stops)
-                            self.delegate?.didGatherBusStops(stops: busStops, route: route)
+                            self.delegate?.didGatherBusPattern(points: busStops)
                         }
                     } catch {
                         print("An error has occured: \(error)")
@@ -52,7 +52,7 @@ class DataGatherer {
         var routes: [BusRoute] = []
         for route in data {
             if route.Group.Name == "On Campus" {
-                let busRoute = BusRoute(name: route.Name, number: route.ShortName, color: route.Color, campus: route.Group.Name)
+                let busRoute = BusRoute(name: route.Name, number: route.ShortName, color: UIColor.colorFromRGBString(string: route.Color), campus: route.Group.Name)
                 routes.append(busRoute)
             }
         }
@@ -62,7 +62,7 @@ class DataGatherer {
         var routes: [BusRoute] = []
         for route in data {
             if route.Group.Name == "Off Campus" {
-                let busRoute = BusRoute(name: route.Name, number: route.ShortName, color: route.Color, campus: route.Group.Name)
+                let busRoute = BusRoute(name: route.Name, number: route.ShortName, color: UIColor.colorFromRGBString(string: route.Color), campus: route.Group.Name)
                 routes.append(busRoute)
             }
         }

@@ -28,14 +28,13 @@ class HomeScreenViewController: UIViewController {
     private var animationDuration:TimeInterval = 0.5
     private var navigationBar: UINavigationBar?
     private var currentlyDisplayedPattern: MKPolyline?
-    private var currentlyDisplayedBusRoute: BusRoute?
     private var longitudeDelta: Double?
     private var latitudeDelta: Double?
     private var menuCollapsed: Bool?
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
-
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         // hide the navigation bar
@@ -78,6 +77,7 @@ class HomeScreenViewController: UIViewController {
                     map.translatesAutoresizingMaskIntoConstraints = false
                     let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 30.614965, longitude: -96.340584), span: MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta))
                     map.setRegion(region, animated: false)
+                    map.showsCompass = false
                     // add the map to the view hierarchy
                     self.view.addSubview(map)
                     // constrain the map
@@ -204,25 +204,23 @@ extension HomeScreenViewController{
 extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if overlay is MKPolyline {
-            if let currentlyDisplayedBusRoute = currentlyDisplayedBusRoute{
-                let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
-                renderer.strokeColor = UIColor.colorFromRGBString(string: currentlyDisplayedBusRoute.color)
-                renderer.lineWidth = 3
-                return renderer
-            }
+            let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
+            renderer.strokeColor = .magenta
+            renderer.lineWidth = 3
+            return renderer
         }
         fatalError("Overlay is of the wrong type")
     }
    
-    func didGatherStopPoints(stops: [CLLocationCoordinate2D], route: BusRoute) {
+    func didGatherStopCoordinates(stops: [CLLocationCoordinate2D]) {
         if let map = map, let homeScreenMenuHeight = homeScreenMenuHeight {
             self.dismissMenu()
-            if let currentlyDisplayedPattern = currentlyDisplayedPattern, let _ = currentlyDisplayedBusRoute {
+            if let currentlyDisplayedPattern = currentlyDisplayedPattern {
                 DispatchQueue.main.async {
                     map.removeOverlay(currentlyDisplayedPattern)
                 }
                 let boundedLine = MKPolyline(coordinates: stops, count: stops.count)
-                self.currentlyDisplayedBusRoute = route
+//                self.currentlyDisplayedBusRoute = route
                 self.currentlyDisplayedPattern = boundedLine
                 DispatchQueue.main.async {
                     map.addOverlay(boundedLine)
@@ -233,7 +231,7 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
             else {
                 let boundedLine = MKPolyline(coordinates: stops, count: stops.count)
                 currentlyDisplayedPattern = boundedLine
-                currentlyDisplayedBusRoute = route
+//                currentlyDisplayedBusRoute = route
                 DispatchQueue.main.async {
                     map.addOverlay(boundedLine)
                     // change the region of the map based on currently displayed bus route

@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import MapKit
 protocol PathMakerDelegate {
-    func didGatherStopPoints(stops: [CLLocationCoordinate2D], route: BusRoute)
+    func didGatherStopCoordinates(stops: [CLLocationCoordinate2D])
 }
 
 class HomeScreenMenuView: UIView {
@@ -308,38 +308,13 @@ extension HomeScreenMenuView: UITableViewDataSource {
                 if indexPath.section == 0 {
                     cell.icon = onCampusRoutes[indexPath.row].number
                     cell.text = onCampusRoutes[indexPath.row].name
-                    if onCampusRoutes[indexPath.row].color.contains("rgb"){
-                        cell.cellColor = UIColor.colorFromRGBString(string: onCampusRoutes[indexPath.row].color)
-                    } else {
-                        if onCampusRoutes[indexPath.row].number == "01-04" {
-                            cell.cellColor = UIColor(red: 153/255, green: 50/255, blue: 204/255, alpha: 1.0)
-                        }
-                        else {
-                            cell.cellColor = .gray
-                        }
-                    }
+                    cell.cellColor = onCampusRoutes[indexPath.row].color
                     return cell
                 }
                 else if indexPath.section == 1 {
                     cell.icon = offCampusRoutes[indexPath.row].number
                     cell.text = offCampusRoutes[indexPath.row].name
-                    if offCampusRoutes[indexPath.row].color.contains("rgb"){
-                        cell.cellColor = UIColor.colorFromRGBString(string: offCampusRoutes[indexPath.row].color)
-                    } else {
-                        if offCampusRoutes[indexPath.row].name == "Reveille" {
-                            cell.cellColor = UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1.0)
-                        }
-                        else if offCampusRoutes[indexPath.row].name == "E-Walk" {
-                            cell.cellColor = UIColor(red: 128/255, green: 4/255, blue: 128/255, alpha: 1.0)
-                        }
-                        else if offCampusRoutes[indexPath.row].name == "RELLIS" {
-                            cell.cellColor = UIColor(red: 65/255, green: 105/255, blue: 225/255, alpha: 1.0)
-                        }
-                        // will use short name for the nights and weekends ones
-                        else if offCampusRoutes[indexPath.row].number == "47-48" {
-                            cell.cellColor = UIColor(red: 220/255, green: 20/255, blue: 61/255, alpha: 1.0)
-                        }
-                    }
+                    cell.cellColor = offCampusRoutes[indexPath.row].color
                     return cell
                 }
             }
@@ -376,14 +351,14 @@ extension HomeScreenMenuView: UITableViewDelegate {
                 if let onCampusRoutes = onCampusRoutes, let dataGatherer = dataGatherer {
                     var endpoint = "route/{route}/pattern"
                     endpoint = endpoint.replacingOccurrences(of: "{route}", with: onCampusRoutes[indexPath.row].number)
-                    dataGatherer.gatherData(endpoint: endpoint, route: onCampusRoutes[indexPath.row])
+                    dataGatherer.gatherData(endpoint: endpoint)
                 }
             }
             else if indexPath.section == 1 {
                 if let offCampusRoutes = offCampusRoutes, let dataGatherer = dataGatherer {
                     var endpoint = "route/{route}/pattern"
                     endpoint = endpoint.replacingOccurrences(of: "{route}", with: offCampusRoutes[indexPath.row].number)
-                    dataGatherer.gatherData(endpoint: endpoint, route: offCampusRoutes[indexPath.row])
+                    dataGatherer.gatherData(endpoint: endpoint)
                 }
             }
         }
@@ -407,15 +382,15 @@ extension HomeScreenMenuView {
 }
 //MARK: - Handle Data Gathering/ etc.
 extension HomeScreenMenuView: DataGathererDelegate {
-    func didGatherBusStops(stops: [BusPattern], route: BusRoute) {
+    func didGatherBusPattern(points: [BusPattern]) {
         var stopPoints: [CLLocationCoordinate2D] = []
-        for stop in stops {
-            let latitude = CoordinateConverter(latitude: stop.latitude, longitude: stop.longitude).0
-            let longitude = CoordinateConverter(latitude: stop.latitude, longitude: stop.longitude).1
+        for point in points {
+            let latitude = CoordinateConverter(latitude: point.latitude, longitude: point.longitude).0
+            let longitude = CoordinateConverter(latitude: point.latitude, longitude: point.longitude).1
             let point = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
             stopPoints.append(point)
         }
-        self.pathDelegate?.didGatherStopPoints(stops: stopPoints, route: route)
+        self.pathDelegate?.didGatherStopCoordinates(stops: stopPoints)
         
     }
     
