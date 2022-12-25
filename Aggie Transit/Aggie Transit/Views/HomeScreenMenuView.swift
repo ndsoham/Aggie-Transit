@@ -8,9 +8,9 @@
 import Foundation
 import UIKit
 import MapKit
-protocol PathMakerDelegate {
-    func didGatherStopCoordinates(stops: [CLLocationCoordinate2D])
-}
+//protocol PathMakerDelegate {
+//    func didGatherStopCoordinates(stops: [CLLocationCoordinate2D])
+//}
 
 class HomeScreenMenuView: UIView {
     private var searchBar: UISearchBar?
@@ -304,17 +304,19 @@ extension HomeScreenMenuView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == allRoutesTableView {
             let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
-            if let onCampusRoutes = onCampusRoutes, let offCampusRoutes = offCampusRoutes {
+            if let onCampusRoutes = onCampusRoutes, let offCampusRoutes = offCampusRoutes, let delegate = pathDelegate {
                 if indexPath.section == 0 {
                     cell.icon = onCampusRoutes[indexPath.row].number
                     cell.text = onCampusRoutes[indexPath.row].name
                     cell.cellColor = onCampusRoutes[indexPath.row].color
+                    onCampusRoutes[indexPath.row].delegate = delegate
                     return cell
                 }
                 else if indexPath.section == 1 {
                     cell.icon = offCampusRoutes[indexPath.row].number
                     cell.text = offCampusRoutes[indexPath.row].name
                     cell.cellColor = offCampusRoutes[indexPath.row].color
+                    offCampusRoutes[indexPath.row].delegate = delegate
                     return cell
                 }
             }
@@ -348,17 +350,13 @@ extension HomeScreenMenuView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == allRoutesTableView {
             if indexPath.section == 0 {
-                if let onCampusRoutes = onCampusRoutes, let dataGatherer = dataGatherer {
-                    var endpoint = "route/{route}/pattern"
-                    endpoint = endpoint.replacingOccurrences(of: "{route}", with: onCampusRoutes[indexPath.row].number)
-                    dataGatherer.gatherData(endpoint: endpoint)
+                if let onCampusRoutes = onCampusRoutes {
+                    onCampusRoutes[indexPath.row].displayBusRoutePatternOnMap()
                 }
             }
             else if indexPath.section == 1 {
-                if let offCampusRoutes = offCampusRoutes, let dataGatherer = dataGatherer {
-                    var endpoint = "route/{route}/pattern"
-                    endpoint = endpoint.replacingOccurrences(of: "{route}", with: offCampusRoutes[indexPath.row].number)
-                    dataGatherer.gatherData(endpoint: endpoint)
+                if let offCampusRoutes = offCampusRoutes {
+                    offCampusRoutes[indexPath.row].displayBusRoutePatternOnMap()
                 }
             }
         }
@@ -382,18 +380,6 @@ extension HomeScreenMenuView {
 }
 //MARK: - Handle Data Gathering/ etc.
 extension HomeScreenMenuView: DataGathererDelegate {
-    func didGatherBusPattern(points: [BusPattern]) {
-        var stopPoints: [CLLocationCoordinate2D] = []
-        for point in points {
-            let latitude = CoordinateConverter(latitude: point.latitude, longitude: point.longitude).0
-            let longitude = CoordinateConverter(latitude: point.latitude, longitude: point.longitude).1
-            let point = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-            stopPoints.append(point)
-        }
-        self.pathDelegate?.didGatherStopCoordinates(stops: stopPoints)
-        
-    }
-    
     func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute]) {
         self.onCampusRoutes = onCampusRoutes
         self.offCampusRoutes = offCampusRoutes
@@ -402,6 +388,4 @@ extension HomeScreenMenuView: DataGathererDelegate {
         }
         
     }
-    
-    
 }

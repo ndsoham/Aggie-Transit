@@ -7,9 +7,9 @@
 
 import Foundation
 import UIKit
-protocol DataGathererDelegate {
-    func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute])
-    func didGatherBusPattern(points: [BusPattern])
+@objc protocol DataGathererDelegate {
+    @objc optional func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute])
+    @objc optional func didGatherBusPattern(points: [BusPattern])
 }
 class DataGatherer {
     private let baseUrl = "https://transport.tamu.edu/BusRoutesFeed/api/"
@@ -33,12 +33,21 @@ class DataGatherer {
                             let routes = try decoder.decode([RouteData].self, from: data)
                             let onCampusRoutes = self.gatherOnCampusBusRoutes(data: routes)
                             let offCampusRoutes = self.gatherOffCampusBusRoutes(data: routes)
-                            self.delegate?.didGatherBusRoutes(onCampusRoutes: onCampusRoutes, offCampusRoutes: offCampusRoutes)
+                            if let delegate = self.delegate {
+                                if let gather = delegate.didGatherBusRoutes {
+                                    gather(onCampusRoutes, offCampusRoutes)
+                                }
+                                    
+                            }
                         }
                         else if endpoint.split(separator: "/").last == "pattern" {
                             let stops = try decoder.decode([PatternData].self, from: data)
                             let busStops = self.gatherBusStops(data: stops)
-                            self.delegate?.didGatherBusPattern(points: busStops)
+                            if let delegate = self.delegate {
+                                if let gather = delegate.didGatherBusPattern {
+                                    gather(busStops)
+                                }
+                            }
                         }
                     } catch {
                         print("An error has occured: \(error)")
@@ -48,7 +57,7 @@ class DataGatherer {
             task.resume()
         }
     }
-    func gatherOnCampusBusRoutes(data: [RouteData]) -> [BusRoute] {
+    private func gatherOnCampusBusRoutes(data: [RouteData]) -> [BusRoute] {
         var routes: [BusRoute] = []
         for route in data {
             if route.Group.Name == "On Campus" {
@@ -58,7 +67,7 @@ class DataGatherer {
         }
         return routes
     }
-    func gatherOffCampusBusRoutes(data: [RouteData]) -> [BusRoute] {
+    private func gatherOffCampusBusRoutes(data: [RouteData]) -> [BusRoute] {
         var routes: [BusRoute] = []
         for route in data {
             if route.Group.Name == "Off Campus" {
@@ -68,10 +77,11 @@ class DataGatherer {
         }
         return routes
     }
-    func gatherBusStops(data: [PatternData]) -> [BusPattern] {
+    private func gatherBusStops(data: [PatternData]) -> [BusPattern] {
         var stops: [BusPattern] = []
         for stop in data {
-            let busStop = BusPattern(name: stop.Name, latitude: stop.Latitude, longitude: stop.Longtitude)
+            let coordinates = CoordinateConverter(latitude: stop.Latitude, longitude: stop.Longtitude)
+            let busStop = BusPattern(name: stop.Name, latitude: coordinates.0, longitude: coordinates.1)
             stops.append(busStop)
         }
         return stops

@@ -68,7 +68,6 @@
 		0F0F8C90295238E300BB617E /* APIData */ = {
 			isa = PBXGroup;
 			children = (
-				0F933382294FC09100180E0E /* DataGatherer.swift */,
 				0F1AF87D2950E46100BE0C85 /* RouteData.swift */,
 				0F0F8C962953F95800BB617E /* PatternData.swift */,
 			);
@@ -141,6 +140,7 @@
 			children = (
 				0FEB8F9929555E4A00D2BB1A /* Converter */,
 				0F0F8C90295238E300BB617E /* APIData */,
+				0F933382294FC09100180E0E /* DataGatherer.swift */,
 				0F0F8C912952398600BB617E /* BusRoute.swift */,
 				0F0F8C982953FBAB00BB617E /* BusPattern.swift */,
 			);

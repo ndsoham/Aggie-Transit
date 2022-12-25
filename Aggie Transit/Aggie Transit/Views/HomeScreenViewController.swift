@@ -28,6 +28,7 @@ class HomeScreenViewController: UIViewController {
     private var animationDuration:TimeInterval = 0.5
     private var navigationBar: UINavigationBar?
     private var currentlyDisplayedPattern: MKPolyline?
+    private var currentlyDisplayedColor: UIColor?
     private var longitudeDelta: Double?
     private var latitudeDelta: Double?
     public var menuCollapsed: Bool?
@@ -202,25 +203,15 @@ extension HomeScreenViewController{
 
 //MARK: - handle the map and creating paths
 extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        if overlay is MKPolyline {
-            let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
-            renderer.strokeColor = .magenta
-            renderer.lineWidth = 3
-            return renderer
-        }
-        fatalError("Overlay is of the wrong type")
-    }
-   
-    func didGatherStopCoordinates(stops: [CLLocationCoordinate2D]) {
+    func displayBusRoutePatternOnMap(color: UIColor, points: [CLLocationCoordinate2D]) {
         if let map = map, let homeScreenMenuHeight = homeScreenMenuHeight {
             self.dismissMenu()
-            if let currentlyDisplayedPattern = currentlyDisplayedPattern {
+            if let currentlyDisplayedPattern = currentlyDisplayedPattern, let _ = currentlyDisplayedColor {
                 DispatchQueue.main.async {
                     map.removeOverlay(currentlyDisplayedPattern)
                 }
-                let boundedLine = MKPolyline(coordinates: stops, count: stops.count)
-//                self.currentlyDisplayedBusRoute = route
+                let boundedLine = MKPolyline(coordinates: points, count: points.count)
+                self.currentlyDisplayedColor = color
                 self.currentlyDisplayedPattern = boundedLine
                 DispatchQueue.main.async {
                     map.addOverlay(boundedLine)
@@ -229,9 +220,9 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
                 }
             }
             else {
-                let boundedLine = MKPolyline(coordinates: stops, count: stops.count)
+                let boundedLine = MKPolyline(coordinates: points, count: points.count)
                 currentlyDisplayedPattern = boundedLine
-//                currentlyDisplayedBusRoute = route
+                currentlyDisplayedColor = color
                 DispatchQueue.main.async {
                     map.addOverlay(boundedLine)
                     // change the region of the map based on currently displayed bus route
@@ -241,7 +232,17 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
         }
     }
     
-    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if overlay is MKPolyline {
+            if let _ = currentlyDisplayedPattern, let color = currentlyDisplayedColor {
+                let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
+                renderer.lineWidth = 3
+                renderer.strokeColor = color
+                return renderer
+            }
+        }
+        fatalError("Overlay is of the wrong type")
+    }
 }
 //MARK: - handle home screen menu gestures
 extension HomeScreenViewController {
@@ -283,7 +284,4 @@ extension HomeScreenViewController {
         }
     }
 }
-//MARK: - manage when the app comes into the foreground
-extension HomeScreenViewController {
-    
-}
+
