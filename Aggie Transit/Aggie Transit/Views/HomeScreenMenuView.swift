@@ -8,10 +8,6 @@
 import Foundation
 import UIKit
 import MapKit
-//protocol PathMakerDelegate {
-//    func didGatherStopCoordinates(stops: [CLLocationCoordinate2D])
-//}
-
 class HomeScreenMenuView: UIView {
     private var searchBar: UISearchBar?
     private var recentsTableView: UITableView?
@@ -44,6 +40,8 @@ class HomeScreenMenuView: UIView {
     private var grabber: UIView?
     private var grabberHeight: Double?
     private var grabberWidth: Double?
+    private var editingNotification: Notification?
+    private var didBeginEditing: Notification.Name?
     override init(frame: CGRect){
         super.init(frame: frame)
         layoutSubviews()
@@ -88,6 +86,9 @@ class HomeScreenMenuView: UIView {
                             searchBar.searchBarStyle = .minimal
                             searchBar.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                             searchBar.translatesAutoresizingMaskIntoConstraints = false
+                            searchBar.delegate = self
+                            searchBar.showsCancelButton = false
+                            searchBar.tintColor = .systemBlue
                             if let searchField = searchBar.value(forKey: "searchField") as? UITextField {
                                 searchField.textColor = UIColor(named: "textColor")
                                 searchField.layer.borderWidth = 2
@@ -354,6 +355,8 @@ extension HomeScreenMenuView: UITableViewDelegate {
                 }
             }
         }
+        // this line of code is required so that the keyboard will go away
+        self.endEditing(true)
         tableView.deselectRow(at: indexPath, animated: false)
     }
 }
@@ -380,5 +383,27 @@ extension HomeScreenMenuView: DataGathererDelegate {
         DispatchQueue.main.async {
             self.allRoutesTableView?.reloadData()
         }
+    }
+}
+//MARK: - Handle search bar interactions
+extension HomeScreenMenuView: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+    }
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        didBeginEditing = Notification.Name("didBeginEditing")
+        if let didBeginEditing = didBeginEditing {
+            editingNotification = Notification(name: didBeginEditing)
+            if let editingNotification = editingNotification {
+                NotificationCenter.default.post(editingNotification)
+            }
+        }
+        searchBar.showsCancelButton = true
+    }
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
     }
 }

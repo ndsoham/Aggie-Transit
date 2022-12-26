@@ -33,9 +33,14 @@ class HomeScreenViewController: UIViewController {
     private var longitudeDelta: Double?
     private var latitudeDelta: Double?
     public var menuCollapsed: Bool?
+    private var keyboardDisplayed: Bool?
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
+        registerKeyboardNotification()
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -52,6 +57,13 @@ class HomeScreenViewController: UIViewController {
         }
         super.viewWillDisappear(animated)
     }
+    //MARK: - Register the keyboard notification
+    func registerKeyboardNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardIsDisplayedOnScreen), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidDisappear), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(editingDidBegin), name: NSNotification.Name("didBeginEditing"), object: nil)
+    }
+    //MARK: - layout subviews of main view
     func layoutSubviews() {
         // configure navigation bar
         if let navigationBar = navigationController?.navigationBar, let _ = navigationController {
@@ -147,12 +159,15 @@ class HomeScreenViewController: UIViewController {
                                 homeScreenMenu.pathDelegate = self
                                 let downSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(homeScreenMenuSwiped))
                                 downSwipeGesture.direction = .down
+                                downSwipeGesture.delegate = self
                                 let upSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(homeScreenMenuSwiped))
                                 upSwipeGesture.direction = .up
+                                upSwipeGesture.delegate = self
                                 homeScreenMenu.addGestureRecognizer(downSwipeGesture)
                                 homeScreenMenu.addGestureRecognizer(upSwipeGesture)
                                 // add the home screen menu to the view hierarchy
                                 map.addSubview(homeScreenMenu)
+                                
                                 // constrain the home screen menu
                                 if let mapMargins = mapMargins {
                                     homeScreenMenu.leadingAnchor.constraint(equalTo: mapMargins.leadingAnchor).isActive = true
@@ -174,7 +189,6 @@ class HomeScreenViewController: UIViewController {
     }
 }
 //MARK: - top right buttons pressed
-
 extension HomeScreenViewController{
     @objc func handleButtonPress(sender: HomeScreenFAB) {
         if sender.buttonName.rawValue == "Settings Button"{
@@ -249,7 +263,7 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
 }
 //MARK: - handle home screen menu gestures
 
-extension HomeScreenViewController {
+extension HomeScreenViewController: UIGestureRecognizerDelegate {
     @objc func homeScreenMenuSwiped(sender: UISwipeGestureRecognizer) {
         if sender.direction == .up {
             self.presentMenu()
@@ -257,6 +271,12 @@ extension HomeScreenViewController {
         else if sender.direction == .down {
             self.dismissMenu()
         }
+    }
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let keyboardDisplayed = keyboardDisplayed {
+            return !keyboardDisplayed
+        }
+        return true
     }
 }
 //MARK: - Create methods to dismiss and present the menu
@@ -291,7 +311,7 @@ extension HomeScreenViewController {
     }
 }
 //MARK: - Allow a way to deselect bus route
-extension HomeScreenViewController: UIGestureRecognizerDelegate {
+extension HomeScreenViewController {
     // this function cleans to map and sets it to the default region
     func clearBusRoutePatternFromMap(){
         if let map = map, let _ = currentlyDisplayedColor, let currentlyDisplayedPattern = currentlyDisplayedPattern , let region = region{
@@ -303,8 +323,42 @@ extension HomeScreenViewController: UIGestureRecognizerDelegate {
             }
         }
     }
+}
+//MARK: - Handle Keyboard popping up on screen
 
-
+extension HomeScreenViewController {
+    @objc func keyboardIsDisplayedOnScreen(){
+        keyboardDisplayed = true
+        if let homeScreenMenu = homeScreenMenu, let homeScreenMenuHeight = homeScreenMenuHeight {
+            DispatchQueue.main.async{
+                UIView.animate(withDuration: 0.25, delay: 0) {
+                        homeScreenMenu.frame.origin.y -= homeScreenMenuHeight
+                }
+            }
+        }
+    }
 }
 
-
+//MARK: - Handle Keyboard disappearing from screen
+extension HomeScreenViewController {
+    @objc func keyboardDidDisappear() {
+        keyboardDisplayed = false
+        if let homeScreenMenu = homeScreenMenu, let homeScreenMenuHeight = homeScreenMenuHeight {
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0, delay: 0) {
+                        homeScreenMenu.frame.origin.y += homeScreenMenuHeight
+                }
+            }
+        }
+    }
+}
+//MARK: - Handle editing did begin
+extension HomeScreenViewController {
+    @objc func editingDidBegin() {
+        if let menuCollapsed = menuCollapsed {
+            if menuCollapsed {
+                self.presentMenu()
+            }
+        }
+    }
+}
