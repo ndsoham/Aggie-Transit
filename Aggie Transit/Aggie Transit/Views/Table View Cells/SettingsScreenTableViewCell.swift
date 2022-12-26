@@ -21,12 +21,13 @@ class SettingsScreenTableViewCell: UITableViewCell {
     private var iconWidth: Double?
     private var labelHeight: Double?
     private var labelWidth: Double?
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layoutSubviews()
     }
-    
+    override func prepareForReuse() {
+        
+    }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -91,6 +92,5 @@ class SettingsScreenTableViewCell: UITableViewCell {
                 }
             }
         }
-        
     }
 }

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-
 class NotificationsScreenTableViewCell: UITableViewCell {
     private var notificationsIcon: UIImageView?
     private var notificationsIconHeight: Double?
@@ -30,6 +29,9 @@ class NotificationsScreenTableViewCell: UITableViewCell {
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    override func prepareForReuse() {
+        
     }
     override func layoutSubviews() {
         cellHeight = self.contentView.frame.height
@@ -112,11 +114,7 @@ class NotificationsScreenTableViewCell: UITableViewCell {
                         textStack.addArrangedSubview(notificationsText)
                     }
                 }
-                
-                
             }
-            
         }
-        
     }
 }

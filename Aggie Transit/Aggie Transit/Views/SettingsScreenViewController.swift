@@ -156,11 +156,3 @@ extension SettingsScreenViewController: UITableViewDelegate, UITableViewDataSour
     
     
 }
-
-extension SettingsScreenViewController: BackButtonDelegate {
-    func handleBackButtonPressed() {
-        self.dismiss(animated: true)
-    }
-    
-    
-}
