@@ -41,7 +41,7 @@ class HomeScreenViewController: UIViewController {
         super.viewDidLoad()
         layoutSubviews()
         registerKeyboardNotification()
-        
+        registerCollapseNotification()
     }
     override func viewWillAppear(_ animated: Bool) {
         // hide the navigation bar
@@ -61,7 +61,11 @@ class HomeScreenViewController: UIViewController {
     func registerKeyboardNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardIsDisplayedOnScreen), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidDisappear), name: UIResponder.keyboardWillHideNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(editingDidBegin), name: NSNotification.Name("didBeginEditing"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(editingDidBegin), name: Notification.Name("didBeginEditing"), object: nil)
+    }
+    //MARK: - Register collapse notification
+    func registerCollapseNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissMenu), name: Notification.Name(rawValue: "collapseMenu"), object: nil)
     }
     //MARK: - layout subviews of main view
     func layoutSubviews() {
@@ -167,7 +171,6 @@ class HomeScreenViewController: UIViewController {
                                 homeScreenMenu.addGestureRecognizer(upSwipeGesture)
                                 // add the home screen menu to the view hierarchy
                                 map.addSubview(homeScreenMenu)
-                                
                                 // constrain the home screen menu
                                 if let mapMargins = mapMargins {
                                     homeScreenMenu.leadingAnchor.constraint(equalTo: mapMargins.leadingAnchor).isActive = true
@@ -222,7 +225,6 @@ extension HomeScreenViewController{
 extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
     func displayBusRoutePatternOnMap(color: UIColor, points: [CLLocationCoordinate2D]) {
         if let map = map, let homeScreenMenuHeight = homeScreenMenuHeight {
-            self.dismissMenu()
             if let currentlyDisplayedPattern = currentlyDisplayedPattern, let _ = currentlyDisplayedColor {
                 DispatchQueue.main.async {
                     map.removeOverlay(currentlyDisplayedPattern)
@@ -282,7 +284,7 @@ extension HomeScreenViewController: UIGestureRecognizerDelegate {
 //MARK: - Create methods to dismiss and present the menu
 
 extension HomeScreenViewController {
-    func dismissMenu(){
+    @objc func dismissMenu(){
         if let homeScreenMenu = homeScreenMenu, let menuCollapsed = menuCollapsed, let homeScreenMenuHeight = homeScreenMenuHeight{
             if !menuCollapsed {
                 DispatchQueue.main.async {
@@ -295,7 +297,7 @@ extension HomeScreenViewController {
             }
         }
     }
-    func presentMenu(){
+    @objc func presentMenu(){
         if let homeScreenMenu = homeScreenMenu, let menuCollapsed = menuCollapsed, let homeScreenMenuHeight = homeScreenMenuHeight {
             if menuCollapsed {
                 DispatchQueue.main.async {

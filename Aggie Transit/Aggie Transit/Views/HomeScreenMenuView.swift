@@ -41,7 +41,7 @@ class HomeScreenMenuView: UIView {
     private var grabberHeight: Double?
     private var grabberWidth: Double?
     private var editingNotification: Notification?
-    private var didBeginEditing: Notification.Name?
+    private var collapseNotification: Notification?
     override init(frame: CGRect){
         super.init(frame: frame)
         layoutSubviews()
@@ -358,6 +358,10 @@ extension HomeScreenMenuView: UITableViewDelegate {
         // this line of code is required so that the keyboard will go away
         self.endEditing(true)
         tableView.deselectRow(at: indexPath, animated: false)
+        collapseNotification = Notification(name: Notification.Name(rawValue: "collapseMenu"))
+        if let collapseNotification = collapseNotification {
+            NotificationCenter.default.post(collapseNotification)
+        }
     }
 }
 //MARK: - Handle Page Control Page Changed
@@ -391,12 +395,9 @@ extension HomeScreenMenuView: UISearchBarDelegate {
         
     }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        didBeginEditing = Notification.Name("didBeginEditing")
-        if let didBeginEditing = didBeginEditing {
-            editingNotification = Notification(name: didBeginEditing)
-            if let editingNotification = editingNotification {
-                NotificationCenter.default.post(editingNotification)
-            }
+        editingNotification = Notification(name: Notification.Name("didBeginEditing"))
+        if let editingNotification = editingNotification {
+            NotificationCenter.default.post(editingNotification)
         }
         searchBar.showsCancelButton = true
     }
