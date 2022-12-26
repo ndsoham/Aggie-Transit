@@ -176,7 +176,6 @@ class HomeScreenMenuView: UIView {
                                                     allRoutesTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                                                     allRoutesTableView.rowHeight = 122
                                                     allRoutesTableView.separatorStyle = .none
-                                                    
                                                     // constrain the all routes table view
                                                     allRoutesTableView.widthAnchor.constraint(equalToConstant: tableViewWidth).isActive = true
                                                     allRoutesTableView.heightAnchor.constraint(equalToConstant: tableViewHeight).isActive = true
@@ -237,11 +236,8 @@ class HomeScreenMenuView: UIView {
                                             }
                                         }
                                 }
-                                    
                                 }
                             }
-                            
-                            
                         }
                     }
                 }
@@ -325,18 +321,16 @@ extension HomeScreenMenuView: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
             cell.icon = "⭐️"
             cell.text = "Favorite Location"
-            cell.cellColor = UIColor(named: cellBackgroundColor.favoriteLocationGold.rawValue)
+            cell.cellColor = UIColor(named: "favoriteLocationGold")
             return cell
         }
         else if tableView == recentsTableView {
             let cell = tableView.dequeueReusableCell(withIdentifier: "homeScreenModalTableViewCell") as! HomeScreenModalTableViewCell
             cell.icon = "📍"
             cell.text = "Recent Location"
-            cell.cellColor = UIColor(named: cellBackgroundColor.recentLocationRed.rawValue)
+            cell.cellColor = UIColor(named: "recentLocationRed")
             return cell
         }
-        
-        
         return UITableViewCell()
     }
     // provide a height for each row
@@ -360,6 +354,7 @@ extension HomeScreenMenuView: UITableViewDelegate {
                 }
             }
         }
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 }
 //MARK: - Handle Page Control Page Changed
@@ -374,7 +369,6 @@ extension HomeScreenMenuView {
             } completion: { _ in
                 self.programmedScroll = false
             }
-
         }
     }
 }
@@ -386,6 +380,5 @@ extension HomeScreenMenuView: DataGathererDelegate {
         DispatchQueue.main.async {
             self.allRoutesTableView?.reloadData()
         }
-        
     }
 }

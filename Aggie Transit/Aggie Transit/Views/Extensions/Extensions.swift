@@ -1,5 +1,5 @@
 //
-//  Color.swift
+//  Extensions.swift
 //  Aggie Transit
 //
 //  Created by Soham Nagawanshi on 12/20/22.
