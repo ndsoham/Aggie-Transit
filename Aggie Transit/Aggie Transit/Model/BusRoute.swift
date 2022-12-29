@@ -9,7 +9,8 @@ import Foundation
 import UIKit
 import MapKit
 protocol PathMakerDelegate {
-    func displayBusRoutePatternOnMap(color: UIColor, points: [CLLocationCoordinate2D])
+    func displayBusRoutePatternOnMap(color: UIColor, points: [BusPattern])
+    func displayBusRouteStopsOnMap(color: UIColor, stops: [BusStop])
 }
 class BusRoute: NSObject {
     var name: String
@@ -17,28 +18,34 @@ class BusRoute: NSObject {
     var color: UIColor
     var campus: String
     var delegate: PathMakerDelegate?
+    private let dataGatherer = DataGatherer()
     init(name: String, number: String, color: UIColor, campus: String){
         self.name = name
         self.number = number
         self.color = color
         self.campus = campus
     }
+    // this displays the pattern on the map
     func displayBusRoutePatternOnMap() {
-        var endpoint = "route/{route}/pattern"
-        endpoint = endpoint.replacingOccurrences(of: "{route}", with: number)
-        let dataGatherer = DataGatherer()
-        dataGatherer.gatherData(endpoint: endpoint)
+        let endpoint = "route/\(number)/pattern"
         dataGatherer.delegate = self
+        dataGatherer.gatherData(endpoint: endpoint)
     }
+    // this displays the stops on the map
+    func displayBusRouteStopsOnMap() {
+        let endpoint = "route/\(number)/stops"
+        dataGatherer.delegate = self
+        dataGatherer.gatherData(endpoint: endpoint)
+    }
+    
 }
 
 extension BusRoute: DataGathererDelegate {
     func didGatherBusPattern(points: [BusPattern]) {
-        var pattern:[CLLocationCoordinate2D] = []
-        for point in points {
-            pattern.append(CLLocationCoordinate2D(latitude: point.latitude, longitude: point.longitude))
-        }
-        delegate?.displayBusRoutePatternOnMap(color: color, points: pattern)
+        delegate?.displayBusRoutePatternOnMap(color: color, points: points)
+    }
+    func didGatherBusStops(stops: [BusStop]) {
+        delegate?.displayBusRouteStopsOnMap(color: color, stops: stops)
     }
 }
 

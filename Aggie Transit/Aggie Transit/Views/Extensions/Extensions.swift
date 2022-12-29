@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 //MARK: - UI Color Extension to create rgb color from string
 extension UIColor {
-    class func colorFromRGBString(string: String) -> UIColor {
+     static func colorFromRGBString(string: String) -> UIColor {
         if string.contains("rgb"){
             let alpha = 1.0
             var colorString = string
@@ -44,6 +44,14 @@ extension UIColor {
 
         return UIColor(red: 80/255, green: 0, blue: 0, alpha: 1.0)
         
+    }
+    func inverseColor() -> UIColor {
+        var alpha: CGFloat = 1.0
+        var red: CGFloat = 0.0, green: CGFloat = 0.0, blue: CGFloat = 0.0
+        if self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) {
+            return UIColor(red: 1.0 - red, green: 1.0 - green, blue: 1.0 - blue, alpha: alpha)
+        }
+        fatalError("Not possible to get this color's inverse")
     }
 }
 //MARK: - UISegementedControl extension to conform to UIScrollViewDelegate

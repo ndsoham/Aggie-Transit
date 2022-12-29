@@ -29,6 +29,7 @@ class HomeScreenViewController: UIViewController {
     private var animationDuration:TimeInterval = 0.5
     private var navigationBar: UINavigationBar?
     private var currentlyDisplayedPattern: MKPolyline?
+    private var currentlyDisplayedStops: [MKAnnotation]?
     private var currentlyDisplayedColor: UIColor?
     private var longitudeDelta: Double?
     private var latitudeDelta: Double?
@@ -111,7 +112,7 @@ class HomeScreenViewController: UIViewController {
                         // configure the buttons
                         buttonStack = UIStackView()
                         if let buttonStack = buttonStack{
-                            fabHeight = 54.85 * (height/812)
+                            fabHeight = 40 * (height/812)
                             fabWidth = fabHeight
                             if let fabHeight = fabHeight, let fabWidth  = fabWidth{
                                 // configure settings button
@@ -220,48 +221,106 @@ extension HomeScreenViewController{
         }
     }
 }
-//MARK: - handle the map and creating paths
+//MARK: - handle the map and creating patterns and points
 
 extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
-    func displayBusRoutePatternOnMap(color: UIColor, points: [CLLocationCoordinate2D]) {
+    // this dispalys the route on the current map
+    func displayBusRoutePatternOnMap(color: UIColor, points: [BusPattern]) {
+        var wayPoints: [CLLocationCoordinate2D] = []
+        for point in points {
+            wayPoints.append(point.location)
+        }
         if let map = map, let homeScreenMenuHeight = homeScreenMenuHeight {
             if let currentlyDisplayedPattern = currentlyDisplayedPattern, let _ = currentlyDisplayedColor {
                 DispatchQueue.main.async {
                     map.removeOverlay(currentlyDisplayedPattern)
                 }
-                let boundedLine = MKPolyline(coordinates: points, count: points.count)
+                let boundedLine = MKPolyline(coordinates: wayPoints, count: points.count)
                 self.currentlyDisplayedColor = color
                 self.currentlyDisplayedPattern = boundedLine
                 DispatchQueue.main.async {
                     map.addOverlay(boundedLine)
                     // change the region of the map based on currently displayed bus route
-                    map.visibleMapRect = map.mapRectThatFits(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: homeScreenMenuHeight * 0.33, left: 5, bottom: homeScreenMenuHeight * 0.33, right: 5))
+                    map.visibleMapRect = map.mapRectThatFits(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: homeScreenMenuHeight * 0.33, left: 10, bottom: homeScreenMenuHeight * 0.33, right: 10))
                 }
             }
             else {
-                let boundedLine = MKPolyline(coordinates: points, count: points.count)
-                currentlyDisplayedPattern = boundedLine
-                currentlyDisplayedColor = color
+                let boundedLine = MKPolyline(coordinates: wayPoints, count: points.count)
+                self.currentlyDisplayedPattern = boundedLine
+                self.currentlyDisplayedColor = color
                 DispatchQueue.main.async {
                     map.addOverlay(boundedLine)
                     // change the region of the map based on currently displayed bus route
-                    map.visibleMapRect = map.mapRectThatFits(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: homeScreenMenuHeight * 0.33, left: 5, bottom: homeScreenMenuHeight * 0.33, right: 5))
+                    map.visibleMapRect = map.mapRectThatFits(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: homeScreenMenuHeight * 0.33, left: 10, bottom: homeScreenMenuHeight * 0.33, right: 10))
                 }
             }
         }
     }
-    
+    // this returns an appropriate renderer for overlay
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if overlay is MKPolyline {
             if let _ = currentlyDisplayedPattern, let color = currentlyDisplayedColor {
                 let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
-                renderer.lineWidth = 3
+                renderer.lineWidth = 5
                 renderer.strokeColor = color
+                renderer.alpha = 1.0
                 return renderer
             }
         }
         fatalError("Overlay is of the wrong type")
     }
+    // this displays the stops on the current map
+    func displayBusRouteStopsOnMap(color: UIColor, stops: [BusStop]) {
+        if let map = map {
+            if let currentlyDisplayedStops = currentlyDisplayedStops, let _ = currentlyDisplayedColor {
+                DispatchQueue.main.async {
+                    map.removeAnnotations(currentlyDisplayedStops)
+                }
+                var stopAnnotations: [MKAnnotation] = []
+                for stop in stops {
+                    let stopAnnotation = MKPointAnnotation()
+                    stopAnnotation.coordinate = stop.location
+                    stopAnnotation.title = stop.name
+                    stopAnnotation.title = stop.name
+                    stopAnnotation.subtitle = stop.isTimePoint ? "Time Point":"Waypoint"
+                    stopAnnotations.append(stopAnnotation)
+                }
+                self.currentlyDisplayedStops = stopAnnotations
+                self.currentlyDisplayedColor = color
+                DispatchQueue.main.async {
+                    map.addAnnotations(stopAnnotations)
+                }
+            }
+            else {
+                var stopAnnotations: [MKAnnotation] = []
+                for stop in stops {
+                    let stopAnnotation = MKPointAnnotation()
+                    stopAnnotation.coordinate = stop.location
+                    stopAnnotation.title = stop.name
+                    stopAnnotation.subtitle = stop.isTimePoint ? "Time Point":"Waypoint"
+                    stopAnnotations.append(stopAnnotation)
+                }
+                self.currentlyDisplayedStops = stopAnnotations
+                self.currentlyDisplayedColor = color
+                DispatchQueue.main.async {
+                    map.addAnnotations(stopAnnotations)
+                }
+            }
+        }
+    }
+    //
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation.isKind(of: MKPointAnnotation.self) {
+            if let currentlyDisplayedColor = currentlyDisplayedColor {
+                let view = MKPinAnnotationView()
+                view.canShowCallout = true
+                view.pinTintColor = annotation.subtitle == "Waypoint" ? currentlyDisplayedColor:currentlyDisplayedColor.inverseColor()
+                return view
+            }
+        }
+        fatalError("Annotation is of the wrong kind")
+    }
+    
 }
 //MARK: - handle home screen menu gestures
 
@@ -304,6 +363,7 @@ extension HomeScreenViewController {
                     UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn) {
                         homeScreenMenu.frame.origin.y -= homeScreenMenuHeight/1.33
                         self.clearBusRoutePatternFromMap()
+                        self.clearBusRouteStopsFromMap()
                     }completion: { _ in
                         self.menuCollapsed = false
                     }
@@ -314,7 +374,7 @@ extension HomeScreenViewController {
 }
 //MARK: - Allow a way to deselect bus route
 extension HomeScreenViewController {
-    // this function cleans to map and sets it to the default region
+    // this function cleans the map and sets it to the default region
     func clearBusRoutePatternFromMap(){
         if let map = map, let _ = currentlyDisplayedColor, let currentlyDisplayedPattern = currentlyDisplayedPattern , let region = region{
             DispatchQueue.main.async {
@@ -322,6 +382,17 @@ extension HomeScreenViewController {
                 map.setRegion(region, animated: true)
                 self.currentlyDisplayedColor = nil
                 self.currentlyDisplayedPattern = nil
+            }
+        }
+    }
+    // this function cleans the bus stops from the map
+    func clearBusRouteStopsFromMap() {
+        if let map = map, let currentlyDisplayedStops = currentlyDisplayedStops, let region = region {
+            DispatchQueue.main.async {
+                map.removeAnnotations(currentlyDisplayedStops)
+                map.setRegion(region, animated: true)
+                self.currentlyDisplayedStops = nil
+                self.currentlyDisplayedColor = nil
             }
         }
     }

@@ -8,7 +8,7 @@
 import UIKit
 
 class HomeScreenModalTableViewCell: UITableViewCell {
-    private let cornerRadius = 36.75
+    private var cornerRadius: Double? = 36.75
     private let borderWidth = 2.0
     private var width: Double?
     private var height: Double?
@@ -44,56 +44,58 @@ class HomeScreenModalTableViewCell: UITableViewCell {
             viewHeight = 86.25 * (height/122)
             viewWidth = 355 * (width/375)
             if let viewHeight = viewHeight, let viewWidth = viewWidth {
-                view = UIView(frame: CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight))
-                if let view = view, let cellColor = cellColor {
-                    // configure the view
-                    view.layer.cornerRadius = cornerRadius
-                    view.layer.borderWidth = borderWidth
-                    view.layer.borderColor = UIColor(named: "borderColor")?.cgColor
-                    view.backgroundColor = cellColor
-                    view.translatesAutoresizingMaskIntoConstraints = false
-                    // add to the view hierarchy
-                    self.contentView.addSubview(view)
-                    // add constraints
-                    margins = self.safeAreaLayoutGuide
-                    if let margins = margins {
-                        view.heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
-                        view.widthAnchor.constraint(equalToConstant: viewWidth).isActive = true
-                        view.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
-                        view.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
-                    }
-                    // create stack view
-                    stackView = UIStackView()
-                    if let stackView = stackView{
-                    // configure stackView
-                        stackView.alignment = .leading
-                        stackView.distribution = .equalCentering
-                        stackView.axis = .horizontal
-                        stackView.spacing = 8
-                        stackView.translatesAutoresizingMaskIntoConstraints = false
-                        // add stackview to view hierarchy
-                        view.addSubview(stackView)
+                if let cornerRadius = cornerRadius{
+                    view = UIView(frame: CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight))
+                    if let view = view, let cellColor = cellColor {
+                        // configure the view
+                        view.layer.cornerRadius = cornerRadius
+                        view.layer.borderWidth = borderWidth
+                        view.layer.borderColor = UIColor(named: "borderColor")?.cgColor
+                        view.backgroundColor = cellColor
+                        view.translatesAutoresizingMaskIntoConstraints = false
+                        // add to the view hierarchy
+                        self.contentView.addSubview(view)
                         // add constraints
-                        viewMargins = view.safeAreaLayoutGuide
-                        if let viewMargins = viewMargins {
-                            stackView.leadingAnchor.constraint(equalTo: viewMargins.leadingAnchor,constant: 10).isActive = true
-                            stackView.centerYAnchor.constraint(equalTo: viewMargins.centerYAnchor).isActive = true
+                        margins = self.safeAreaLayoutGuide
+                        if let margins = margins {
+                            view.heightAnchor.constraint(equalToConstant: viewHeight).isActive = true
+                            view.widthAnchor.constraint(equalToConstant: viewWidth).isActive = true
+                            view.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
+                            view.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
                         }
-                        // create icon label and text label
-                        iconLabel = UILabel()
-                        customTextLabel = UILabel()
-                        if let iconLabel = iconLabel, let customTextLabel = customTextLabel, let icon = icon, let text = text {
-                            iconLabel.text = icon
-                            iconLabel.textColor = UIColor(named: "modalTableCellTextColor")
-                            customTextLabel.text = text
-                            customTextLabel.textColor = UIColor(named: "modalTableCellTextColor")
-                            // add to view hierarchy
-                            stackView.addArrangedSubview(iconLabel)
-                            stackView.addArrangedSubview(customTextLabel)
-                            
+                        // create stack view
+                        stackView = UIStackView()
+                        if let stackView = stackView{
+                        // configure stackView
+                            stackView.alignment = .leading
+                            stackView.distribution = .equalCentering
+                            stackView.axis = .horizontal
+                            stackView.spacing = 8
+                            stackView.translatesAutoresizingMaskIntoConstraints = false
+                            // add stackview to view hierarchy
+                            view.addSubview(stackView)
+                            // add constraints
+                            viewMargins = view.safeAreaLayoutGuide
+                            if let viewMargins = viewMargins {
+                                stackView.leadingAnchor.constraint(equalTo: viewMargins.leadingAnchor,constant: 10).isActive = true
+                                stackView.centerYAnchor.constraint(equalTo: viewMargins.centerYAnchor).isActive = true
+                            }
+                            // create icon label and text label
+                            iconLabel = UILabel()
+                            customTextLabel = UILabel()
+                            if let iconLabel = iconLabel, let customTextLabel = customTextLabel, let icon = icon, let text = text {
+                                iconLabel.text = icon
+                                iconLabel.textColor = UIColor(named: "modalTableCellTextColor")
+                                customTextLabel.text = text
+                                customTextLabel.textColor = UIColor(named: "modalTableCellTextColor")
+                                // add to view hierarchy
+                                stackView.addArrangedSubview(iconLabel)
+                                stackView.addArrangedSubview(customTextLabel)
+                                
+                            }
                         }
+                        
                     }
-                    
                 }
             }
             

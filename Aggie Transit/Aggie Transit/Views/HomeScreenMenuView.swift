@@ -347,17 +347,20 @@ extension HomeScreenMenuView: UITableViewDelegate {
             if indexPath.section == 0 {
                 if let onCampusRoutes = onCampusRoutes {
                     onCampusRoutes[indexPath.row].displayBusRoutePatternOnMap()
+                    onCampusRoutes[indexPath.row].displayBusRouteStopsOnMap()
                 }
             }
             else if indexPath.section == 1 {
                 if let offCampusRoutes = offCampusRoutes {
                     offCampusRoutes[indexPath.row].displayBusRoutePatternOnMap()
+                    offCampusRoutes[indexPath.row].displayBusRouteStopsOnMap()
                 }
             }
         }
         // this line of code is required so that the keyboard will go away
         self.endEditing(true)
         tableView.deselectRow(at: indexPath, animated: false)
+        // use this to alert the system to collapse the menu when a bus route is selected
         collapseNotification = Notification(name: Notification.Name(rawValue: "collapseMenu"))
         if let collapseNotification = collapseNotification {
             NotificationCenter.default.post(collapseNotification)
@@ -367,6 +370,19 @@ extension HomeScreenMenuView: UITableViewDelegate {
 //MARK: - Handle Page Control Page Changed
 extension HomeScreenMenuView {
     @objc func handleControlPageChanged(sender: UISegmentedControl){
+        // scroll each table view to the top when the associated button is pressed
+        if let allRoutesTableView = allRoutesTableView, let recentsTableView = recentsTableView, let favoritesTableView = favoritesTableView {
+            if sender.selectedSegmentIndex == 0 {
+                recentsTableView.setContentOffset(.zero, animated: false)
+            }
+            else if sender.selectedSegmentIndex == 1 {
+                favoritesTableView.setContentOffset(.zero, animated: false)
+            }
+            else if sender.selectedSegmentIndex == 2 {
+                allRoutesTableView.setContentOffset(.zero, animated: false)
+            }
+        }
+        // change the scroll views position based on the segmented control's selection
         if let scrollView = scrollView {
             let xPos = scrollView.frame.width * Double(sender.selectedSegmentIndex)
             let yPos = 0.0
