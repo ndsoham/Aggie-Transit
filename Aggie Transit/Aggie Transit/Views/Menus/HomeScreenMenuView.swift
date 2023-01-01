@@ -8,8 +8,9 @@
 import Foundation
 import UIKit
 import MapKit
+import DropDown
 class HomeScreenMenuView: UIView {
-    private var searchBar: UISearchBar?
+    public var searchBar: UISearchBar?
     private var recentsTableView: UITableView?
     private var favoritesTableView: UITableView?
     private var allRoutesTableView: UITableView?
@@ -42,6 +43,9 @@ class HomeScreenMenuView: UIView {
     private var grabberWidth: Double?
     private var editingNotification: Notification?
     private var collapseNotification: Notification?
+    public var map: MKMapView?
+    private var searchCompleter: MKLocalSearchCompleter?
+    private var searchResults: DropDown?
     override init(frame: CGRect){
         super.init(frame: frame)
         layoutSubviews()
@@ -91,7 +95,7 @@ class HomeScreenMenuView: UIView {
                             searchBar.tintColor = .systemBlue
                             if let searchField = searchBar.value(forKey: "searchField") as? UITextField {
                                 searchField.textColor = UIColor(named: "textColor")
-                                searchField.layer.borderWidth = 2
+                                searchField.layer.borderWidth = 1
                                 searchField.clipsToBounds = true
                                 searchField.layer.cornerRadius = 18
                                 searchField.layer.borderColor = UIColor(named: "borderColor")?.cgColor
@@ -408,7 +412,20 @@ extension HomeScreenMenuView: DataGathererDelegate {
 //MARK: - Handle search bar interactions
 extension HomeScreenMenuView: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
+        searchCompleter = MKLocalSearchCompleter()
+        searchResults = DropDown()
+        if let searchCompleter = searchCompleter, let map = map, let searchResults = searchResults {
+            searchCompleter.delegate = self
+            searchCompleter.queryFragment = searchText
+            searchCompleter.region = map.region
+            searchResults.anchorView = searchBar
+            configureSearchResultsMenu()
+        }
+        if searchText.isEmpty {
+            if let searchResults = searchResults {
+                searchResults.hide()
+            }
+        }
     }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         editingNotification = Notification(name: Notification.Name("didBeginEditing"))
@@ -419,8 +436,70 @@ extension HomeScreenMenuView: UISearchBarDelegate {
     }
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = false
+        if let searchResults = searchResults {
+            searchResults.hide()
+        }
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
     }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+        if let map = map {
+            let searchRequest = MKLocalSearch.Request()
+            searchRequest.naturalLanguageQuery = searchBar.text
+            searchRequest.region = map.region
+            let search = MKLocalSearch(request: searchRequest)
+            search.start { response, error in
+                guard let response = response else {
+                    fatalError("Invalid search")
+                }
+                for item in response.mapItems {
+                    if let name = item.name, let location = item.placemark.location {
+                        print("\(name): \(location.coordinate.latitude), \(location.coordinate.longitude)")
+                    }
+                }
+
+            }
+        }
+    }
 }
+//MARK: - Conform to the auto completion delegation
+extension HomeScreenMenuView: MKLocalSearchCompleterDelegate {
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        var suggestions: [String] = []
+        for result in completer.results {
+            suggestions.append(result.title)
+        }
+        if let searchResults = searchResults {
+            searchResults.dataSource = suggestions
+            searchResults.reloadAllComponents()
+            searchResults.show()
+        }
+    }
+}
+//MARK: - configure search results menu
+extension HomeScreenMenuView {
+    func configureSearchResultsMenu() {
+        if let searchResults = searchResults {
+            searchResults.bottomOffset = CGPoint(x: 0, y: (searchResults.anchorView?.plainView.bounds.height)!)
+            searchResults.direction = .bottom
+            searchResults.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+            searchResults.textColor = UIColor(named: "textColor")!
+            searchResults.cornerRadius = 15
+            searchResults.textFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
+            searchResults.dimmedBackgroundColor = .clear
+            searchResults.dismissMode = .manual
+            let modifiedLightGray = UIColor(red: 125/255, green: 125/255, blue: 125/255, alpha: 0.5)
+            searchResults.selectionBackgroundColor = modifiedLightGray
+            searchResults.selectedTextColor = UIColor(named: "textColor")!
+            searchResults.selectionAction = { itemIndex, name in
+                if let searchBar = self.searchBar {
+                    searchBar.text = name
+                }
+            }
+        }
+    }
+    
+}
+

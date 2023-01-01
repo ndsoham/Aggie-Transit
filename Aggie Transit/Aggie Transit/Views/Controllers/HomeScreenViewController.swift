@@ -170,6 +170,7 @@ class HomeScreenViewController: UIViewController {
                                 upSwipeGesture.delegate = self
                                 homeScreenMenu.addGestureRecognizer(downSwipeGesture)
                                 homeScreenMenu.addGestureRecognizer(upSwipeGesture)
+                                homeScreenMenu.map = map
                                 // add the home screen menu to the view hierarchy
                                 map.addSubview(homeScreenMenu)
                                 // constrain the home screen menu
@@ -433,5 +434,7 @@ extension HomeScreenViewController {
                 self.presentMenu()
             }
         }
+        
     }
 }
+
