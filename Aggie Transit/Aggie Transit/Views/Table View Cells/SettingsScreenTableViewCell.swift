@@ -21,7 +21,6 @@ class SettingsScreenTableViewCell: UITableViewCell {
     private var iconWidth: Double?
     private var labelHeight: Double?
     private var labelWidth: Double?
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layoutSubviews()
@@ -93,6 +92,5 @@ class SettingsScreenTableViewCell: UITableViewCell {
                 }
             }
         }
-        
     }
 }

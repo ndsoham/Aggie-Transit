@@ -12,16 +12,13 @@ enum HomeScreenFABPath: String {
     case settings = "homeScreenSettingsFAB"
     case notifications = "homeScreenNotificationsFAB"
 }
-
 enum ButtonName: String {
     case settings = "Settings Button"
     case notifications = "Notifications Button"
 }
-
 class HomeScreenFAB: UIButton {
     let backgroundImage: HomeScreenFABPath
     var buttonName: ButtonName
-    
     init(frame: CGRect, backgroundImage:HomeScreenFABPath, buttonName:ButtonName){
         self.backgroundImage = backgroundImage
         self.buttonName = buttonName
@@ -30,13 +27,8 @@ class HomeScreenFAB: UIButton {
             self.setBackgroundImage(buttonBackgroundImage, for: .normal)
             self.imageView?.contentMode = .scaleAspectFit
         }
-    
-    
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    
 }

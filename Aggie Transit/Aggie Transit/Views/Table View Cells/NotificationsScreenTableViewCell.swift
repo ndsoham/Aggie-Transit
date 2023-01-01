@@ -6,7 +6,6 @@
 //
 
 import UIKit
-
 class NotificationsScreenTableViewCell: UITableViewCell {
     private var notificationsIcon: UIImageView?
     private var notificationsIconHeight: Double?
@@ -115,11 +114,7 @@ class NotificationsScreenTableViewCell: UITableViewCell {
                         textStack.addArrangedSubview(notificationsText)
                     }
                 }
-                
-                
             }
-            
         }
-        
     }
 }

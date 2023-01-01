@@ -6,8 +6,12 @@
 //
 
 import Foundation
-struct BusPattern{
+import MapKit
+@objc class BusPattern: NSObject {
     var name: String
-    var latitude: Double
-    var longitude: Double
+    var location: CLLocationCoordinate2D
+    init(name: String, location: CLLocationCoordinate2D) {
+        self.name = name
+        self.location = location
+    }
 }
