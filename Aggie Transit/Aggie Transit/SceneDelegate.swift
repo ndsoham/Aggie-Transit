@@ -31,16 +31,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
         
         // use this code to fix the animation flaw that occurs when the app goes into the background
-        if let navigationController = window?.rootViewController as? UINavigationController{
-            if let currentController = navigationController.visibleViewController as? HomeScreenViewController {
-                currentController.menuCollapsed = false
-            }
-        }
+      
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
         // Called when the scene will move from an active state to an inactive state.
         // This may occur due to temporary interruptions (ex. an incoming phone call).
+        window?.endEditing(true)
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
@@ -52,6 +49,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
+        if let navigationController = window?.rootViewController as? UINavigationController{
+            if let currentController = navigationController.visibleViewController as? HomeScreenViewController {
+                currentController.menuCollapsed = false
+                currentController.clearBusRouteStopsFromMap()
+                currentController.clearBusRoutePatternFromMap()
+            }
+        }
     }
 
 

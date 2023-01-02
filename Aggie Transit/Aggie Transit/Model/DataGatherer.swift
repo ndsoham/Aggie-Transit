@@ -7,9 +7,11 @@
 
 import Foundation
 import UIKit
+import MapKit
 @objc protocol DataGathererDelegate {
     @objc optional func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute])
     @objc optional func didGatherBusPattern(points: [BusPattern])
+    @objc optional func didGatherBusStops(stops: [BusStop])
 }
 class DataGatherer {
     private let baseUrl = "https://transport.tamu.edu/BusRoutesFeed/api/"
@@ -41,10 +43,19 @@ class DataGatherer {
                             }
                         }
                         else if endpoint.split(separator: "/").last == "pattern" {
-                            let stops = try decoder.decode([PatternData].self, from: data)
-                            let busStops = self.gatherBusStops(data: stops)
+                            let points = try decoder.decode([PatternData].self, from: data)
+                            let busPoints = self.gatherBusPattern(data: points)
                             if let delegate = self.delegate {
                                 if let gather = delegate.didGatherBusPattern {
+                                    gather(busPoints)
+                                }
+                            }
+                        }
+                        else if endpoint.split(separator: "/").last == "stops" {
+                            let stops = try decoder.decode([StopData].self, from: data)
+                            let busStops = self.gatherBusStops(data: stops)
+                            if let delegate = self.delegate {
+                                if let gather = delegate.didGatherBusStops {
                                     gather(busStops)
                                 }
                             }
@@ -57,6 +68,7 @@ class DataGatherer {
             task.resume()
         }
     }
+    //MARK: - Use this to convert from decoded route data to bus routes
     private func gatherOnCampusBusRoutes(data: [RouteData]) -> [BusRoute] {
         var routes: [BusRoute] = []
         for route in data {
@@ -77,11 +89,22 @@ class DataGatherer {
         }
         return routes
     }
-    private func gatherBusStops(data: [PatternData]) -> [BusPattern] {
-        var stops: [BusPattern] = []
+//MARK: - use this to convert from decoded pattern data to bus pattern
+    private func gatherBusPattern(data: [PatternData]) -> [BusPattern] {
+        var points: [BusPattern] = []
+        for point in data {
+            let coordinates = CoordinateConverter(latitude: point.Latitude, longitude: point.Longtitude)
+            let busPoint = BusPattern(name: point.Name, location: CLLocationCoordinate2D(latitude: coordinates.0, longitude: coordinates.1))
+            points.append(busPoint)
+        }
+        return points
+    }
+//MARK: - use this to convert from decoded stop data to bus stop
+    private func gatherBusStops(data: [StopData]) -> [BusStop] {
+        var stops: [BusStop] = []
         for stop in data {
             let coordinates = CoordinateConverter(latitude: stop.Latitude, longitude: stop.Longtitude)
-            let busStop = BusPattern(name: stop.Name, latitude: coordinates.0, longitude: coordinates.1)
+            let busStop = BusStop(name: stop.Name, location: CLLocationCoordinate2D(latitude: coordinates.0, longitude: coordinates.1), isTimePoint: stop.Stop.IsTimePoint)
             stops.append(busStop)
         }
         return stops
