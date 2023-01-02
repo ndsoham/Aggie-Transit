@@ -14,6 +14,8 @@
 		0F0F8C972953F95800BB617E /* PatternData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C962953F95800BB617E /* PatternData.swift */; };
 		0F0F8C992953FBAB00BB617E /* BusPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C982953FBAB00BB617E /* BusPattern.swift */; };
 		0F1AF87E2950E46100BE0C85 /* RouteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F1AF87D2950E46100BE0C85 /* RouteData.swift */; };
+		0F22D400296296A9000AAC01 /* SearchResultsDropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F22D3FE296296A9000AAC01 /* SearchResultsDropDownCell.swift */; };
+		0F22D401296296A9000AAC01 /* SearchResultsDropDownCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F22D3FF296296A9000AAC01 /* SearchResultsDropDownCell.xib */; };
 		0F2F37FE29318150005998AF /* HomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F2F37FD29318150005998AF /* HomeScreenViewController.swift */; };
 		0F36CD3829155B460059BC24 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD3729155B460059BC24 /* AppDelegate.swift */; };
 		0F36CD3A29155B460059BC24 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD3929155B460059BC24 /* SceneDelegate.swift */; };
@@ -41,6 +43,8 @@
 		0F0F8C962953F95800BB617E /* PatternData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternData.swift; sourceTree = "<group>"; };
 		0F0F8C982953FBAB00BB617E /* BusPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusPattern.swift; sourceTree = "<group>"; };
 		0F1AF87D2950E46100BE0C85 /* RouteData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteData.swift; sourceTree = "<group>"; };
+		0F22D3FE296296A9000AAC01 /* SearchResultsDropDownCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsDropDownCell.swift; sourceTree = "<group>"; };
+		0F22D3FF296296A9000AAC01 /* SearchResultsDropDownCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchResultsDropDownCell.xib; sourceTree = "<group>"; };
 		0F2F37FD29318150005998AF /* HomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewController.swift; sourceTree = "<group>"; };
 		0F36CD3429155B460059BC24 /* Aggie Transit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Aggie Transit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F36CD3729155B460059BC24 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -193,6 +197,8 @@
 				0F77003F294CB243008C421A /* HomeScreenModalTableViewCell.swift */,
 				0F031B992929BAF800055421 /* SettingsScreenTableViewCell.swift */,
 				0F031B9B2929BB1200055421 /* NotificationsScreenTableViewCell.swift */,
+				0F22D3FE296296A9000AAC01 /* SearchResultsDropDownCell.swift */,
+				0F22D3FF296296A9000AAC01 /* SearchResultsDropDownCell.xib */,
 			);
 			path = "Table View Cells";
 			sourceTree = "<group>";
@@ -203,7 +209,6 @@
 				3611905BF7494E3A8B6F07BB /* Pods-Aggie Transit.debug.xcconfig */,
 				461942E911B2AA7AFBB0D7BE /* Pods-Aggie Transit.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -278,6 +283,7 @@
 				0F36CD4429155B460059BC24 /* LaunchScreen.storyboard in Resources */,
 				0F36CD4129155B460059BC24 /* Assets.xcassets in Resources */,
 				0F36CD3F29155B460059BC24 /* Main.storyboard in Resources */,
+				0F22D401296296A9000AAC01 /* SearchResultsDropDownCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,6 +353,7 @@
 				0F770040294CB243008C421A /* HomeScreenModalTableViewCell.swift in Sources */,
 				0F031B9C2929BB1200055421 /* NotificationsScreenTableViewCell.swift in Sources */,
 				0F1AF87E2950E46100BE0C85 /* RouteData.swift in Sources */,
+				0F22D400296296A9000AAC01 /* SearchResultsDropDownCell.swift in Sources */,
 				0F36CD53291560A80059BC24 /* NotificationsScreenViewController.swift in Sources */,
 				0F0F8C992953FBAB00BB617E /* BusPattern.swift in Sources */,
 				0F62CD0A2938847700374C63 /* HomeScreenMenuView.swift in Sources */,

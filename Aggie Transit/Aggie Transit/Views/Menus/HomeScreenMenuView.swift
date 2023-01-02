@@ -46,6 +46,9 @@ class HomeScreenMenuView: UIView {
     public var map: MKMapView?
     private var searchCompleter: MKLocalSearchCompleter?
     private var searchResults: DropDown?
+    private var cellNib: UINib?
+    private var addresses: [String] = []
+    private var options: [String] = []
     override init(frame: CGRect){
         super.init(frame: frame)
         layoutSubviews()
@@ -95,12 +98,8 @@ class HomeScreenMenuView: UIView {
                             searchBar.tintColor = .systemBlue
                             if let searchField = searchBar.value(forKey: "searchField") as? UITextField {
                                 searchField.textColor = UIColor(named: "textColor")
-                                searchField.layer.borderWidth = 1
                                 searchField.clipsToBounds = true
-                                searchField.layer.cornerRadius = 18
-                                searchField.layer.borderColor = UIColor(named: "borderColor")?.cgColor
                             }
-                            
                             // constrain the search bar
                             searchBar.widthAnchor.constraint(equalToConstant: searchBarWidth).isActive = true
                             searchBar.heightAnchor.constraint(equalToConstant: searchBarHeight).isActive = true
@@ -374,6 +373,8 @@ extension HomeScreenMenuView: UITableViewDelegate {
 //MARK: - Handle Page Control Page Changed
 extension HomeScreenMenuView {
     @objc func handleControlPageChanged(sender: UISegmentedControl){
+        // end editing
+        self.endEditing(true)
         // scroll each table view to the top when the associated button is pressed
         if let allRoutesTableView = allRoutesTableView, let recentsTableView = recentsTableView, let favoritesTableView = favoritesTableView {
             if sender.selectedSegmentIndex == 0 {
@@ -418,14 +419,13 @@ extension HomeScreenMenuView: UISearchBarDelegate {
             searchCompleter.delegate = self
             searchCompleter.queryFragment = searchText
             searchCompleter.region = map.region
-            searchResults.anchorView = searchBar
-            configureSearchResultsMenu()
-        }
-        if searchText.isEmpty {
-            if let searchResults = searchResults {
+            if searchText.isEmpty {
+                searchResults.dataSource = []
                 searchResults.hide()
             }
+            configureSearchResultsMenu()
         }
+        
     }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         editingNotification = Notification(name: Notification.Name("didBeginEditing"))
@@ -433,6 +433,7 @@ extension HomeScreenMenuView: UISearchBarDelegate {
             NotificationCenter.default.post(editingNotification)
         }
         searchBar.showsCancelButton = true
+        searchBar.text = nil
     }
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = false
@@ -441,6 +442,7 @@ extension HomeScreenMenuView: UISearchBarDelegate {
         }
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    
         searchBar.endEditing(true)
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -463,41 +465,56 @@ extension HomeScreenMenuView: UISearchBarDelegate {
             }
         }
     }
+    
 }
 //MARK: - Conform to the auto completion delegation
 extension HomeScreenMenuView: MKLocalSearchCompleterDelegate {
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        var suggestions: [String] = []
-        for result in completer.results {
-            suggestions.append(result.title)
+        addresses  = []
+        options = []
+            for result in completer.results {
+                options.append(result.title)
+                addresses.append(result.subtitle)
+            }
+            if let searchResults = searchResults {
+                searchResults.dataSource = options
+                searchResults.customCellConfiguration = { (index: Index, item: String, cell: DropDownCell) -> Void in
+                    guard let cell = cell as? SearchResultsDropDownCell else {return}
+                    let addressAttributes: [NSAttributedString.Key:Any] = [
+                        .font: UIFont.systemFont(ofSize: 14)
+                    ]
+                    cell.addressLabel.attributedText = NSAttributedString(string: self.addresses[index],attributes: addressAttributes)
+                }
+                searchResults.show()
+            }
         }
-        if let searchResults = searchResults {
-            searchResults.dataSource = suggestions
-            searchResults.reloadAllComponents()
-            searchResults.show()
-        }
-    }
 }
+
 //MARK: - configure search results menu
 extension HomeScreenMenuView {
     func configureSearchResultsMenu() {
-        if let searchResults = searchResults {
-            searchResults.bottomOffset = CGPoint(x: 0, y: (searchResults.anchorView?.plainView.bounds.height)!)
+        cellNib = UINib(nibName: "SearchResultsDropDownCell", bundle: nil)
+        if let searchResults = searchResults, let searchBar = searchBar, let cellNib = cellNib {
+            searchResults.anchorView = searchBar.searchTextField
+            searchResults.width = searchBar.searchTextField.frame.width
+            searchResults.cellNib = cellNib
+            searchResults.cornerRadius = 7.5
+            searchResults.bottomOffset = CGPoint(x: 0, y: (searchResults.anchorView?.plainView.bounds.height)!+1)
             searchResults.direction = .bottom
-            searchResults.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+            searchResults.backgroundColor = UIColor(named: "menuColor")
             searchResults.textColor = UIColor(named: "textColor")!
-            searchResults.cornerRadius = 15
             searchResults.textFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
             searchResults.dimmedBackgroundColor = .clear
-            searchResults.dismissMode = .manual
             let modifiedLightGray = UIColor(red: 125/255, green: 125/255, blue: 125/255, alpha: 0.5)
             searchResults.selectionBackgroundColor = modifiedLightGray
             searchResults.selectedTextColor = UIColor(named: "textColor")!
             searchResults.selectionAction = { itemIndex, name in
                 if let searchBar = self.searchBar {
-                    searchBar.text = name
+                    searchBar.text = self.addresses[itemIndex]
                 }
             }
+            searchResults.separatorColor = UIColor(named: "borderColor") ?? .clear
+            
         }
     }
     
