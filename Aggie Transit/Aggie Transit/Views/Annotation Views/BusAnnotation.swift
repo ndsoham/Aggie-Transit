@@ -8,7 +8,6 @@
 import Foundation
 import MapKit
 class BusAnnotation: MKPointAnnotation {
-     var location: CLLocationCoordinate2D?
      var direction: CLLocationDirection?
 }
 

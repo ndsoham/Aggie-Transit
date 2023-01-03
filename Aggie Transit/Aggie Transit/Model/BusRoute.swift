@@ -20,11 +20,17 @@ class BusRoute: NSObject {
     var campus: String
     var delegate: PathMakerDelegate?
     private let dataGatherer = DataGatherer()
+    private var timer: Timer?
     init(name: String, number: String, color: UIColor, campus: String){
         self.name = name
         self.number = number
         self.color = color
         self.campus = campus
+        super.init()
+        registerUnveilNotification()
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     // this displays the pattern on the map
     func displayBusRoutePatternOnMap() {
@@ -40,9 +46,24 @@ class BusRoute: NSObject {
     }
     // this displays the buses on the map
     func displayBusesOnMap(){
-        let endpoint = "route/\(number)/buses"
-        dataGatherer.delegate = self
-        dataGatherer.gatherData(endpoint: endpoint)
+        DispatchQueue.main.async{
+            self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
+                let endpoint = "route/\(self.number)/buses"
+                self.dataGatherer.delegate = self
+                self.dataGatherer.gatherData(endpoint: endpoint)
+                
+            })
+        }
+    }
+    // Register unveil notification
+    func registerUnveilNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(invalidateTimer), name: Notification.Name(rawValue: "unveilMenu"), object: nil)
+    }
+    // invalidate the timer
+    @objc func invalidateTimer() {
+        if let timer = timer {
+            timer.invalidate()
+        }
     }
     
 }

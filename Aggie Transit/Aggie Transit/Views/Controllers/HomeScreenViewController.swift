@@ -36,6 +36,7 @@ class HomeScreenViewController: UIViewController {
     private var latitudeDelta: Double?
     public var menuCollapsed: Bool?
     private var keyboardDisplayed: Bool?
+    private var unveilNotification: Notification?
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -314,7 +315,7 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation.isKind(of: BusAnnotation.self), let annotation = annotation as? BusAnnotation, let direction = annotation.direction {
             let view = MKAnnotationView()
-            view.image = UIImage(named: "bus")?.rotate(radians: rad(direction))
+            view.image = UIImage(named: "bus")?.rotate(radians: rad(direction-90))
             view.canShowCallout = true
             return view
         }
@@ -412,6 +413,10 @@ extension HomeScreenViewController {
                         self.clearBusRouteStopsFromMap()
                         self.clearBusesFromMap()
                     }completion: { _ in
+                        self.unveilNotification = Notification(name: Notification.Name("unveilMenu"))
+                        if let unveilNotification = self.unveilNotification {
+                            NotificationCenter.default.post(unveilNotification)
+                        }
                         self.menuCollapsed = false
                     }
                 }
