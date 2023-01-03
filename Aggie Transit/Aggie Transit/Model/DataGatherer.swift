@@ -12,6 +12,7 @@ import MapKit
     @objc optional func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute])
     @objc optional func didGatherBusPattern(points: [BusPattern])
     @objc optional func didGatherBusStops(stops: [BusStop])
+    @objc optional func didGatherBuses(buses: [Bus])
 }
 class DataGatherer {
     private let baseUrl = "https://transport.tamu.edu/BusRoutesFeed/api/"
@@ -57,6 +58,15 @@ class DataGatherer {
                             if let delegate = self.delegate {
                                 if let gather = delegate.didGatherBusStops {
                                     gather(busStops)
+                                }
+                            }
+                        }
+                        else if endpoint.split(separator: "/").last == "buses" {
+                            let busData = try decoder.decode([BusData].self, from: data)
+                            let buses = self.gatherBuses(data: busData)
+                            if let delegate = self.delegate {
+                                if let gather = delegate.didGatherBuses {
+                                    gather(buses)
                                 }
                             }
                         }
@@ -109,8 +119,18 @@ class DataGatherer {
         }
         return stops
     }
+//MARK: - use this to convert from decoded bus data to bus
+    private func gatherBuses(data: [BusData]) -> [Bus] {
+        var buses: [Bus] = []
+        for bus in data {
+            if let latitude = Double(bus.lat), let longitude = Double(bus.lng), let direction = CLLocationDirection(bus.direction) {
+                let coordinates = CoordinateConverter(latitude: latitude, longitude: longitude)
+                let routeBus = Bus(location: CLLocationCoordinate2D(latitude: coordinates.0, longitude: coordinates.1), direction: direction,name: bus.route, nextStop: bus.nextStop)
+                buses.append(routeBus)
+            }
+            
+        }
+        return buses
+    }
 }
-
-
-
 

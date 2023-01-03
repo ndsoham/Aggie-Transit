@@ -11,6 +11,7 @@ import MapKit
 protocol PathMakerDelegate {
     func displayBusRoutePatternOnMap(color: UIColor, points: [BusPattern])
     func displayBusRouteStopsOnMap(color: UIColor, stops: [BusStop])
+    func displayBusesOnMap(buses:[Bus])
 }
 class BusRoute: NSObject {
     var name: String
@@ -37,6 +38,12 @@ class BusRoute: NSObject {
         dataGatherer.delegate = self
         dataGatherer.gatherData(endpoint: endpoint)
     }
+    // this displays the buses on the map
+    func displayBusesOnMap(){
+        let endpoint = "route/\(number)/buses"
+        dataGatherer.delegate = self
+        dataGatherer.gatherData(endpoint: endpoint)
+    }
     
 }
 
@@ -46,6 +53,9 @@ extension BusRoute: DataGathererDelegate {
     }
     func didGatherBusStops(stops: [BusStop]) {
         delegate?.displayBusRouteStopsOnMap(color: color, stops: stops)
+    }
+    func didGatherBuses(buses: [Bus]) {
+        delegate?.displayBusesOnMap(buses: buses)
     }
 }
 

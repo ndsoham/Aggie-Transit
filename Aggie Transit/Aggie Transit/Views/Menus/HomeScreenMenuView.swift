@@ -351,12 +351,14 @@ extension HomeScreenMenuView: UITableViewDelegate {
                 if let onCampusRoutes = onCampusRoutes {
                     onCampusRoutes[indexPath.row].displayBusRoutePatternOnMap()
                     onCampusRoutes[indexPath.row].displayBusRouteStopsOnMap()
+                    onCampusRoutes[indexPath.row].displayBusesOnMap()
                 }
             }
             else if indexPath.section == 1 {
                 if let offCampusRoutes = offCampusRoutes {
                     offCampusRoutes[indexPath.row].displayBusRoutePatternOnMap()
                     offCampusRoutes[indexPath.row].displayBusRouteStopsOnMap()
+                    offCampusRoutes[indexPath.row].displayBusesOnMap()
                 }
             }
         }

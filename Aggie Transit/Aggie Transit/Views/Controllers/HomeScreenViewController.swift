@@ -31,6 +31,7 @@ class HomeScreenViewController: UIViewController {
     private var currentlyDisplayedPattern: MKPolyline?
     private var currentlyDisplayedStops: [MKAnnotation]?
     private var currentlyDisplayedColor: UIColor?
+    private var currentlyDisplayedBuses: [MKAnnotation]?
     private var longitudeDelta: Double?
     private var latitudeDelta: Double?
     public var menuCollapsed: Bool?
@@ -309,8 +310,14 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
             }
         }
     }
-    //
+    // this provides the annotation view
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation.isKind(of: BusAnnotation.self), let annotation = annotation as? BusAnnotation, let direction = annotation.direction {
+            let view = MKAnnotationView()
+            view.image = UIImage(named: "bus")?.rotate(radians: rad(direction))
+            view.canShowCallout = true
+            return view
+        }
         if annotation.isKind(of: MKPointAnnotation.self) {
             if let currentlyDisplayedColor = currentlyDisplayedColor {
                 let view = MKPinAnnotationView()
@@ -321,6 +328,44 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
         }
         fatalError("Annotation is of the wrong kind")
     }
+    // this displays the buses on the map
+    func displayBusesOnMap(buses: [Bus]) {
+        if let map = map {
+            if let currentlyDisplayedBuses = currentlyDisplayedBuses, let _ = currentlyDisplayedColor {
+                DispatchQueue.main.async {
+                    map.removeAnnotations(currentlyDisplayedBuses)
+                }
+                var busAnnotations:[MKAnnotation] = []
+                for bus in buses {
+                    let busAnnotation = BusAnnotation()
+                    busAnnotation.coordinate = bus.location
+                    busAnnotation.direction = bus.direction
+//                    busAnnotation.title = bus.name
+                    busAnnotation.subtitle = "next stop - \(bus.nextStop)"
+                    busAnnotations.append(busAnnotation)
+                }
+                self.currentlyDisplayedBuses = busAnnotations
+                DispatchQueue.main.async {
+                    map.addAnnotations(busAnnotations)
+                }
+            } else {
+                var busAnnotations:[MKAnnotation] = []
+                for bus in buses {
+                    let busAnnotation = BusAnnotation()
+                    busAnnotation.coordinate = bus.location
+                    busAnnotation.direction = bus.direction
+//                    busAnnotation.title = bus.name
+                    busAnnotation.subtitle = "next stop - \(bus.nextStop)"
+                    busAnnotations.append(busAnnotation)
+                }
+                self.currentlyDisplayedBuses = busAnnotations
+                DispatchQueue.main.async {
+                    map.addAnnotations(busAnnotations)
+                }
+            }
+        }
+    }
+    
     
 }
 //MARK: - handle home screen menu gestures
@@ -365,6 +410,7 @@ extension HomeScreenViewController {
                         homeScreenMenu.frame.origin.y -= homeScreenMenuHeight/1.33
                         self.clearBusRoutePatternFromMap()
                         self.clearBusRouteStopsFromMap()
+                        self.clearBusesFromMap()
                     }completion: { _ in
                         self.menuCollapsed = false
                     }
@@ -393,6 +439,17 @@ extension HomeScreenViewController {
                 map.removeAnnotations(currentlyDisplayedStops)
                 map.setRegion(region, animated: true)
                 self.currentlyDisplayedStops = nil
+                self.currentlyDisplayedColor = nil
+            }
+        }
+    }
+    // this function cleans the buses from the map
+    func clearBusesFromMap(){
+        if let map = map, let currentlyDisplayedBuses = currentlyDisplayedBuses, let region = region {
+            DispatchQueue.main.async {
+                map.removeAnnotations(currentlyDisplayedBuses)
+                map.setRegion(region, animated: true)
+                self.currentlyDisplayedBuses = nil
                 self.currentlyDisplayedColor = nil
             }
         }
