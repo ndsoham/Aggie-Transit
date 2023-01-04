@@ -34,6 +34,7 @@
 		0F8B6353295A93B6000385C6 /* BusStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8B6352295A93B6000385C6 /* BusStop.swift */; };
 		0F933383294FC09100180E0E /* DataGatherer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F933382294FC09100180E0E /* DataGatherer.swift */; };
 		0FB4FB5C2960C02A0091B616 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0FB4FB5A2960C02A0091B616 /* Model.xcdatamodeld */; };
+		0FC4F0492964EFCF00E0FBA8 /* LocationAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC4F0482964EFCF00E0FBA8 /* LocationAnnotation.swift */; };
 		0FEB8F9B29555E6200D2BB1A /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEB8F9A29555E6200D2BB1A /* CoordinateConverter.swift */; };
 		7A8363F15CFBB4406D490A79 /* Pods_Aggie_Transit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98533FCA8E57C99C2F068E7C /* Pods_Aggie_Transit.framework */; };
 /* End PBXBuildFile section */
@@ -68,6 +69,7 @@
 		0F8B6352295A93B6000385C6 /* BusStop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusStop.swift; sourceTree = "<group>"; };
 		0F933382294FC09100180E0E /* DataGatherer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataGatherer.swift; sourceTree = "<group>"; };
 		0FB4FB5B2960C02A0091B616 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		0FC4F0482964EFCF00E0FBA8 /* LocationAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationAnnotation.swift; sourceTree = "<group>"; };
 		0FEB8F9A29555E6200D2BB1A /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
 		3611905BF7494E3A8B6F07BB /* Pods-Aggie Transit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aggie Transit.debug.xcconfig"; path = "Target Support Files/Pods-Aggie Transit/Pods-Aggie Transit.debug.xcconfig"; sourceTree = "<group>"; };
 		461942E911B2AA7AFBB0D7BE /* Pods-Aggie Transit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aggie Transit.release.xcconfig"; path = "Target Support Files/Pods-Aggie Transit/Pods-Aggie Transit.release.xcconfig"; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				0F4C502A2963993C000D9771 /* BusAnnotation.swift */,
+				0FC4F0482964EFCF00E0FBA8 /* LocationAnnotation.swift */,
 			);
 			path = "Annotation Views";
 			sourceTree = "<group>";
@@ -189,12 +192,12 @@
 			isa = PBXGroup;
 			children = (
 				0FEB8F9929555E4A00D2BB1A /* Converter */,
-				0F0F8C90295238E300BB617E /* APIData */,
 				0F933382294FC09100180E0E /* DataGatherer.swift */,
 				0F8B6352295A93B6000385C6 /* BusStop.swift */,
 				0F0F8C912952398600BB617E /* BusRoute.swift */,
 				0F0F8C982953FBAB00BB617E /* BusPattern.swift */,
 				0F475E812963797900571B8A /* Bus.swift */,
+				0F0F8C90295238E300BB617E /* APIData */,
 				0FB4FB5A2960C02A0091B616 /* Model.xcdatamodeld */,
 			);
 			path = Model;
@@ -372,6 +375,7 @@
 				0F770040294CB243008C421A /* HomeScreenModalTableViewCell.swift in Sources */,
 				0F031B9C2929BB1200055421 /* NotificationsScreenTableViewCell.swift in Sources */,
 				0F1AF87E2950E46100BE0C85 /* RouteData.swift in Sources */,
+				0FC4F0492964EFCF00E0FBA8 /* LocationAnnotation.swift in Sources */,
 				0F22D400296296A9000AAC01 /* SearchResultsDropDownCell.swift in Sources */,
 				0F36CD53291560A80059BC24 /* NotificationsScreenViewController.swift in Sources */,
 				0F475E822963797900571B8A /* Bus.swift in Sources */,

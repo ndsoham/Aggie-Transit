@@ -31,12 +31,12 @@ class HomeScreenViewController: UIViewController {
     private var currentlyDisplayedPattern: MKPolyline?
     private var currentlyDisplayedStops: [MKAnnotation]?
     private var currentlyDisplayedColor: UIColor?
-    private var currentlyDisplayedBuses: [MKAnnotation]?
+    private var currentlyDisplayedBuses: [BusAnnotation]?
+    private var currentlyDisplayedLocation: MKAnnotation?
     private var longitudeDelta: Double?
     private var latitudeDelta: Double?
     public var menuCollapsed: Bool?
     private var keyboardDisplayed: Bool?
-    private var unveilNotification: Notification?
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -164,6 +164,7 @@ class HomeScreenViewController: UIViewController {
                                 homeScreenMenu.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                                 homeScreenMenu.translatesAutoresizingMaskIntoConstraints = false
                                 homeScreenMenu.pathDelegate = self
+                                homeScreenMenu.locationIdentifierDelegate = self
                                 let downSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(homeScreenMenuSwiped))
                                 downSwipeGesture.direction = .down
                                 downSwipeGesture.delegate = self
@@ -315,11 +316,16 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation.isKind(of: BusAnnotation.self), let annotation = annotation as? BusAnnotation, let direction = annotation.direction {
             let view = MKAnnotationView()
-            view.image = UIImage(named: "bus")?.rotate(radians: rad(direction-90))
+            view.image = UIImage(named: "bus")?.rotate(radians: rad(direction))
             view.canShowCallout = true
             return view
         }
-        if annotation.isKind(of: MKPointAnnotation.self) {
+        else if annotation.isKind(of: LocationAnnotation.self){
+            let view = MKMarkerAnnotationView()
+            view.canShowCallout = true
+            return view
+        }
+        else if annotation.isKind(of: MKPointAnnotation.self) {
             if let currentlyDisplayedColor = currentlyDisplayedColor {
                 let view = MKPinAnnotationView()
                 view.canShowCallout = true
@@ -336,12 +342,12 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
                 DispatchQueue.main.async {
                     map.removeAnnotations(currentlyDisplayedBuses)
                 }
-                var busAnnotations:[MKAnnotation] = []
+                var busAnnotations:[BusAnnotation] = []
                 for bus in buses {
                     let busAnnotation = BusAnnotation()
                     busAnnotation.coordinate = bus.location
                     busAnnotation.direction = bus.direction
-//                    busAnnotation.title = bus.name
+                    busAnnotation.title = "Route - \(bus.name)"
                     busAnnotation.subtitle = "next stop - \(bus.nextStop)"
                     busAnnotations.append(busAnnotation)
                 }
@@ -350,12 +356,12 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
                     map.addAnnotations(busAnnotations)
                 }
             } else {
-                var busAnnotations:[MKAnnotation] = []
+                var busAnnotations:[BusAnnotation] = []
                 for bus in buses {
                     let busAnnotation = BusAnnotation()
                     busAnnotation.coordinate = bus.location
                     busAnnotation.direction = bus.direction
-//                    busAnnotation.title = bus.name
+                    busAnnotation.title = "Route - \(bus.name)"
                     busAnnotation.subtitle = "next stop - \(bus.nextStop)"
                     busAnnotations.append(busAnnotation)
                 }
@@ -366,8 +372,7 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
             }
         }
     }
-    
-    
+  
 }
 //MARK: - handle home screen menu gestures
 
@@ -409,14 +414,12 @@ extension HomeScreenViewController {
                 DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn) {
                         homeScreenMenu.frame.origin.y -= homeScreenMenuHeight/1.33
+                        NotificationCenter.default.post(Notification(name: Notification.Name("invalidateTimer")))
                         self.clearBusRoutePatternFromMap()
                         self.clearBusRouteStopsFromMap()
                         self.clearBusesFromMap()
+                        self.clearDisplayedLocationFromMap()
                     }completion: { _ in
-                        self.unveilNotification = Notification(name: Notification.Name("unveilMenu"))
-                        if let unveilNotification = self.unveilNotification {
-                            NotificationCenter.default.post(unveilNotification)
-                        }
                         self.menuCollapsed = false
                     }
                 }
@@ -456,6 +459,16 @@ extension HomeScreenViewController {
                 map.setRegion(region, animated: true)
                 self.currentlyDisplayedBuses = nil
                 self.currentlyDisplayedColor = nil
+            }
+        }
+    }
+    // this function removes the currently displayed location from the map
+    func clearDisplayedLocationFromMap(){
+        if let map = map, let currentlyDisplayedLocation = currentlyDisplayedLocation, let region = region {
+            DispatchQueue.main.async {
+                map.removeAnnotation(currentlyDisplayedLocation)
+                map.setRegion(region, animated: true)
+                self.currentlyDisplayedLocation = nil
             }
         }
     }
@@ -499,4 +512,37 @@ extension HomeScreenViewController {
         
     }
 }
-
+//MARK: - Handle showing search location
+extension HomeScreenViewController: LocationIdentifierDelegate {
+    func showLocationOnMap(location: CLLocationCoordinate2D, name: String, address: String) {
+        if let map = map {
+            if let currentlyDisplayedLocation = currentlyDisplayedLocation {
+                DispatchQueue.main.async {
+                    map.removeAnnotation(currentlyDisplayedLocation)
+                }
+                let locationAnnotation = LocationAnnotation()
+                locationAnnotation.coordinate = location
+                locationAnnotation.title = name
+                locationAnnotation.subtitle = address
+                self.currentlyDisplayedLocation = locationAnnotation
+                DispatchQueue.main.async {
+                    map.addAnnotation(locationAnnotation)
+                    map.selectAnnotation(locationAnnotation, animated: true)
+                    
+                }
+            } else {
+                let locationAnnotation = LocationAnnotation()
+                locationAnnotation.coordinate = location
+                locationAnnotation.title = name
+                locationAnnotation.subtitle = address
+                self.currentlyDisplayedLocation = locationAnnotation
+                DispatchQueue.main.async {
+                    map.addAnnotation(locationAnnotation)
+                    map.selectAnnotation(locationAnnotation, animated: true)
+                }
+            }
+        }
+    }
+    
+    
+}

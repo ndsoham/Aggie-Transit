@@ -9,6 +9,9 @@ import Foundation
 import UIKit
 import MapKit
 import DropDown
+protocol LocationIdentifierDelegate {
+    func showLocationOnMap(location: CLLocationCoordinate2D, name: String, address: String)
+}
 class HomeScreenMenuView: UIView {
     public var searchBar: UISearchBar?
     private var recentsTableView: UITableView?
@@ -38,6 +41,7 @@ class HomeScreenMenuView: UIView {
     private var offCampusRoutes: [BusRoute]?
     private var programmedScroll: Bool = false
     public var pathDelegate: PathMakerDelegate?
+    public var locationIdentifierDelegate: LocationIdentifierDelegate?
     private var grabber: UIView?
     private var grabberHeight: Double?
     private var grabberWidth: Double?
@@ -113,7 +117,7 @@ class HomeScreenMenuView: UIView {
                                     pageController.insertSegment(withTitle: "Recents", at: 0, animated: false)
                                     pageController.insertSegment(withTitle: "Favorites", at: 1, animated: false)
                                     pageController.insertSegment(withTitle: "All Routes", at: 2, animated: false)
-                                    pageController.selectedSegmentIndex = 0
+                                    pageController.selectedSegmentIndex = 2
                                     pageController.translatesAutoresizingMaskIntoConstraints = false
                                     pageController.isUserInteractionEnabled = true
                                     pageController.addTarget(self, action: #selector(handleControlPageChanged), for: .valueChanged)
@@ -208,8 +212,9 @@ class HomeScreenMenuView: UIView {
                                                             tableViewStack.addArrangedSubview(recentsTableView)
                                                             tableViewStack.addArrangedSubview(favoritesTableView)
                                                             tableViewStack.addArrangedSubview(allRoutesTableView)
+                                                            // scroll the scroll view
+                                                            scrollView.scrollRectToVisible(CGRect(x: Double(pageController.selectedSegmentIndex)*scrollViewWidth, y: 0, width: scrollViewWidth, height: scrollViewHeight), animated: false)
                                                             // configure the super table view
-                                                           
                                                             superViewStack = UIStackView(arrangedSubviews: [grabber, searchBar, pageController, scrollView])
                                                             stackViewSpacing = 4.0 * (height/(812/3))
                                                             if let superViewStack = superViewStack, let stackViewSpacing = stackViewSpacing{
@@ -444,7 +449,6 @@ extension HomeScreenMenuView: UISearchBarDelegate {
         }
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-    
         searchBar.endEditing(true)
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -458,9 +462,13 @@ extension HomeScreenMenuView: UISearchBarDelegate {
                 guard let response = response else {
                     fatalError("Invalid search")
                 }
-                for item in response.mapItems {
-                    if let name = item.name, let location = item.placemark.location {
-                        print("\(name): \(location.coordinate.latitude), \(location.coordinate.longitude)")
+                if let item = response.mapItems.first, let name = item.name, let address = item.placemark.title {
+                    if let locationIdentifierDelegate = self.locationIdentifierDelegate {
+                        locationIdentifierDelegate.showLocationOnMap(location: item.placemark.coordinate, name: name, address: address)
+                        self.collapseNotification = Notification(name: Notification.Name(rawValue: "collapseMenu"))
+                        if let collapseNotification = self.collapseNotification {
+                            NotificationCenter.default.post(collapseNotification)
+                        }
                     }
                 }
 
@@ -512,7 +520,7 @@ extension HomeScreenMenuView {
             searchResults.selectedTextColor = UIColor(named: "textColor")!
             searchResults.selectionAction = { itemIndex, name in
                 if let searchBar = self.searchBar {
-                    searchBar.text = self.addresses[itemIndex]
+                    searchBar.text = self.options[itemIndex]
                 }
             }
             searchResults.separatorColor = UIColor(named: "borderColor") ?? .clear

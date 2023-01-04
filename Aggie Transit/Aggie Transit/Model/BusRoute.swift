@@ -19,15 +19,15 @@ class BusRoute: NSObject {
     var color: UIColor
     var campus: String
     var delegate: PathMakerDelegate?
-    private let dataGatherer = DataGatherer()
     private var timer: Timer?
+    private let dataGatherer = DataGatherer()
     init(name: String, number: String, color: UIColor, campus: String){
         self.name = name
         self.number = number
         self.color = color
         self.campus = campus
         super.init()
-        registerUnveilNotification()
+        registerTimerInvalidationNotification()
     }
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -46,26 +46,24 @@ class BusRoute: NSObject {
     }
     // this displays the buses on the map
     func displayBusesOnMap(){
-        DispatchQueue.main.async{
-            self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
-                let endpoint = "route/\(self.number)/buses"
-                self.dataGatherer.delegate = self
-                self.dataGatherer.gatherData(endpoint: endpoint)
-                
-            })
+        let endpoint = "route/\(self.number)/buses"
+        self.dataGatherer.delegate = self
+        self.dataGatherer.gatherData(endpoint: endpoint)
+        timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { timer in
+            self.dataGatherer.gatherData(endpoint: endpoint)
         }
     }
-    // Register unveil notification
-    func registerUnveilNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(invalidateTimer), name: Notification.Name(rawValue: "unveilMenu"), object: nil)
-    }
-    // invalidate the timer
-    @objc func invalidateTimer() {
+    // use this to invalidate the timer
+    @objc func invalidateTimer(){
         if let timer = timer {
             timer.invalidate()
         }
     }
-    
+    // use this to register the relevant notification
+    func registerTimerInvalidationNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(invalidateTimer), name: Notification.Name("invalidateTimer"), object: nil)
+    }
+  
 }
 
 extension BusRoute: DataGathererDelegate {

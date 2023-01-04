@@ -13,6 +13,7 @@ import MapKit
     @objc optional func didGatherBusPattern(points: [BusPattern])
     @objc optional func didGatherBusStops(stops: [BusStop])
     @objc optional func didGatherBuses(buses: [Bus])
+    @objc optional func didUpdateBuses(buses: [Bus])
 }
 class DataGatherer {
     private let baseUrl = "https://transport.tamu.edu/BusRoutesFeed/api/"
@@ -72,6 +73,31 @@ class DataGatherer {
                         }
                     } catch {
                         print("An error has occured: \(error)")
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
+    func updateBuses(endpoint: String) {
+        let url = URL(string: baseUrl+endpoint)
+        if let url = url {
+            let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error = error {
+                    print("An error has occured \(error)")
+                } else {
+                    do{
+                        guard let data = data else {return}
+                        let decoder = JSONDecoder()
+                        let busData = try decoder.decode([BusData].self, from: data)
+                        let buses = self.gatherBuses(data: busData)
+                        if let delegate = self.delegate {
+                            if let update = delegate.didUpdateBuses {
+                                update(buses)
+                            }
+                        }
+                    } catch {
+                        print("An error has occured \(error)")
                     }
                 }
             }
