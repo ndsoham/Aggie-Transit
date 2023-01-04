@@ -32,7 +32,7 @@ class HomeScreenViewController: UIViewController {
     private var currentlyDisplayedStops: [MKAnnotation]?
     private var currentlyDisplayedColor: UIColor?
     private var currentlyDisplayedBuses: [BusAnnotation]?
-    private var currentlyDisplayedLocation: MKAnnotation?
+    private var currentlyDisplayedLocations: [MKAnnotation]?
     private var longitudeDelta: Double?
     private var latitudeDelta: Double?
     public var menuCollapsed: Bool?
@@ -464,11 +464,11 @@ extension HomeScreenViewController {
     }
     // this function removes the currently displayed location from the map
     func clearDisplayedLocationFromMap(){
-        if let map = map, let currentlyDisplayedLocation = currentlyDisplayedLocation, let region = region {
+        if let map = map, let currentlyDisplayedLocation = currentlyDisplayedLocations, let region = region {
             DispatchQueue.main.async {
-                map.removeAnnotation(currentlyDisplayedLocation)
+                map.removeAnnotations(currentlyDisplayedLocation)
                 map.setRegion(region, animated: true)
-                self.currentlyDisplayedLocation = nil
+                self.currentlyDisplayedLocations = nil
             }
         }
     }
@@ -514,31 +514,38 @@ extension HomeScreenViewController {
 }
 //MARK: - Handle showing search location
 extension HomeScreenViewController: LocationIdentifierDelegate {
-    func showLocationOnMap(location: CLLocationCoordinate2D, name: String, address: String) {
+    func showLocationOnMap(results: [Location]) {
         if let map = map {
-            if let currentlyDisplayedLocation = currentlyDisplayedLocation {
+            if let currentlyDisplayedLocations = currentlyDisplayedLocations {
                 DispatchQueue.main.async {
-                    map.removeAnnotation(currentlyDisplayedLocation)
+                    map.removeAnnotations(currentlyDisplayedLocations)
                 }
-                let locationAnnotation = LocationAnnotation()
-                locationAnnotation.coordinate = location
-                locationAnnotation.title = name
-                locationAnnotation.subtitle = address
-                self.currentlyDisplayedLocation = locationAnnotation
+                var locationAnnotations:[LocationAnnotation] = []
+                for result in results {
+                    let locationAnnotation = LocationAnnotation()
+                    locationAnnotation.coordinate = result.location
+                    locationAnnotation.title = result.name
+                    locationAnnotation.subtitle = result.address
+                    locationAnnotations.append(locationAnnotation)
+                }
+                self.currentlyDisplayedLocations = locationAnnotations
                 DispatchQueue.main.async {
-                    map.addAnnotation(locationAnnotation)
-                    map.selectAnnotation(locationAnnotation, animated: true)
-                    
+                    map.addAnnotations(locationAnnotations)
+                    map.showAnnotations(locationAnnotations, animated: true)
                 }
             } else {
-                let locationAnnotation = LocationAnnotation()
-                locationAnnotation.coordinate = location
-                locationAnnotation.title = name
-                locationAnnotation.subtitle = address
-                self.currentlyDisplayedLocation = locationAnnotation
+                var locationAnnotations:[LocationAnnotation] = []
+                for result in results {
+                    let locationAnnotation = LocationAnnotation()
+                    locationAnnotation.coordinate = result.location
+                    locationAnnotation.title = result.name
+                    locationAnnotation.subtitle = result.address
+                    locationAnnotations.append(locationAnnotation)
+                }
+                self.currentlyDisplayedLocations = locationAnnotations
                 DispatchQueue.main.async {
-                    map.addAnnotation(locationAnnotation)
-                    map.selectAnnotation(locationAnnotation, animated: true)
+                    map.addAnnotations(locationAnnotations)
+                    map.showAnnotations(locationAnnotations, animated: true)
                 }
             }
         }

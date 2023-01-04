@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import DropDown
 protocol LocationIdentifierDelegate {
-    func showLocationOnMap(location: CLLocationCoordinate2D, name: String, address: String)
+    func showLocationOnMap(results: [Location])
 }
 class HomeScreenMenuView: UIView {
     public var searchBar: UISearchBar?
@@ -441,11 +441,22 @@ extension HomeScreenMenuView: UISearchBarDelegate {
         }
         searchBar.showsCancelButton = true
         searchBar.text = nil
+        if let map = map {
+            map.isScrollEnabled = false
+            map.isZoomEnabled = false
+            map.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 30.614965, longitude: -96.340584), span: MKCoordinateSpan(latitudeDelta: 0.0125, longitudeDelta: 0.0125))
+
+        }
     }
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = false
         if let searchResults = searchResults {
             searchResults.hide()
+        }
+        if let map = map {
+            map.isZoomEnabled = true
+            map.isScrollEnabled = true
+            map.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 30.614965, longitude: -96.340584), span: MKCoordinateSpan(latitudeDelta: 0.0125, longitudeDelta: 0.0125))
         }
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -462,16 +473,21 @@ extension HomeScreenMenuView: UISearchBarDelegate {
                 guard let response = response else {
                     fatalError("Invalid search")
                 }
-                if let item = response.mapItems.first, let name = item.name, let address = item.placemark.title {
-                    if let locationIdentifierDelegate = self.locationIdentifierDelegate {
-                        locationIdentifierDelegate.showLocationOnMap(location: item.placemark.coordinate, name: name, address: address)
-                        self.collapseNotification = Notification(name: Notification.Name(rawValue: "collapseMenu"))
-                        if let collapseNotification = self.collapseNotification {
-                            NotificationCenter.default.post(collapseNotification)
-                        }
+                var locations:[Location] = []
+                for item in response.mapItems {
+                    if let name = item.name, let address = item.placemark.title, address.lowercased().contains("bryan") || address.lowercased().contains("college station") {
+                        let location = Location(name: name, location: item.placemark.coordinate, address: address)
+                        locations.append(location)
+                        
                     }
                 }
-
+                if let locationIdentifierDelegate = self.locationIdentifierDelegate {
+                    locationIdentifierDelegate.showLocationOnMap(results: locations)
+                }
+                self.collapseNotification = Notification(name: Notification.Name(rawValue: "collapseMenu"))
+                if let collapseNotification = self.collapseNotification {
+                    NotificationCenter.default.post(collapseNotification)
+                }
             }
         }
     }
@@ -520,7 +536,7 @@ extension HomeScreenMenuView {
             searchResults.selectedTextColor = UIColor(named: "textColor")!
             searchResults.selectionAction = { itemIndex, name in
                 if let searchBar = self.searchBar {
-                    searchBar.text = self.options[itemIndex]
+                    searchBar.text = self.addresses[itemIndex] == "Search Nearby" ? self.options[itemIndex]:self.addresses[itemIndex]
                 }
             }
             searchResults.separatorColor = UIColor(named: "borderColor") ?? .clear
