@@ -49,7 +49,7 @@ class BusRoute: NSObject {
         let endpoint = "route/\(self.number)/buses"
         self.dataGatherer.delegate = self
         self.dataGatherer.gatherData(endpoint: endpoint)
-        timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { timer in
+        timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { timer in
             self.dataGatherer.gatherData(endpoint: endpoint)
         }
     }

@@ -8,8 +8,13 @@
 import Foundation
 import MapKit
 
-struct Location {
+@objc class Location: NSObject {
     var name: String
     var location: CLLocationCoordinate2D
     var address: String
+    init(name: String, location: CLLocationCoordinate2D, address: String) {
+        self.name = name
+        self.location = location
+        self.address = address
+    }
 }

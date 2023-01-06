@@ -54,6 +54,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 currentController.menuCollapsed = false
                 currentController.clearBusRouteStopsFromMap()
                 currentController.clearBusRoutePatternFromMap()
+                currentController.clearBusesFromMap()
             }
         }
     }

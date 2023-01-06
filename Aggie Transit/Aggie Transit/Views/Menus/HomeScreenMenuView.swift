@@ -89,7 +89,7 @@ class HomeScreenMenuView: UIView {
                     grabber.heightAnchor.constraint(equalToConstant: grabberHeight).isActive = true
                     // configure search bar
                     searchBarHeight = 52 * (height/(812/3))
-                    searchBarWidth = width
+                    searchBarWidth = width - 16
                     if let searchBarHeight = searchBarHeight, let searchBarWidth = searchBarWidth {
                         searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: searchBarWidth, height: searchBarHeight))
                         if let searchBar = searchBar {
@@ -109,7 +109,7 @@ class HomeScreenMenuView: UIView {
                             searchBar.heightAnchor.constraint(equalToConstant: searchBarHeight).isActive = true
                             // configure the page controller
                             pageControllerHeight = 30 * (height/(812/3))
-                            pageControllerWidth = width - 16
+                            pageControllerWidth = searchBarWidth - 16
                             if let pageControllerHeight = pageControllerHeight, let pageControllerWidth = pageControllerWidth {
                                 pageController = UISegmentedControl(frame: CGRect(x: 0, y: 0, width: pageControllerWidth, height: pageControllerHeight))
                                 if let pageController = pageController{
@@ -126,7 +126,7 @@ class HomeScreenMenuView: UIView {
                                     pageController.heightAnchor.constraint(equalToConstant: pageControllerHeight).isActive = true
                                     // configure the scroll view
                                     scrollViewHeight = height - pageControllerHeight - searchBarHeight - grabberHeight
-                                    scrollViewWidth = width
+                                    scrollViewWidth = searchBarWidth - 16
                                     if let scrollViewHeight = scrollViewHeight, let scrollViewWidth = scrollViewWidth {
                                         scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: scrollViewWidth, height: scrollViewHeight))
                                         if let scrollView = scrollView {
@@ -143,7 +143,7 @@ class HomeScreenMenuView: UIView {
                                             scrollView.heightAnchor.constraint(equalToConstant: scrollViewHeight).isActive = true
                                             // configure the table views
                                             tableViewHeight = height - pageControllerHeight - searchBarHeight
-                                            tableViewWidth = width
+                                            tableViewWidth = pageControllerWidth
                                             if let tableViewHeight = tableViewHeight, let tableViewWidth = tableViewWidth {
                                                 recentsTableView = UITableView(frame: CGRect(x: 0, y: 0, width: tableViewWidth, height: tableViewHeight))
                                                 favoritesTableView = UITableView(frame: CGRect(x: 0, y: 0, width: tableViewWidth, height: tableViewHeight))
@@ -231,7 +231,7 @@ class HomeScreenMenuView: UIView {
                                                                 if let viewMargins = viewMargins{
                                                                     superViewStack.leadingAnchor.constraint(equalTo: viewMargins.leadingAnchor).isActive = true
                                                                     superViewStack.trailingAnchor.constraint(equalTo: viewMargins.trailingAnchor).isActive = true
-                                                                    superViewStack.topAnchor.constraint(equalTo: viewMargins.topAnchor, constant: 8).isActive = true
+                                                                    superViewStack.topAnchor.constraint(equalTo: viewMargins.topAnchor, constant: 10).isActive = true
                                                                    
                                                                 }
                                                                 
@@ -536,7 +536,7 @@ extension HomeScreenMenuView {
             searchResults.selectedTextColor = UIColor(named: "textColor")!
             searchResults.selectionAction = { itemIndex, name in
                 if let searchBar = self.searchBar {
-                    searchBar.text = self.addresses[itemIndex] == "Search Nearby" ? self.options[itemIndex]:self.addresses[itemIndex]
+                    searchBar.text = self.addresses[itemIndex] == "Search Nearby" ? self.options[itemIndex]:self.options[itemIndex]+" "+self.addresses[itemIndex]
                 }
             }
             searchResults.separatorColor = UIColor(named: "borderColor") ?? .clear

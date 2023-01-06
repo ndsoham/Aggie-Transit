@@ -45,6 +45,7 @@ class HomeScreenViewController: UIViewController {
         layoutSubviews()
         registerKeyboardNotification()
         registerCollapseNotification()
+        registerAnnotationViews()
     }
     override func viewWillAppear(_ animated: Bool) {
         // hide the navigation bar
@@ -320,9 +321,9 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
             view.canShowCallout = true
             return view
         }
-        else if annotation.isKind(of: LocationAnnotation.self){
-            let view = MKMarkerAnnotationView()
-            view.canShowCallout = true
+        else if annotation.isKind(of: LocationAnnotation.self) || annotation.isKind(of: MKClusterAnnotation.self){
+            let view = mapView.dequeueReusableAnnotationView(withIdentifier: NSStringFromClass(LocationAnnotation.self)) as! LocationAnnotationView
+            view.centerOffset = CGPoint(x: 0, y: -25)
             return view
         }
         else if annotation.isKind(of: MKPointAnnotation.self) {
@@ -333,6 +334,7 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
                 return view
             }
         }
+        
         fatalError("Annotation is of the wrong kind")
     }
     // this displays the buses on the map
@@ -414,13 +416,16 @@ extension HomeScreenViewController {
                 DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn) {
                         homeScreenMenu.frame.origin.y -= homeScreenMenuHeight/1.33
-                        NotificationCenter.default.post(Notification(name: Notification.Name("invalidateTimer")))
                         self.clearBusRoutePatternFromMap()
                         self.clearBusRouteStopsFromMap()
                         self.clearBusesFromMap()
                         self.clearDisplayedLocationFromMap()
+                        if let region = self.region, let map = self.map {
+                            map.setRegion(region, animated: true)
+                        }
                     }completion: { _ in
                         self.menuCollapsed = false
+                        
                     }
                 }
             }
@@ -455,6 +460,7 @@ extension HomeScreenViewController {
     func clearBusesFromMap(){
         if let map = map, let currentlyDisplayedBuses = currentlyDisplayedBuses, let region = region {
             DispatchQueue.main.async {
+                NotificationCenter.default.post(Notification(name: Notification.Name("invalidateTimer")))
                 map.removeAnnotations(currentlyDisplayedBuses)
                 map.setRegion(region, animated: true)
                 self.currentlyDisplayedBuses = nil
@@ -552,4 +558,12 @@ extension HomeScreenViewController: LocationIdentifierDelegate {
     }
     
     
+}
+//MARK: - Use this to register annotation views
+extension HomeScreenViewController {
+    func registerAnnotationViews() {
+        if let map = map {
+            map.register(LocationAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(LocationAnnotation.self))
+        }
+    }
 }

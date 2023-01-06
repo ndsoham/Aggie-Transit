@@ -42,7 +42,7 @@ class HomeScreenModalTableViewCell: UITableViewCell {
         if let width = width, let height = height {
             // add a subview to the view and shape it accordingly
             viewHeight = 86.25 * (height/122)
-            viewWidth = 355 * (width/375)
+            viewWidth = (355-16) * (width/375)
             if let viewHeight = viewHeight, let viewWidth = viewWidth {
                 if let cornerRadius = cornerRadius{
                     view = UIView(frame: CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight))
