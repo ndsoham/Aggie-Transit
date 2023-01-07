@@ -37,12 +37,14 @@ class HomeScreenViewController: UIViewController {
     private var latitudeDelta: Double?
     public var menuCollapsed: Bool?
     private var keyboardDisplayed: Bool?
+    private var activityIndicator: UIActivityIndicatorView?
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
+        setUpActivityIndicator()
         registerKeyboardNotification()
         registerCollapseNotification()
         registerAnnotationViews()
@@ -229,22 +231,34 @@ extension HomeScreenViewController{
 //MARK: - handle the map and creating patterns and points
 
 extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
-    // this dispalys the route on the current map
-    func displayBusRoutePatternOnMap(color: UIColor, points: [BusPattern]) {
+    // this displays the buttern pattern and stops
+    func displayBusRouteOnMap(color: UIColor, points: [BusPattern], stops: [BusStop]) {
         var wayPoints: [CLLocationCoordinate2D] = []
         for point in points {
             wayPoints.append(point.location)
         }
+        var stopAnnotations: [MKAnnotation] = []
+        for stop in stops {
+            let stopAnnotation = MKPointAnnotation()
+            stopAnnotation.coordinate = stop.location
+            stopAnnotation.title = stop.name
+            stopAnnotation.title = stop.name
+            stopAnnotation.subtitle = stop.isTimePoint ? "Time Point":"Waypoint"
+            stopAnnotations.append(stopAnnotation)
+        }
         if let map = map, let homeScreenMenuHeight = homeScreenMenuHeight {
-            if let currentlyDisplayedPattern = currentlyDisplayedPattern, let _ = currentlyDisplayedColor {
+            if let currentlyDisplayedPattern = currentlyDisplayedPattern, let currentlyDisplayedStops = currentlyDisplayedStops, let _ = currentlyDisplayedColor {
                 DispatchQueue.main.async {
+                    map.removeAnnotations(currentlyDisplayedStops)
                     map.removeOverlay(currentlyDisplayedPattern)
                 }
                 let boundedLine = MKPolyline(coordinates: wayPoints, count: points.count)
                 self.currentlyDisplayedColor = color
                 self.currentlyDisplayedPattern = boundedLine
+                self.currentlyDisplayedStops = stopAnnotations
                 DispatchQueue.main.async {
                     map.addOverlay(boundedLine)
+                    map.addAnnotations(stopAnnotations)
                     // change the region of the map based on currently displayed bus route
                     map.visibleMapRect = map.mapRectThatFits(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: homeScreenMenuHeight * 0.33, left: 10, bottom: homeScreenMenuHeight * 0.33, right: 10))
                 }
@@ -253,14 +267,17 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
                 let boundedLine = MKPolyline(coordinates: wayPoints, count: points.count)
                 self.currentlyDisplayedPattern = boundedLine
                 self.currentlyDisplayedColor = color
+                self.currentlyDisplayedStops = stopAnnotations
                 DispatchQueue.main.async {
                     map.addOverlay(boundedLine)
+                    map.addAnnotations(stopAnnotations)
                     // change the region of the map based on currently displayed bus route
                     map.visibleMapRect = map.mapRectThatFits(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: homeScreenMenuHeight * 0.33, left: 10, bottom: homeScreenMenuHeight * 0.33, right: 10))
                 }
             }
         }
     }
+    
     // this returns an appropriate renderer for overlay
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if overlay is MKPolyline {
@@ -274,45 +291,6 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
         }
         fatalError("Overlay is of the wrong type")
     }
-    // this displays the stops on the current map
-    func displayBusRouteStopsOnMap(color: UIColor, stops: [BusStop]) {
-        if let map = map {
-            if let currentlyDisplayedStops = currentlyDisplayedStops, let _ = currentlyDisplayedColor {
-                DispatchQueue.main.async {
-                    map.removeAnnotations(currentlyDisplayedStops)
-                }
-                var stopAnnotations: [MKAnnotation] = []
-                for stop in stops {
-                    let stopAnnotation = MKPointAnnotation()
-                    stopAnnotation.coordinate = stop.location
-                    stopAnnotation.title = stop.name
-                    stopAnnotation.title = stop.name
-                    stopAnnotation.subtitle = stop.isTimePoint ? "Time Point":"Waypoint"
-                    stopAnnotations.append(stopAnnotation)
-                }
-                self.currentlyDisplayedStops = stopAnnotations
-                self.currentlyDisplayedColor = color
-                DispatchQueue.main.async {
-                    map.addAnnotations(stopAnnotations)
-                }
-            }
-            else {
-                var stopAnnotations: [MKAnnotation] = []
-                for stop in stops {
-                    let stopAnnotation = MKPointAnnotation()
-                    stopAnnotation.coordinate = stop.location
-                    stopAnnotation.title = stop.name
-                    stopAnnotation.subtitle = stop.isTimePoint ? "Time Point":"Waypoint"
-                    stopAnnotations.append(stopAnnotation)
-                }
-                self.currentlyDisplayedStops = stopAnnotations
-                self.currentlyDisplayedColor = color
-                DispatchQueue.main.async {
-                    map.addAnnotations(stopAnnotations)
-                }
-            }
-        }
-    }
     // this provides the annotation view
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation.isKind(of: BusAnnotation.self), let annotation = annotation as? BusAnnotation, let direction = annotation.direction {
@@ -321,10 +299,14 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
             view.canShowCallout = true
             return view
         }
-        else if annotation.isKind(of: LocationAnnotation.self) || annotation.isKind(of: MKClusterAnnotation.self){
+        else if annotation.isKind(of: LocationAnnotation.self) {
             let view = mapView.dequeueReusableAnnotationView(withIdentifier: NSStringFromClass(LocationAnnotation.self)) as! LocationAnnotationView
-            view.centerOffset = CGPoint(x: 0, y: -25)
+            view.canShowCallout = true
+            view.routeDisplayerDelegate = self
             return view
+        }
+        else if annotation.isKind(of: MKClusterAnnotation.self) {
+            return MKMarkerAnnotationView()
         }
         else if annotation.isKind(of: MKPointAnnotation.self) {
             if let currentlyDisplayedColor = currentlyDisplayedColor {
@@ -332,6 +314,9 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
                 view.canShowCallout = true
                 view.pinTintColor = annotation.subtitle == "Waypoint" ? currentlyDisplayedColor:currentlyDisplayedColor.inverseColor()
                 return view
+            }
+            else {
+                return MKMarkerAnnotationView()
             }
         }
         
@@ -567,3 +552,58 @@ extension HomeScreenViewController {
         }
     }
 }
+//MARK: - Set up activity indicator while route is generating
+extension HomeScreenViewController: RouteGenerationProgressDelegate {
+    // use this to set up the activity indicator
+    func setUpActivityIndicator() {
+        if let map = map {
+            activityIndicator = UIActivityIndicatorView(style: .large)
+            if let activityIndicator = activityIndicator {
+                // configure
+                activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+                activityIndicator.hidesWhenStopped = true
+                map.addSubview(activityIndicator)
+                // add constraints
+                if let mapMargins = mapMargins {
+                    activityIndicator.centerXAnchor.constraint(equalTo: mapMargins.centerXAnchor).isActive = true
+                    activityIndicator.centerYAnchor.constraint(equalTo: mapMargins.centerYAnchor).isActive = true
+                }
+            }
+        }
+    }
+    // use this to start animating and stop animating
+    func routeGenerationDidStart() {
+        if let activityIndicator = activityIndicator {
+            activityIndicator.startAnimating()
+        }
+    }
+    
+    func routeGenerationDidEnd() {
+        if let activityIndicator = activityIndicator {
+            activityIndicator.stopAnimating()
+        }
+    }
+}
+//MARK: - Use this to display the route
+extension HomeScreenViewController: RouteDisplayerDelegate {
+    func displayRouteOnMap(userLocation: CLLocationCoordinate2D, firstStop: BusStop, secondStop: BusStop, destinationStop: BusStop, initialStop: BusStop) {
+        if let map = map {
+            let userLocationAnnotation = MKPointAnnotation()
+            userLocationAnnotation.coordinate = userLocation
+            let firstStopAnnotation = MKPointAnnotation()
+            firstStopAnnotation.coordinate = firstStop.location
+            let secondStopAnnotation = MKPointAnnotation()
+            secondStopAnnotation.coordinate = secondStop.location
+            let destinationStopAnnotation = MKPointAnnotation()
+            destinationStopAnnotation.coordinate = destinationStop.location
+            map.addAnnotations([userLocationAnnotation, firstStopAnnotation, secondStopAnnotation, destinationStopAnnotation])
+            map.showAnnotations([userLocationAnnotation, firstStopAnnotation, secondStopAnnotation, destinationStopAnnotation], animated: true)
+            if let currentlyDisplayedLocations = currentlyDisplayedLocations{
+                map.removeAnnotations(currentlyDisplayedLocations)
+            }
+        }
+    }
+    
+    
+}
+

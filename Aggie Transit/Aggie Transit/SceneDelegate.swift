@@ -46,6 +46,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
+        print("im in scene did enter background")
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
@@ -55,6 +56,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 currentController.clearBusRouteStopsFromMap()
                 currentController.clearBusRoutePatternFromMap()
                 currentController.clearBusesFromMap()
+                currentController.clearDisplayedLocationFromMap()
             }
         }
     }

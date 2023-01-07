@@ -36,7 +36,7 @@ class HomeScreenMenuView: UIView {
     private var viewMargins: UILayoutGuide?
     private var pageController: UISegmentedControl?
     private var stackViewSpacing: Double?
-    private var dataGatherer: DataGatherer?
+    private var dataGatherer: DataGatherer = DataGatherer()
     private var onCampusRoutes: [BusRoute]?
     private var offCampusRoutes: [BusRoute]?
     private var programmedScroll: Bool = false
@@ -56,11 +56,7 @@ class HomeScreenMenuView: UIView {
     override init(frame: CGRect){
         super.init(frame: frame)
         layoutSubviews()
-        dataGatherer = DataGatherer()
-        if let dataGatherer = dataGatherer {
-            dataGatherer.delegate = self
-            dataGatherer.gatherData(endpoint: "Routes")
-        }
+        setUpDataGatherer()
     }
     
     required init?(coder: NSCoder){
@@ -73,6 +69,7 @@ class HomeScreenMenuView: UIView {
         self.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
         self.isUserInteractionEnabled = true
         self.layer.cornerRadius = 15
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         if let height = height, let width = width {
             // create a grabber
            grabberHeight = 5
@@ -253,7 +250,13 @@ class HomeScreenMenuView: UIView {
             }
         }
     }
+    //MARK: - Setup data gatherer
+    func setUpDataGatherer(){
+        dataGatherer.delegate = self
+        dataGatherer.gatherData(endpoint: "Routes")
+    }
 }
+
 //MARK: - Provide Table View with data
 extension HomeScreenMenuView: UITableViewDataSource {
     // provide the number of sections
@@ -354,16 +357,16 @@ extension HomeScreenMenuView: UITableViewDelegate {
         if tableView == allRoutesTableView {
             if indexPath.section == 0 {
                 if let onCampusRoutes = onCampusRoutes {
-                    onCampusRoutes[indexPath.row].displayBusRoutePatternOnMap()
-                    onCampusRoutes[indexPath.row].displayBusRouteStopsOnMap()
-                    onCampusRoutes[indexPath.row].displayBusesOnMap()
+                    onCampusRoutes[indexPath.row].displayBusRoute()
+                    onCampusRoutes[indexPath.row].displayBuses()
+                    
                 }
             }
             else if indexPath.section == 1 {
                 if let offCampusRoutes = offCampusRoutes {
-                    offCampusRoutes[indexPath.row].displayBusRoutePatternOnMap()
-                    offCampusRoutes[indexPath.row].displayBusRouteStopsOnMap()
-                    offCampusRoutes[indexPath.row].displayBusesOnMap()
+                    offCampusRoutes[indexPath.row].displayBusRoute()
+                    offCampusRoutes[indexPath.row].displayBuses()
+                    
                 }
             }
         }
@@ -412,6 +415,7 @@ extension HomeScreenMenuView: DataGathererDelegate {
     func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute]) {
         self.onCampusRoutes = onCampusRoutes
         self.offCampusRoutes = offCampusRoutes
+        RouteGenerator.shared.allRoutes = onCampusRoutes + offCampusRoutes
         DispatchQueue.main.async {
             self.allRoutesTableView?.reloadData()
         }

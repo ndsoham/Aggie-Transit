@@ -9,9 +9,8 @@ import Foundation
 import UIKit
 import MapKit
 protocol PathMakerDelegate {
-    func displayBusRoutePatternOnMap(color: UIColor, points: [BusPattern])
-    func displayBusRouteStopsOnMap(color: UIColor, stops: [BusStop])
     func displayBusesOnMap(buses:[Bus])
+    func displayBusRouteOnMap(color: UIColor, points: [BusPattern], stops: [BusStop])
 }
 class BusRoute: NSObject {
     var name: String
@@ -19,6 +18,9 @@ class BusRoute: NSObject {
     var color: UIColor
     var campus: String
     var delegate: PathMakerDelegate?
+    var stops: [BusStop]?
+    var pattern: [BusPattern]?
+    var buses: [Bus]?
     private var timer: Timer?
     private let dataGatherer = DataGatherer()
     init(name: String, number: String, color: UIColor, campus: String){
@@ -28,30 +30,46 @@ class BusRoute: NSObject {
         self.campus = campus
         super.init()
         registerTimerInvalidationNotification()
+        gatherPattern()
+        gatherStops()
     }
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    // this displays the pattern on the map
-    func displayBusRoutePatternOnMap() {
+    // this gathers pattern data
+    func gatherPattern() {
         let endpoint = "route/\(number)/pattern"
         dataGatherer.delegate = self
         dataGatherer.gatherData(endpoint: endpoint)
     }
-    // this displays the stops on the map
-    func displayBusRouteStopsOnMap() {
+    // this gathers stop data
+    func gatherStops() {
         let endpoint = "route/\(number)/stops"
         dataGatherer.delegate = self
         dataGatherer.gatherData(endpoint: endpoint)
     }
-    // this displays the buses on the map
-    func displayBusesOnMap(){
-        let endpoint = "route/\(self.number)/buses"
-        self.dataGatherer.delegate = self
-        self.dataGatherer.gatherData(endpoint: endpoint)
-        timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { timer in
+    // this gathers bus data
+    func gatherBuses(){
+        DispatchQueue.main.async{
+            let endpoint = "route/\(self.number)/buses"
+            self.dataGatherer.delegate = self
             self.dataGatherer.gatherData(endpoint: endpoint)
+            self.timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true, block: { timer in
+                let endpoint = "route/\(self.number)/buses"
+                self.dataGatherer.delegate = self
+                self.dataGatherer.gatherData(endpoint: endpoint)
+            })
         }
+    }
+    // use this to display the route on the map
+    func displayBusRoute() {
+        if let delegate = delegate, let stops = stops, let pattern = pattern {
+            delegate.displayBusRouteOnMap(color: self.color, points: pattern, stops: stops)
+        }
+    }
+    // use this to display the buses on the map
+    func displayBuses(){
+        gatherBuses()
     }
     // use this to invalidate the timer
     @objc func invalidateTimer(){
@@ -68,13 +86,16 @@ class BusRoute: NSObject {
 
 extension BusRoute: DataGathererDelegate {
     func didGatherBusPattern(points: [BusPattern]) {
-        delegate?.displayBusRoutePatternOnMap(color: color, points: points)
+        self.pattern = points
     }
     func didGatherBusStops(stops: [BusStop]) {
-        delegate?.displayBusRouteStopsOnMap(color: color, stops: stops)
+        self.stops = stops
     }
     func didGatherBuses(buses: [Bus]) {
-        delegate?.displayBusesOnMap(buses: buses)
+        self.buses = buses
+        if let delegate = delegate, let buses = self.buses {
+            delegate.displayBusesOnMap(buses: buses)
+        }
     }
 }
 

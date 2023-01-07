@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import MapKit
 //MARK: - UI Color Extension to create rgb color from string
 extension UIColor {
      static func colorFromRGBString(string: String) -> UIColor {
@@ -92,4 +93,10 @@ extension UIImage {
 //MARK: - use to convert to radians
 func rad(_ number: Double) -> Double {
     return number * Double.pi / 180
+}
+//MARK: - Use to find distance
+extension CLLocationCoordinate2D {
+    func distance(to: CLLocationCoordinate2D) -> CLLocationDistance {
+        MKMapPoint(self).distance(to: MKMapPoint(to))
+    }
 }

@@ -7,6 +7,14 @@
 
 import Foundation
 import MapKit
+protocol RouteGenerationProgressDelegate {
+    func routeGenerationDidStart()
+    func routeGenerationDidEnd()
+}
+protocol RouteDisplayerDelegate {
+    func displayRouteOnMap(userLocation: CLLocationCoordinate2D, firstStop: BusStop, secondStop: BusStop, destinationStop: BusStop, initialStop: BusStop)
+}
+
 // used to differentiate between annotations
 class LocationAnnotation: MKPointAnnotation {
     
@@ -15,10 +23,8 @@ class LocationAnnotation: MKPointAnnotation {
 class LocationAnnotationView: MKAnnotationView {
     private var directionsButton: UIButton?
     private var directionsButtonHeight: Double?
-    private var directionsButtonWidth: Double?
     private var favoritesButton: UIButton?
     private var favoritesButtonHeight: Double?
-    private var favoriesButtonWidth: Double?
     private var nameLabel: UILabel?
     private var addressLabel: UILabel?
     private var stackView: UIStackView?
@@ -26,11 +32,14 @@ class LocationAnnotationView: MKAnnotationView {
     private var width: Double?
     private var height: Double?
     private var safeMargins: UILayoutGuide?
+    public var routeGenerationDelegate: RouteGenerationProgressDelegate?
+    public var routeDisplayerDelegate: RouteDisplayerDelegate?
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         self.frame = CGRect(x: 0, y: 0, width: 175, height: 84)
         clusteringIdentifier = "location"
     }
+  
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -48,20 +57,18 @@ class LocationAnnotationView: MKAnnotationView {
     override func layoutSubviews() {
         super.layoutSubviews()
         height = self.frame.height
-        width = self.frame.width
+        width = self.frame.height
         self.backgroundColor = UIColor(named:"launchScreenBackgroundColor")
         self.layer.cornerRadius = 15
         if let height = height, let width = width {
             directionsButtonHeight = 20 * (height/84)
             favoritesButtonHeight = directionsButtonHeight
-            directionsButtonWidth = 139 * (width/175)
-            favoriesButtonWidth = width - 10 - directionsButtonWidth!
             stackView = UIStackView()
             buttonStack = UIStackView()
             nameLabel = UILabel()
             addressLabel = UILabel()
             safeMargins = self.safeAreaLayoutGuide
-            if let nameLabel = nameLabel, let addressLabel = addressLabel, let directionsButtonWidth = directionsButtonWidth, let directionsButtonHeight = directionsButtonHeight, let favoriesButtonWidth = favoriesButtonWidth, let favoritesButtonHeight = favoritesButtonHeight, let stackView = stackView, let buttonStack = buttonStack, let safeMargins = safeMargins {
+            if let nameLabel = nameLabel, let addressLabel = addressLabel, let directionsButtonHeight = directionsButtonHeight, let favoritesButtonHeight = favoritesButtonHeight, let stackView = stackView, let buttonStack = buttonStack, let safeMargins = safeMargins {
                 // confiure vertical stack view
                 stackView.axis = .vertical
                 stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -72,8 +79,10 @@ class LocationAnnotationView: MKAnnotationView {
                 self.addSubview(stackView)
                 // add constraints
                 stackView.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor,constant: 2 * (width/175)).isActive = true
-                stackView.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor,constant: 2 * (width/175)).isActive = true
+                stackView.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor,constant: -2 * (width/175)).isActive = true
                 stackView.centerYAnchor.constraint(equalTo: safeMargins.centerYAnchor).isActive = true
+                
+                
                 // configure the text label
                 nameLabel.translatesAutoresizingMaskIntoConstraints = false
                 nameLabel.textAlignment = .center
@@ -84,13 +93,14 @@ class LocationAnnotationView: MKAnnotationView {
                 addressLabel.lineBreakMode = .byTruncatingTail
                 nameLabel.lineBreakMode = .byTruncatingTail
                 nameLabel.numberOfLines = 0
+                addressLabel.numberOfLines = 0
                 guard let name = annotation?.title, let address = annotation?.subtitle else {return}
                 let nameAttributes: [NSAttributedString.Key:Any] = [
-                    .font : UIFont.boldSystemFont(ofSize: 12),
+                    .font: UIFont.boldSystemFont(ofSize: 12 * (height/84)),
                     .foregroundColor : UIColor(named: "textColor") ?? .black
                 ]
                 let addressAttributes: [NSAttributedString.Key:Any] = [
-                    .font : UIFont.systemFont(ofSize: 10),
+                    .font : UIFont.systemFont(ofSize: 10 * (height/84)),
                     .foregroundColor: UIColor(named: "textColor") ?? .black
                 ]
                 nameLabel.attributedText = NSAttributedString(string: name!, attributes: nameAttributes)
@@ -122,11 +132,10 @@ class LocationAnnotationView: MKAnnotationView {
                     // add to view hierarchy
                     buttonStack.addArrangedSubview(favoritesButton)
                     buttonStack.addArrangedSubview(directionsButton)
-                    // constrain the width and height
+                    // add constraints
                     favoritesButton.heightAnchor.constraint(equalToConstant: favoritesButtonHeight).isActive = true
-                    favoritesButton.widthAnchor.constraint(equalToConstant: favoriesButtonWidth).isActive = true
                     directionsButton.heightAnchor.constraint(equalToConstant: directionsButtonHeight).isActive = true
-                    directionsButton.widthAnchor.constraint(equalToConstant: directionsButtonWidth).isActive = true
+                    
                 }
             }
             
@@ -137,8 +146,26 @@ class LocationAnnotationView: MKAnnotationView {
 //MARK: - Handle the buttons being pressed
 extension LocationAnnotationView {
     @objc func handleDirectionsPressed(sender: UIButton){
-        print("implement this method")
-        print(self.annotation?.title, self.annotation?.subtitle)
+        if let annotation = annotation, let title = annotation.title, let name = title, let subtitle = annotation.subtitle, let address = subtitle {
+            let location = Location(name: name, location: annotation.coordinate, address: address)
+            let closestDestination = RouteGenerator.shared.findClosestBusStops(location: location)
+            let closestUser = RouteGenerator.shared.findClosestBusStops(location: Location(name: "user location", location: CLLocationCoordinate2D(latitude: 30.62138417079569, longitude: -96.34249946007645), address: "user location")) //30.62138417079569, -96.34249946007645
+            if let closestUser = closestUser, let closestDestination = closestDestination {
+                let inRoute = RouteGenerator.shared.findRelevantBusRoutes(stop: closestDestination)
+                let outRoute = RouteGenerator.shared.findRelevantBusRoutes(stop: closestUser)
+                if let inRoute = inRoute, let outRoute = outRoute {
+                    print(inRoute[0].name, outRoute[0].name)
+                   let closestStops = RouteGenerator.shared.findClosestBusStop(inRoute: inRoute[0], outRoute: outRoute[0])
+                    if let routeDisplayerDelegate = routeDisplayerDelegate, let firstStop = closestStops.0, let secondStop = closestStops.1 {
+                        routeDisplayerDelegate.displayRouteOnMap(userLocation: CLLocationCoordinate2D(latitude: 30.62138417079569, longitude: -96.34249946007645), firstStop: firstStop, secondStop: secondStop, destinationStop: closestDestination, initialStop: closestUser)
+                    }
+                }
+            }
+            
+            if let routeGenerationDelegate = routeGenerationDelegate {
+                routeGenerationDelegate.routeGenerationDidStart()
+            }
+        }
     }
     @objc func handleFavoritesPressed(sender: UIButton){
         print("implement this method")

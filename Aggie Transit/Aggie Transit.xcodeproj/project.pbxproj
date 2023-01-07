@@ -30,6 +30,7 @@
 		0F4C502B2963993C000D9771 /* BusAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4C502A2963993C000D9771 /* BusAnnotation.swift */; };
 		0F62CD0A2938847700374C63 /* HomeScreenMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F62CD092938847700374C63 /* HomeScreenMenuView.swift */; };
 		0F770040294CB243008C421A /* HomeScreenModalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F77003F294CB243008C421A /* HomeScreenModalTableViewCell.swift */; };
+		0F7C72BB2968AEC00094151C /* RouteGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7C72BA2968AEC00094151C /* RouteGenerator.swift */; };
 		0F8B6351295A92E7000385C6 /* StopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8B6350295A92E7000385C6 /* StopData.swift */; };
 		0F8B6353295A93B6000385C6 /* BusStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8B6352295A93B6000385C6 /* BusStop.swift */; };
 		0F933383294FC09100180E0E /* DataGatherer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F933382294FC09100180E0E /* DataGatherer.swift */; };
@@ -66,6 +67,7 @@
 		0F4C502A2963993C000D9771 /* BusAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAnnotation.swift; sourceTree = "<group>"; };
 		0F62CD092938847700374C63 /* HomeScreenMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenMenuView.swift; sourceTree = "<group>"; };
 		0F77003F294CB243008C421A /* HomeScreenModalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenModalTableViewCell.swift; sourceTree = "<group>"; };
+		0F7C72BA2968AEC00094151C /* RouteGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteGenerator.swift; sourceTree = "<group>"; };
 		0F8B6350295A92E7000385C6 /* StopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopData.swift; sourceTree = "<group>"; };
 		0F8B6352295A93B6000385C6 /* BusStop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusStop.swift; sourceTree = "<group>"; };
 		0F933382294FC09100180E0E /* DataGatherer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataGatherer.swift; sourceTree = "<group>"; };
@@ -90,7 +92,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0F0F8C90295238E300BB617E /* APIData */ = {
+		0F0F8C90295238E300BB617E /* API Data */ = {
 			isa = PBXGroup;
 			children = (
 				0F1AF87D2950E46100BE0C85 /* RouteData.swift */,
@@ -98,7 +100,7 @@
 				0F8B6350295A92E7000385C6 /* StopData.swift */,
 				0F475E7F296378B600571B8A /* BusData.swift */,
 			);
-			path = APIData;
+			path = "API Data";
 			sourceTree = "<group>";
 		};
 		0F0F8C93295293D300BB617E /* Extensions */ = {
@@ -145,7 +147,6 @@
 		0F36CD4D29155F560059BC24 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				0F0F8C93295293D300BB617E /* Extensions */,
 				0FEE66092919E464004E2C93 /* Table View Cells */,
 				0F36CD54291562070059BC24 /* Buttons */,
 				0F6E78962960FF4600C81F81 /* Menus */,
@@ -193,6 +194,7 @@
 		0F933381294FC07D00180E0E /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0F7C72BA2968AEC00094151C /* RouteGenerator.swift */,
 				0FEB8F9929555E4A00D2BB1A /* Converter */,
 				0F933382294FC09100180E0E /* DataGatherer.swift */,
 				0F8B6352295A93B6000385C6 /* BusStop.swift */,
@@ -200,7 +202,7 @@
 				0F0F8C982953FBAB00BB617E /* BusPattern.swift */,
 				0F475E812963797900571B8A /* Bus.swift */,
 				0FCD55492965351C0091EAD1 /* Location.swift */,
-				0F0F8C90295238E300BB617E /* APIData */,
+				0F0F8C90295238E300BB617E /* API Data */,
 				0FB4FB5A2960C02A0091B616 /* Model.xcdatamodeld */,
 			);
 			path = Model;
@@ -217,6 +219,7 @@
 		0FEE66092919E464004E2C93 /* Table View Cells */ = {
 			isa = PBXGroup;
 			children = (
+				0F0F8C93295293D300BB617E /* Extensions */,
 				0F77003F294CB243008C421A /* HomeScreenModalTableViewCell.swift */,
 				0F031B992929BAF800055421 /* SettingsScreenTableViewCell.swift */,
 				0F031B9B2929BB1200055421 /* NotificationsScreenTableViewCell.swift */,
@@ -361,6 +364,7 @@
 			files = (
 				0F0F8C922952398600BB617E /* BusRoute.swift in Sources */,
 				0F8B6351295A92E7000385C6 /* StopData.swift in Sources */,
+				0F7C72BB2968AEC00094151C /* RouteGenerator.swift in Sources */,
 				0F2F37FE29318150005998AF /* HomeScreenViewController.swift in Sources */,
 				0F4C502B2963993C000D9771 /* BusAnnotation.swift in Sources */,
 				0F36CD56291562C40059BC24 /* HomeScreenFAB.swift in Sources */,

@@ -40,7 +40,6 @@ class DataGatherer {
                                 if let gather = delegate.didGatherBusRoutes {
                                     gather(onCampusRoutes, offCampusRoutes)
                                 }
-                                    
                             }
                         }
                         else if endpoint.split(separator: "/").last == "pattern" {
