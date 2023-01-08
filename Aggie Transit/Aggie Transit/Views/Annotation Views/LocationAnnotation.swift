@@ -148,20 +148,10 @@ extension LocationAnnotationView {
     @objc func handleDirectionsPressed(sender: UIButton){
         if let annotation = annotation, let title = annotation.title, let name = title, let subtitle = annotation.subtitle, let address = subtitle {
             let location = Location(name: name, location: annotation.coordinate, address: address)
-            let closestDestination = RouteGenerator.shared.findClosestBusStops(location: location)
-            let closestUser = RouteGenerator.shared.findClosestBusStops(location: Location(name: "user location", location: CLLocationCoordinate2D(latitude: 30.62138417079569, longitude: -96.34249946007645), address: "user location")) //30.62138417079569, -96.34249946007645
-            if let closestUser = closestUser, let closestDestination = closestDestination {
-                let inRoute = RouteGenerator.shared.findRelevantBusRoutes(stop: closestDestination)
-                let outRoute = RouteGenerator.shared.findRelevantBusRoutes(stop: closestUser)
-                if let inRoute = inRoute, let outRoute = outRoute {
-                    print(inRoute[0].name, outRoute[0].name)
-                   let closestStops = RouteGenerator.shared.findClosestBusStop(inRoute: inRoute[0], outRoute: outRoute[0])
-                    if let routeDisplayerDelegate = routeDisplayerDelegate, let firstStop = closestStops.0, let secondStop = closestStops.1 {
-                        routeDisplayerDelegate.displayRouteOnMap(userLocation: CLLocationCoordinate2D(latitude: 30.62138417079569, longitude: -96.34249946007645), firstStop: firstStop, secondStop: secondStop, destinationStop: closestDestination, initialStop: closestUser)
-                    }
-                }
+            let dict = RouteGenerator.shared.findRelevantBusRoutesAndClosestStops(location: location)
+            for (key,value) in dict {
+                print(key.name, " - ",value.name )
             }
-            
             if let routeGenerationDelegate = routeGenerationDelegate {
                 routeGenerationDelegate.routeGenerationDidStart()
             }

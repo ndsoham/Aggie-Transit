@@ -358,8 +358,7 @@ extension HomeScreenMenuView: UITableViewDelegate {
             if indexPath.section == 0 {
                 if let onCampusRoutes = onCampusRoutes {
                     onCampusRoutes[indexPath.row].displayBusRoute()
-                    onCampusRoutes[indexPath.row].displayBuses()
-                    
+                    onCampusRoutes[indexPath.row].displayBuses()                    
                 }
             }
             else if indexPath.section == 1 {

@@ -10,14 +10,22 @@ import UIKit
 import MapKit
 @objc protocol DataGathererDelegate {
     @objc optional func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute])
-    @objc optional func didGatherBusPattern(points: [BusPattern])
-    @objc optional func didGatherBusStops(stops: [BusStop])
-    @objc optional func didGatherBuses(buses: [Bus])
 }
+protocol BusRouteDataGathererDelegate {
+    func didGatherBusPattern(points: [BusPattern])
+    func didGatherBusStops(stops: [BusStop])
+    func didGatherBuses(buses: [Bus])
+    func didGatherTimeTable(table: [[String:Date?]])
+}
+
 class DataGatherer {
     private let baseUrl = "https://transport.tamu.edu/BusRoutesFeed/api/"
+    private let dateFormatter = DateFormatter()
     public var delegate: DataGathererDelegate?
-    init(){}
+    public var busRouteDelegate: BusRouteDataGathererDelegate?
+    init(){
+        configureDateFormatter()
+    }
     func gatherData(endpoint: String){
         let url = URL(string: baseUrl+endpoint)
         if let url = url{
@@ -45,28 +53,30 @@ class DataGatherer {
                         else if endpoint.split(separator: "/").last == "pattern" {
                             let points = try decoder.decode([PatternData].self, from: data)
                             let busPoints = self.gatherBusPattern(data: points)
-                            if let delegate = self.delegate {
-                                if let gather = delegate.didGatherBusPattern {
-                                    gather(busPoints)
-                                }
+                            if let busRouteDelegate = self.busRouteDelegate {
+                                busRouteDelegate.didGatherBusPattern(points: busPoints)
                             }
                         }
                         else if endpoint.split(separator: "/").last == "stops" {
                             let stops = try decoder.decode([StopData].self, from: data)
                             let busStops = self.gatherBusStops(data: stops)
-                            if let delegate = self.delegate {
-                                if let gather = delegate.didGatherBusStops {
-                                    gather(busStops)
-                                }
+                            if let busRouteDelegate = self.busRouteDelegate {
+                                busRouteDelegate.didGatherBusStops(stops: busStops)
                             }
                         }
                         else if endpoint.split(separator: "/").last == "buses" {
                             let busData = try decoder.decode([BusData].self, from: data)
                             let buses = self.gatherBuses(data: busData)
-                            if let delegate = self.delegate {
-                                if let gather = delegate.didGatherBuses {
-                                    gather(buses)
-                                }
+                            if let busRouteDelegate = self.busRouteDelegate {
+                                busRouteDelegate.didGatherBuses(buses: buses)
+                            }
+                        }
+                        else if endpoint.split(separator: "/").last == "TimeTable" {
+                            
+                            let timeData = try decoder.decode([[String:String?]].self, from: data)
+                            let timeTable = self.gatherTime(data: timeData)
+                            if let busRouteDelegate = self.busRouteDelegate {
+                                busRouteDelegate.didGatherTimeTable(table: timeTable)
                             }
                         }
                     } catch {
@@ -131,5 +141,32 @@ class DataGatherer {
         }
         return buses
     }
+//MARK: - use this to convert from decoded bus data to time data
+    private func gatherTime(data: [[String:String?]]) -> [[String:Date?]] {
+        var timeTable: [[String:Date?]] = []
+        for row in data {
+            var rowCopy: [String: Date?] = [:]
+            for (key, value) in row {
+                if let value = value, let date = dateFormatter.date(from: value) {
+                    rowCopy[key] = date
+                } else {
+                    rowCopy[key] = nil
+                }
+            }
+            timeTable.append(rowCopy)
+        }
+        return timeTable
+    }
+//MARK: - use this to format the date formatter
+    // use this to format the date formatter
+    func configureDateFormatter() {
+        dateFormatter.timeZone = TimeZone(abbreviation: "CST")
+        dateFormatter.dateStyle = .none
+        dateFormatter.timeStyle = .short
+        dateFormatter.setLocalizedDateFormatFromTemplate("hh:mm a")
+        dateFormatter.locale = Locale(identifier: "en_US")
+        dateFormatter.defaultDate = NSDate.now
+    }
 }
+
 
