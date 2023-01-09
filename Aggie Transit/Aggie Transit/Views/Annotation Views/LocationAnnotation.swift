@@ -147,11 +147,18 @@ class LocationAnnotationView: MKAnnotationView {
 extension LocationAnnotationView {
     @objc func handleDirectionsPressed(sender: UIButton){
         if let annotation = annotation, let title = annotation.title, let name = title, let subtitle = annotation.subtitle, let address = subtitle {
-            let location = Location(name: name, location: annotation.coordinate, address: address)
-            let dict = RouteGenerator.shared.findRelevantBusRoutesAndClosestStops(location: location)
-            for (key,value) in dict {
-                print(key.name, " - ",value.name )
+            let destination = Location(name: name, location: annotation.coordinate, address: address)
+            let userLocation = Location(name: "User Location", location: CLLocationCoordinate2D(latitude: 30.62822498626818, longitude: -96.33642686215725), address: "Rise at Northgate") // Northpoint: , , Rise: CLLocationCoordinate2D(latitude: 30.621679228296554, longitude: -96.34257448521092)
+            guard let destinationRoutesAndStops = RouteGenerator.shared.findRelevantBusRoutesAndClosestStops(location: destination) else {
+                print("No Routes are available.")
+                return
             }
+            guard let userRoutesAndStops = RouteGenerator.shared.findRelevantBusRoutesAndClosestStops(location: userLocation) else {
+                print("No Routes are available.")
+                return
+            }
+            RouteGenerator.shared.findClosestBusStops(destination: destination, destinationRoutesAndStops: destinationRoutesAndStops, userRoutesAndStops: userRoutesAndStops, userLocation: userLocation)
+           
             if let routeGenerationDelegate = routeGenerationDelegate {
                 routeGenerationDelegate.routeGenerationDidStart()
             }

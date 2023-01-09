@@ -71,7 +71,7 @@ class DataGatherer {
                                 busRouteDelegate.didGatherBuses(buses: buses)
                             }
                         }
-                        else if endpoint.split(separator: "/").last == "TimeTable" {
+                        else {//if endpoint.split(separator: "/").last == "TimeTable" {
                             
                             let timeData = try decoder.decode([[String:String?]].self, from: data)
                             let timeTable = self.gatherTime(data: timeData)

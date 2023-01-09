@@ -100,3 +100,12 @@ extension CLLocationCoordinate2D {
         MKMapPoint(self).distance(to: MKMapPoint(to))
     }
 }
+//MARK: - Use this to order the bus stops
+extension Array {
+    mutating func rotateLeft(positions: Int) {
+        let index = self.index(startIndex, offsetBy: positions, limitedBy: endIndex) ?? endIndex
+        let slice = self[..<index]
+        removeSubrange(..<index)
+        insert(contentsOf: slice, at: endIndex)
+    }
+}

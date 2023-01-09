@@ -18,19 +18,38 @@ class BusRoute: NSObject {
     var color: UIColor
     var campus: String
     var delegate: PathMakerDelegate?
-    var stops: [BusStop]? {
+    var stops: [BusStop]? 
+    var pattern: [BusPattern]?
+    var buses: [Bus]?
+    var timeTable: [[String:Date?]]? {
         didSet {
-            if let stops = stops{
-                RouteGenerator.shared.allStops.append(contentsOf: stops)
+            if let timeTable = timeTable {
+                let middleRow = timeTable[timeTable.count/2]
+                    if let maxTime = middleRow.values.max(by: {
+                        if let first = $0, let second = $1 {
+                            return first < second
+                        } else {
+                            return false
+                        }
+                    }) as? Date,
+                    let minTime = middleRow.values.min(by: {
+                        if let first = $0, let second = $1 {
+                            return first < second
+                        } else {
+                            return false
+                        }
+                    }) as? Date {
+                        let difference = maxTime.timeIntervalSince(minTime)
+                        self.timeDiffMin = difference
+                    }
+                
             }
         }
     }
-    var pattern: [BusPattern]?
-    var buses: [Bus]?
-    var timeTable: [[String:Date?]]?
     var currentlyRunning: Bool?
     var startTime: Date?
     var stopTime: Date?
+    var timeDiffMin: Double?
     private var timer: Timer?
     private let dataGatherer = DataGatherer()
     init(name: String, number: String, color: UIColor, campus: String){
@@ -62,7 +81,7 @@ class BusRoute: NSObject {
     }
     // this gathers time data
     func gatherTimeTable(){
-        let endpoint = "route/\(number)/TimeTable"
+        let endpoint = "route/\(number)/TimeTable/01-09"
         dataGatherer.busRouteDelegate = self
         dataGatherer.gatherData(endpoint: endpoint)
     }
