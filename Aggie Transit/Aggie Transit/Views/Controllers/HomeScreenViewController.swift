@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 import MapKit
-
+import FloatingPanel
 class HomeScreenViewController: UIViewController {
     private var safeAreaHeight:Double?
     private var height: Double?
@@ -23,9 +23,7 @@ class HomeScreenViewController: UIViewController {
     private var homeScreenSettingsFAB: HomeScreenFAB?
     private var buttonStack: UIStackView?
     private var mapMargins: UILayoutGuide?
-    private var homeScreenMenu: HomeScreenMenuView?
-    private var homeScreenMenuHeight: Double?
-    private var homeScreenMenuWidth: Double?
+    private var homeScreenMenu: HomeScreenMenuViewController?
     private var animationDuration:TimeInterval = 0.5
     private var navigationBar: UINavigationBar?
     private var currentlyDisplayedPattern: MKPolyline?
@@ -35,9 +33,8 @@ class HomeScreenViewController: UIViewController {
     private var currentlyDisplayedLocations: [MKAnnotation]?
     private var longitudeDelta: Double?
     private var latitudeDelta: Double?
-    public var menuCollapsed: Bool?
-    private var keyboardDisplayed: Bool?
     private var activityIndicator: UIActivityIndicatorView?
+    private var fpc: FloatingPanelController?
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -88,7 +85,6 @@ class HomeScreenViewController: UIViewController {
             width = self.view.frame.width
             if let height = height, let width = width{
                 buttonSpacing = 7.15 * (height/812)
-                
                 // configure super view backbround
                 self.view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                 // configure the map
@@ -113,7 +109,6 @@ class HomeScreenViewController: UIViewController {
                             map.topAnchor.constraint(equalTo: superViewMargins.topAnchor).isActive = true
                             map.bottomAnchor.constraint(equalTo: superViewMargins.bottomAnchor).isActive = true
                         }
-                        
                         // configure the buttons
                         buttonStack = UIStackView()
                         if let buttonStack = buttonStack{
@@ -157,37 +152,28 @@ class HomeScreenViewController: UIViewController {
                                 buttonStack.topAnchor.constraint(equalTo: mapMargins.topAnchor,constant: 10).isActive = true
                             }
                         }
-                        // configure home screen menu view
-                        homeScreenMenuHeight = (812/3) * (height/812)
-                        homeScreenMenuWidth = width
-                        if let homeScreenMenuWidth = homeScreenMenuWidth, let homeScreenMenuHeight = homeScreenMenuHeight{
-                            homeScreenMenu = HomeScreenMenuView(frame: CGRect(x: 0, y: 0, width: homeScreenMenuWidth, height: homeScreenMenuHeight))
+//                        // configure home screen menu view
+                        fpc = FloatingPanelController()
+                        if let fpc = fpc {
+                            // configure floating panel
+                            let appearance = SurfaceAppearance()
+                            appearance.cornerRadius = 15
+                            appearance.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                            fpc.surfaceView.appearance = appearance
+                            fpc.delegate = self
+                            // set a content view
+                            homeScreenMenu = HomeScreenMenuViewController()
+                            // configure the homeScreenMenu view
                             if let homeScreenMenu = homeScreenMenu {
-                                menuCollapsed = false
-                                homeScreenMenu.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                                homeScreenMenu.translatesAutoresizingMaskIntoConstraints = false
+                                homeScreenMenu.view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                                 homeScreenMenu.pathDelegate = self
                                 homeScreenMenu.locationIdentifierDelegate = self
-                                let downSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(homeScreenMenuSwiped))
-                                downSwipeGesture.direction = .down
-                                downSwipeGesture.delegate = self
-                                let upSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(homeScreenMenuSwiped))
-                                upSwipeGesture.direction = .up
-                                upSwipeGesture.delegate = self
-                                homeScreenMenu.addGestureRecognizer(downSwipeGesture)
-                                homeScreenMenu.addGestureRecognizer(upSwipeGesture)
                                 homeScreenMenu.map = map
-                                // add the home screen menu to the view hierarchy
-                                map.addSubview(homeScreenMenu)
-                                // constrain the home screen menu
-                                if let mapMargins = mapMargins {
-                                    homeScreenMenu.leadingAnchor.constraint(equalTo: mapMargins.leadingAnchor).isActive = true
-                                    homeScreenMenu.trailingAnchor.constraint(equalTo: mapMargins.trailingAnchor).isActive = true
-                                    homeScreenMenu.bottomAnchor.constraint(equalTo: mapMargins.bottomAnchor).isActive = true
-                                    homeScreenMenu.heightAnchor.constraint(equalToConstant: homeScreenMenuHeight).isActive = true
-                                }
-                                
                             }
+                            fpc.set(contentViewController: homeScreenMenu)
+                            // add and show the views managed by the floating panel controller object to self.view
+                            fpc.addPanel(toParent: self)
+                            
                         }
                         
                     }
@@ -233,6 +219,7 @@ extension HomeScreenViewController{
 extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
     // this displays the buttern pattern and stops
     func displayBusRouteOnMap(color: UIColor, points: [BusPattern], stops: [BusStop]) {
+
         var wayPoints: [CLLocationCoordinate2D] = []
         for point in points {
             wayPoints.append(point.location)
@@ -246,7 +233,7 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
             stopAnnotation.subtitle = stop.isTimePoint ? "Time Point":"Waypoint"
             stopAnnotations.append(stopAnnotation)
         }
-        if let map = map, let homeScreenMenuHeight = homeScreenMenuHeight {
+        if let map = map, let fpc = fpc {
             if let currentlyDisplayedPattern = currentlyDisplayedPattern, let currentlyDisplayedStops = currentlyDisplayedStops, let _ = currentlyDisplayedColor {
                 DispatchQueue.main.async {
                     map.removeAnnotations(currentlyDisplayedStops)
@@ -260,7 +247,7 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
                     map.addOverlay(boundedLine)
                     map.addAnnotations(stopAnnotations)
                     // change the region of the map based on currently displayed bus route
-                    map.visibleMapRect = map.mapRectThatFits(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: homeScreenMenuHeight * 0.33, left: 10, bottom: homeScreenMenuHeight * 0.33, right: 10))
+                    map.visibleMapRect = map.mapRectThatFits(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: fpc.surfaceView.frame.height * 0.33, left: 10, bottom: fpc.surfaceView.frame.height * (1/8), right: 10))
                 }
             }
             else {
@@ -272,7 +259,7 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
                     map.addOverlay(boundedLine)
                     map.addAnnotations(stopAnnotations)
                     // change the region of the map based on currently displayed bus route
-                    map.visibleMapRect = map.mapRectThatFits(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: homeScreenMenuHeight * 0.33, left: 10, bottom: homeScreenMenuHeight * 0.33, right: 10))
+                    map.visibleMapRect = map.mapRectThatFits(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: fpc.surfaceView.frame.height * 0.33, left: 10, bottom: fpc.surfaceView.frame.height * (1/8), right: 10))
                 }
             }
         }
@@ -361,59 +348,29 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
     }
   
 }
-//MARK: - handle home screen menu gestures
-
-extension HomeScreenViewController: UIGestureRecognizerDelegate {
-    @objc func homeScreenMenuSwiped(sender: UISwipeGestureRecognizer) {
-        if sender.direction == .up {
-            self.presentMenu()
-        }
-        else if sender.direction == .down {
-            self.dismissMenu()
-        }
-    }
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if let keyboardDisplayed = keyboardDisplayed {
-            return !keyboardDisplayed
-        }
-        return true
-    }
-}
 //MARK: - Create methods to dismiss and present the menu
 
 extension HomeScreenViewController {
     @objc func dismissMenu(){
-        if let homeScreenMenu = homeScreenMenu, let menuCollapsed = menuCollapsed, let homeScreenMenuHeight = homeScreenMenuHeight{
-            if !menuCollapsed {
-                DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
-                        homeScreenMenu.frame.origin.y += homeScreenMenuHeight/1.33
-                    } completion: { _ in
-                        self.menuCollapsed = true
-                    }
-                }
+        if let fpc = fpc {
+            DispatchQueue.main.async {
+                fpc.move(to: .tip, animated: true)
             }
         }
     }
     @objc func presentMenu(){
-        if let homeScreenMenu = homeScreenMenu, let menuCollapsed = menuCollapsed, let homeScreenMenuHeight = homeScreenMenuHeight {
-            if menuCollapsed {
-                DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn) {
-                        homeScreenMenu.frame.origin.y -= homeScreenMenuHeight/1.33
-                        self.clearBusRoutePatternFromMap()
-                        self.clearBusRouteStopsFromMap()
-                        self.clearBusesFromMap()
-                        self.clearDisplayedLocationFromMap()
-                        if let region = self.region, let map = self.map {
-                            map.setRegion(region, animated: true)
-                        }
-                    }completion: { _ in
-                        self.menuCollapsed = false
-                        
-                    }
+        if let fpc = fpc{
+            DispatchQueue.main.async {
+                fpc.move(to: .half, animated: true)
+                self.clearBusRoutePatternFromMap()
+                self.clearBusRouteStopsFromMap()
+                self.clearBusesFromMap()
+                self.clearDisplayedLocationFromMap()
+                if let region = self.region, let map = self.map {
+                    map.setRegion(region, animated: false)
                 }
             }
+            
         }
     }
 }
@@ -468,12 +425,9 @@ extension HomeScreenViewController {
 
 extension HomeScreenViewController {
     @objc func keyboardIsDisplayedOnScreen(){
-        keyboardDisplayed = true
-        if let homeScreenMenu = homeScreenMenu, let homeScreenMenuHeight = homeScreenMenuHeight {
-            DispatchQueue.main.async{
-                UIView.animate(withDuration: 0.25, delay: 0) {
-                        homeScreenMenu.frame.origin.y -= homeScreenMenuHeight
-                }
+        DispatchQueue.main.async {
+            if let fpc = self.fpc {
+                fpc.move(to: .full, animated: true)
             }
         }
     }
@@ -482,12 +436,9 @@ extension HomeScreenViewController {
 //MARK: - Handle Keyboard disappearing from screen
 extension HomeScreenViewController {
     @objc func keyboardDidDisappear() {
-        keyboardDisplayed = false
-        if let homeScreenMenu = homeScreenMenu, let homeScreenMenuHeight = homeScreenMenuHeight {
-            DispatchQueue.main.async {
-                UIView.animate(withDuration: 0, delay: 0) {
-                        homeScreenMenu.frame.origin.y += homeScreenMenuHeight
-                }
+        DispatchQueue.main.async {
+            if let fpc = self.fpc {
+                fpc.move(to: .half, animated: true)
             }
         }
     }
@@ -495,12 +446,7 @@ extension HomeScreenViewController {
 //MARK: - Handle editing did begin
 extension HomeScreenViewController {
     @objc func editingDidBegin() {
-        if let menuCollapsed = menuCollapsed {
-            if menuCollapsed {
-                self.presentMenu()
-            }
-        }
-        
+        self.presentMenu()
     }
 }
 //MARK: - Handle showing search location
@@ -603,7 +549,23 @@ extension HomeScreenViewController: RouteDisplayerDelegate {
             }
         }
     }
-    
+}
+//MARK: - Conform to floating panel's delegate
+extension HomeScreenViewController: FloatingPanelControllerDelegate, FloatingPanelBehavior {
+    func floatingPanelWillEndDragging(_ fpc: FloatingPanelController, withVelocity velocity: CGPoint, targetState: UnsafeMutablePointer<FloatingPanelState>) {
+        if fpc.state == .tip && targetState.pointee == .half {
+            self.clearBusRoutePatternFromMap()
+            self.clearBusRouteStopsFromMap()
+            self.clearBusesFromMap()
+            self.clearDisplayedLocationFromMap()
+            if let region = self.region, let map = self.map {
+                map.setRegion(region, animated: true)
+            }
+        }
+    }
+    func allowsRubberBanding(for edge: UIRectEdge) -> Bool {
+        true
+    }
     
 }
-
+//MARK: - customize the half state
