@@ -28,7 +28,7 @@
 		0F475E80296378B600571B8A /* BusData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F475E7F296378B600571B8A /* BusData.swift */; };
 		0F475E822963797900571B8A /* Bus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F475E812963797900571B8A /* Bus.swift */; };
 		0F4C502B2963993C000D9771 /* BusAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4C502A2963993C000D9771 /* BusAnnotation.swift */; };
-		0F62CD0A2938847700374C63 /* HomeScreenMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F62CD092938847700374C63 /* HomeScreenMenuView.swift */; };
+		0F62CD0A2938847700374C63 /* HomeScreenMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */; };
 		0F770040294CB243008C421A /* HomeScreenModalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F77003F294CB243008C421A /* HomeScreenModalTableViewCell.swift */; };
 		0F7C72BB2968AEC00094151C /* RouteGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7C72BA2968AEC00094151C /* RouteGenerator.swift */; };
 		0F8B6351295A92E7000385C6 /* StopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8B6350295A92E7000385C6 /* StopData.swift */; };
@@ -65,7 +65,7 @@
 		0F475E7F296378B600571B8A /* BusData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusData.swift; sourceTree = "<group>"; };
 		0F475E812963797900571B8A /* Bus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bus.swift; sourceTree = "<group>"; };
 		0F4C502A2963993C000D9771 /* BusAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAnnotation.swift; sourceTree = "<group>"; };
-		0F62CD092938847700374C63 /* HomeScreenMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenMenuView.swift; sourceTree = "<group>"; };
+		0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenMenuViewController.swift; sourceTree = "<group>"; };
 		0F77003F294CB243008C421A /* HomeScreenModalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenModalTableViewCell.swift; sourceTree = "<group>"; };
 		0F7C72BA2968AEC00094151C /* RouteGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteGenerator.swift; sourceTree = "<group>"; };
 		0F8B6350295A92E7000385C6 /* StopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopData.swift; sourceTree = "<group>"; };
@@ -150,7 +150,6 @@
 				0F0F8C93295293D300BB617E /* Extensions */,
 				0FEE66092919E464004E2C93 /* Table View Cells */,
 				0F36CD54291562070059BC24 /* Buttons */,
-				0F6E78962960FF4600C81F81 /* Menus */,
 				0F6E78952960FF2400C81F81 /* Controllers */,
 				0F4C5029296398F9000D9771 /* Annotation Views */,
 			);
@@ -177,19 +176,12 @@
 		0F6E78952960FF2400C81F81 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */,
 				0F2F37FD29318150005998AF /* HomeScreenViewController.swift */,
 				0F36CD502915602B0059BC24 /* SettingsScreenViewController.swift */,
 				0F36CD52291560A80059BC24 /* NotificationsScreenViewController.swift */,
 			);
 			path = Controllers;
-			sourceTree = "<group>";
-		};
-		0F6E78962960FF4600C81F81 /* Menus */ = {
-			isa = PBXGroup;
-			children = (
-				0F62CD092938847700374C63 /* HomeScreenMenuView.swift */,
-			);
-			path = Menus;
 			sourceTree = "<group>";
 		};
 		0F933381294FC07D00180E0E /* Model */ = {
@@ -388,7 +380,7 @@
 				0F36CD53291560A80059BC24 /* NotificationsScreenViewController.swift in Sources */,
 				0F475E822963797900571B8A /* Bus.swift in Sources */,
 				0F0F8C992953FBAB00BB617E /* BusPattern.swift in Sources */,
-				0F62CD0A2938847700374C63 /* HomeScreenMenuView.swift in Sources */,
+				0F62CD0A2938847700374C63 /* HomeScreenMenuViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
