@@ -7,5 +7,6 @@ target 'Aggie Transit' do
 
   # Pods for Aggie Transit
 pod 'DropDown'
+pod 'FloatingPanel'
 
 end

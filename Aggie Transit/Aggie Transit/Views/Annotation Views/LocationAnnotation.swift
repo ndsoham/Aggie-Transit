@@ -148,7 +148,7 @@ extension LocationAnnotationView {
     @objc func handleDirectionsPressed(sender: UIButton){
         if let annotation = annotation, let title = annotation.title, let name = title, let subtitle = annotation.subtitle, let address = subtitle {
             let destination = Location(name: name, location: annotation.coordinate, address: address)
-            let userLocation = Location(name: "User Location", location: CLLocationCoordinate2D(latitude: 30.62822498626818, longitude: -96.33642686215725), address: "Rise at Northgate") // Northpoint: , , Rise: CLLocationCoordinate2D(latitude: 30.621679228296554, longitude: -96.34257448521092)
+            let userLocation = Location(name: "User Location", location: CLLocationCoordinate2D(latitude: 30.62822498626818, longitude: -96.33642686215725), address: "Northpoint Crossing") // Northpoint:CLLocationCoordinate2D(latitude: 30.62822498626818, longitude: -96.33642686215725), Rise: CLLocationCoordinate2D(latitude: 30.621679228296554, longitude: -96.34257448521092), park west: CLLocationCoordinate2D(latitude: 30.599508211117378, longitude: -96.3417951323297), MSC: CLLocationCoordinate2D(latitude: 30.612474654010782, longitude: -96.3415856495476), 
             guard let destinationRoutesAndStops = RouteGenerator.shared.findRelevantBusRoutesAndClosestStops(location: destination) else {
                 print("No Routes are available.")
                 return
@@ -157,7 +157,15 @@ extension LocationAnnotationView {
                 print("No Routes are available.")
                 return
             }
-            RouteGenerator.shared.findClosestBusStops(destination: destination, destinationRoutesAndStops: destinationRoutesAndStops, userRoutesAndStops: userRoutesAndStops, userLocation: userLocation)
+            RouteGenerator.shared.findClosestBusStops(destination: destination, destinationRoutesAndStops: destinationRoutesAndStops, userRoutesAndStops: userRoutesAndStops, userLocation: userLocation) {
+                print("Route Generation Successful ---")
+                let (start, stops, finish, travel) = $0
+                print(start.name, "-> ", terminator: "")
+                for (route, stop) in stops {
+                    print(stop.name,terminator: "(\(route.name) - \(route.number)) ->")
+                }
+                print(finish.name, travel, separator: ":")
+            }
            
             if let routeGenerationDelegate = routeGenerationDelegate {
                 routeGenerationDelegate.routeGenerationDidStart()

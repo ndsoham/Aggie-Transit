@@ -7,62 +7,120 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		34D86F4481D9328BF45B637B906B3122 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		3BE3B6C8B88066D1731109BAAA186F25 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		515E22E4255B6073C1897BDDB091A2B8 /* DropDown+Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87586FE2C9DECB6AE7FCA3238E4A1B8 /* DropDown+Appearance.swift */; };
-		68E1653C561E14BBEAC9CF4873570D58 /* DropDownCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EEBC6D732E1B0C41C6A8D03A8C81CF47 /* DropDownCell.xib */; };
-		74012B832FAF67F8D62A2B27CDAFE8B5 /* DPDConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3761A77A038E79C8451C03293CDA4FC0 /* DPDConstants.swift */; };
-		7BA8B7E6822A082F499EACEBCF435BF7 /* Pods-Aggie Transit-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F95594AB38D5F9A2DF1CE97CE38FFF /* Pods-Aggie Transit-dummy.m */; };
-		84459C4824533C9C4FD12AFC941F3CE1 /* DropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCC1AD54C344AFD4E184B9586BFE267 /* DropDown.swift */; };
-		89A72A55273CE358DC4E7600F785C37B /* DPDKeyboardListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBB2377069976EC65992A59335066D3 /* DPDKeyboardListener.swift */; };
-		907338727C09F65DB75AA7AB9E10C3B4 /* DropDown-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = AF17E1BF2597D8F37F69DB34CA024E5C /* DropDown-dummy.m */; };
-		B73E510E851686F8184E26986A470458 /* DPDUIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451F84589A96D52448FD74E261268404 /* DPDUIView+Extension.swift */; };
-		BDC10974A8641F01C5665C61EA37A153 /* DropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EA092CDFBD4C66A29A9CDEA1DE78E1 /* DropDownCell.swift */; };
-		E0A8C46EEE733B55971B1CC5ED65C9AA /* DropDown-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F8F61850F82D6CC477FAF8326336FD5A /* DropDown-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FF69E5BF686E5FAC7E744918D2101E77 /* Pods-Aggie Transit-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8727091BB36B2ABA8E0994847EB75EF7 /* Pods-Aggie Transit-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		080B162C169B2332706ACF0144FE752D /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642DE14EBDCE041D772748D7E783796C /* Position.swift */; };
+		0D5CBE55518A62CFB9B5CFFBABD9F30F /* Transitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D8BEB79F2792C53C4184356D2C1BA5 /* Transitioning.swift */; };
+		17D22B11CA5E699C088CAEF2054DEC4E /* Pods-Aggie Transit-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8727091BB36B2ABA8E0994847EB75EF7 /* Pods-Aggie Transit-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		20A7F7A81D66E3C3E55734CC77F1E214 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30F97A088A24A47EE1EDDBDB8647C47 /* State.swift */; };
+		34D86F4481D9328BF45B637B906B3122 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB6F611E86A4758835A715E4B4184F6 /* Foundation.framework */; };
+		4A8302D4217225D733A57186901C75FE /* FloatingPanel-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D741F49B482AC0CC99C54DFBF5B79B15 /* FloatingPanel-dummy.m */; };
+		4D05A3C2AC3151DA8B382D5A01D9A3D9 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E0C993B1769E8D84EC44AD1D20EBEC /* Logger.swift */; };
+		515E22E4255B6073C1897BDDB091A2B8 /* DropDown+Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A1604BE022B077B37183A707E0F193 /* DropDown+Appearance.swift */; };
+		5330D3C08FFBC78B7775222678E1828B /* LayoutReferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC968EE3DBEA5B89B0F732BD690FE5C /* LayoutReferences.swift */; };
+		68E1653C561E14BBEAC9CF4873570D58 /* DropDownCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9FBA6C2223E0FB03D790CF83AAF662 /* DropDownCell.xib */; };
+		716F1AB371C1DBC5A91F85053DE427FD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB6F611E86A4758835A715E4B4184F6 /* Foundation.framework */; };
+		74012B832FAF67F8D62A2B27CDAFE8B5 /* DPDConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EDBECB709AECB236BEB78F324233C16 /* DPDConstants.swift */; };
+		7710872EF59C44450E1F77B4FBD39FCA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2BDDEC5C7CF8AAE9CE96D631187F51E /* Extensions.swift */; };
+		84459C4824533C9C4FD12AFC941F3CE1 /* DropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4D91D05E2A4CF98AE43559D2935E95 /* DropDown.swift */; };
+		88A6CF5082770229B0B4F12E27931BE4 /* SurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5617E05A31A408DCB765147EA428BD97 /* SurfaceView.swift */; };
+		89A72A55273CE358DC4E7600F785C37B /* DPDKeyboardListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98E3629684A80B864A9DD0BB1543131 /* DPDKeyboardListener.swift */; };
+		8C3C7A18AF793362282248D7053AC8D2 /* Pods-Aggie Transit-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F95594AB38D5F9A2DF1CE97CE38FFF /* Pods-Aggie Transit-dummy.m */; };
+		8D158FB7773B86AAE9F81A3DFF8F7275 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D245E0514AAC1A2B9A6D5EA2F383E90F /* UIKit.framework */; };
+		907338727C09F65DB75AA7AB9E10C3B4 /* DropDown-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C4082FA2482A82DF91DF92CE45812BF6 /* DropDown-dummy.m */; };
+		9D66E8AD3A20F55B92E6CB49F089C3C2 /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833BA7E4A6187D54DCEA82BFA8FE7E4F /* Controller.swift */; };
+		A31289357678E530EFF9517E474993F6 /* GrabberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F096273C73F3452610796FB4CF426B8C /* GrabberView.swift */; };
+		A65E412AD3B7A1609BF969A3391C580C /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9711763EE3C531B0758B85266E7BCDB6 /* Core.swift */; };
+		B6567FD239CBF5B53B810FE0B0BF142F /* PassthroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA6524A9E98CAA5A1950C6C8FBC313A /* PassthroughView.swift */; };
+		B73E510E851686F8184E26986A470458 /* DPDUIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB65E100A6E69D0407957EA4F4C72BB /* DPDUIView+Extension.swift */; };
+		BDC10974A8641F01C5665C61EA37A153 /* DropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBD3DEDD7CC1D3D8561CD6861F10D76 /* DropDownCell.swift */; };
+		C1E5844B29EE2237714811788C847A59 /* LayoutAnchoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEDAC8920EB2A14BF1DC4C9708CFD205 /* LayoutAnchoring.swift */; };
+		C886E6F3A5E63C79D747F9C65D06CFC8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB6F611E86A4758835A715E4B4184F6 /* Foundation.framework */; };
+		DC0EDBA61967D32C87F4A9AE587BBC30 /* FloatingPanel-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E6474B3F99B7FFE7262E7A49FEE22DFD /* FloatingPanel-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E0A8C46EEE733B55971B1CC5ED65C9AA /* DropDown-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 369C58C642C43FFEB6114AC612AEEB9E /* DropDown-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F0B761F245A992BFDE8F666B84BD8785 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4E1B17E0D1E0F0E9DCB394AD9D82A3 /* Layout.swift */; };
+		F2420A40C03E49F006049ED28E2FB9B9 /* BackdropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374C495FCA291842FB602F9786359E98 /* BackdropView.swift */; };
+		F6EAB031EC78E19521E63ED440DC15AA /* Behavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61448FA57D14679A9E32966EAA91028 /* Behavior.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		59E356942A97620BDCD3F4E6D5B42197 /* PBXContainerItemProxy */ = {
+		2C7128290957FAE24A93C89DBC47EB11 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = E9F9401E9C74C0C393164FD8D86D0068;
 			remoteInfo = DropDown;
 		};
+		2E3B6D6875F3FBF470BD0A7763D73866 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4874E7E655CEB4C01E4572AD903AEA21;
+			remoteInfo = FloatingPanel;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		04F95594AB38D5F9A2DF1CE97CE38FFF /* Pods-Aggie Transit-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Aggie Transit-dummy.m"; sourceTree = "<group>"; };
 		1739932EE78DB0DC2F5C934B0C17AD3E /* Pods-Aggie Transit-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Aggie Transit-frameworks.sh"; sourceTree = "<group>"; };
+		2097785508C928FCF1AF280336749A42 /* DropDown.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DropDown.debug.xcconfig; sourceTree = "<group>"; };
 		2A2D29C1DFC5E6D709B82CACB21E8304 /* Pods-Aggie Transit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Aggie Transit.debug.xcconfig"; sourceTree = "<group>"; };
-		2F8A529C653A26F8D0B57E1CD7B2B5E6 /* DropDown-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "DropDown-Info.plist"; sourceTree = "<group>"; };
-		2FCC1AD54C344AFD4E184B9586BFE267 /* DropDown.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DropDown.swift; path = DropDown/src/DropDown.swift; sourceTree = "<group>"; };
-		3761A77A038E79C8451C03293CDA4FC0 /* DPDConstants.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DPDConstants.swift; path = DropDown/helpers/DPDConstants.swift; sourceTree = "<group>"; };
-		451F84589A96D52448FD74E261268404 /* DPDUIView+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "DPDUIView+Extension.swift"; path = "DropDown/helpers/DPDUIView+Extension.swift"; sourceTree = "<group>"; };
+		2CB65E100A6E69D0407957EA4F4C72BB /* DPDUIView+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "DPDUIView+Extension.swift"; path = "DropDown/helpers/DPDUIView+Extension.swift"; sourceTree = "<group>"; };
+		30E0C993B1769E8D84EC44AD1D20EBEC /* Logger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Logger.swift; path = Sources/Logger.swift; sourceTree = "<group>"; };
+		369C58C642C43FFEB6114AC612AEEB9E /* DropDown-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DropDown-umbrella.h"; sourceTree = "<group>"; };
+		374C495FCA291842FB602F9786359E98 /* BackdropView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BackdropView.swift; path = Sources/BackdropView.swift; sourceTree = "<group>"; };
+		42E1B8E5B0C3C5A8E971F5BEDF2FA856 /* DropDown-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "DropDown-Info.plist"; sourceTree = "<group>"; };
+		44860DA338FD11893D5E91F4A33394F4 /* DropDown-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DropDown-prefix.pch"; sourceTree = "<group>"; };
+		4EC968EE3DBEA5B89B0F732BD690FE5C /* LayoutReferences.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LayoutReferences.swift; path = Sources/LayoutReferences.swift; sourceTree = "<group>"; };
+		4EF2003688C71E1B87A75369AAD452A8 /* FloatingPanel.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = FloatingPanel.modulemap; sourceTree = "<group>"; };
+		55947CFD1D2849A0184CAC78ABFBC288 /* FloatingPanel-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "FloatingPanel-Info.plist"; sourceTree = "<group>"; };
+		5617E05A31A408DCB765147EA428BD97 /* SurfaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SurfaceView.swift; path = Sources/SurfaceView.swift; sourceTree = "<group>"; };
 		61E83AC1791CF138A90877B59E096973 /* Pods-Aggie Transit.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Aggie Transit.modulemap"; sourceTree = "<group>"; };
+		642DE14EBDCE041D772748D7E783796C /* Position.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Position.swift; path = Sources/Position.swift; sourceTree = "<group>"; };
+		64771CD0A0B9ECBF2F52A04AD098F1DF /* FloatingPanel-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FloatingPanel-prefix.pch"; sourceTree = "<group>"; };
 		66EFFBE99954251D4CBF2942FEC536CE /* Pods-Aggie Transit-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Aggie Transit-acknowledgements.markdown"; sourceTree = "<group>"; };
-		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		730D85BE0320FD50EA665A82042E5742 /* DropDown-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DropDown-prefix.pch"; sourceTree = "<group>"; };
+		6EDBECB709AECB236BEB78F324233C16 /* DPDConstants.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DPDConstants.swift; path = DropDown/helpers/DPDConstants.swift; sourceTree = "<group>"; };
+		6FAAB7D3DE9B2564509ABD18687E938E /* FloatingPanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FloatingPanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		833BA7E4A6187D54DCEA82BFA8FE7E4F /* Controller.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Controller.swift; path = Sources/Controller.swift; sourceTree = "<group>"; };
+		86D0153CF9539665FBD51F4E3A5A9084 /* DropDown.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = DropDown.modulemap; sourceTree = "<group>"; };
 		8727091BB36B2ABA8E0994847EB75EF7 /* Pods-Aggie Transit-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Aggie Transit-umbrella.h"; sourceTree = "<group>"; };
-		8DBB2377069976EC65992A59335066D3 /* DPDKeyboardListener.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DPDKeyboardListener.swift; path = DropDown/helpers/DPDKeyboardListener.swift; sourceTree = "<group>"; };
-		93EA092CDFBD4C66A29A9CDEA1DE78E1 /* DropDownCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DropDownCell.swift; path = DropDown/src/DropDownCell.swift; sourceTree = "<group>"; };
-		9B6725B782188F18CB76A740433F14E4 /* DropDown.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DropDown.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C15EB8657063755722D9C7DC8D72885 /* DropDown.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DropDown.release.xcconfig; sourceTree = "<group>"; };
+		9711763EE3C531B0758B85266E7BCDB6 /* Core.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Core.swift; path = Sources/Core.swift; sourceTree = "<group>"; };
+		9B6725B782188F18CB76A740433F14E4 /* DropDown */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = DropDown; path = DropDown.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		A87586FE2C9DECB6AE7FCA3238E4A1B8 /* DropDown+Appearance.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "DropDown+Appearance.swift"; path = "DropDown/src/DropDown+Appearance.swift"; sourceTree = "<group>"; };
-		AF17E1BF2597D8F37F69DB34CA024E5C /* DropDown-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "DropDown-dummy.m"; sourceTree = "<group>"; };
+		A30F97A088A24A47EE1EDDBDB8647C47 /* State.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = State.swift; path = Sources/State.swift; sourceTree = "<group>"; };
+		A61448FA57D14679A9E32966EAA91028 /* Behavior.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Behavior.swift; path = Sources/Behavior.swift; sourceTree = "<group>"; };
+		A98E3629684A80B864A9DD0BB1543131 /* DPDKeyboardListener.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DPDKeyboardListener.swift; path = DropDown/helpers/DPDKeyboardListener.swift; sourceTree = "<group>"; };
+		B6DAB076E1FC1470574C78B74C25346E /* FloatingPanel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FloatingPanel.release.xcconfig; sourceTree = "<group>"; };
+		BFBD3DEDD7CC1D3D8561CD6861F10D76 /* DropDownCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DropDownCell.swift; path = DropDown/src/DropDownCell.swift; sourceTree = "<group>"; };
+		C2FBDFF23DBF912FCF02031B00FCC285 /* FloatingPanel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FloatingPanel.debug.xcconfig; sourceTree = "<group>"; };
+		C4082FA2482A82DF91DF92CE45812BF6 /* DropDown-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "DropDown-dummy.m"; sourceTree = "<group>"; };
+		C8D8BEB79F2792C53C4184356D2C1BA5 /* Transitioning.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Transitioning.swift; path = Sources/Transitioning.swift; sourceTree = "<group>"; };
+		D245E0514AAC1A2B9A6D5EA2F383E90F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		D281BF28A7AAF6D63AD91509917C1985 /* Pods-Aggie Transit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Aggie Transit.release.xcconfig"; sourceTree = "<group>"; };
-		DCD9DE78A7260CA1D999340CF0124D1D /* DropDown.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = DropDown.modulemap; sourceTree = "<group>"; };
-		E5834E7BD925BD3ED29331C1938CC0B7 /* DropDown.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DropDown.debug.xcconfig; sourceTree = "<group>"; };
+		D741F49B482AC0CC99C54DFBF5B79B15 /* FloatingPanel-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FloatingPanel-dummy.m"; sourceTree = "<group>"; };
+		DA4D91D05E2A4CF98AE43559D2935E95 /* DropDown.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DropDown.swift; path = DropDown/src/DropDown.swift; sourceTree = "<group>"; };
+		DA9FBA6C2223E0FB03D790CF83AAF662 /* DropDownCell.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = DropDownCell.xib; path = DropDown/resources/DropDownCell.xib; sourceTree = "<group>"; };
+		E1ED70D0710E71E370B76868D425BDB8 /* DropDown.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DropDown.release.xcconfig; sourceTree = "<group>"; };
+		E2BDDEC5C7CF8AAE9CE96D631187F51E /* Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = Sources/Extensions.swift; sourceTree = "<group>"; };
+		E6474B3F99B7FFE7262E7A49FEE22DFD /* FloatingPanel-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FloatingPanel-umbrella.h"; sourceTree = "<group>"; };
+		EAB6F611E86A4758835A715E4B4184F6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		EB28631AC9A5F0E32FDF83B6AC09EF01 /* Pods-Aggie Transit-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Aggie Transit-acknowledgements.plist"; sourceTree = "<group>"; };
-		EEBC6D732E1B0C41C6A8D03A8C81CF47 /* DropDownCell.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = DropDownCell.xib; path = DropDown/resources/DropDownCell.xib; sourceTree = "<group>"; };
+		ECA6524A9E98CAA5A1950C6C8FBC313A /* PassthroughView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PassthroughView.swift; path = Sources/PassthroughView.swift; sourceTree = "<group>"; };
+		EEDAC8920EB2A14BF1DC4C9708CFD205 /* LayoutAnchoring.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LayoutAnchoring.swift; path = Sources/LayoutAnchoring.swift; sourceTree = "<group>"; };
 		EEF18C767B8E5956D948A536E488FC5F /* Pods-Aggie Transit */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-Aggie Transit"; path = Pods_Aggie_Transit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF4E1B17E0D1E0F0E9DCB394AD9D82A3 /* Layout.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Layout.swift; path = Sources/Layout.swift; sourceTree = "<group>"; };
+		F096273C73F3452610796FB4CF426B8C /* GrabberView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GrabberView.swift; path = Sources/GrabberView.swift; sourceTree = "<group>"; };
+		F3A1604BE022B077B37183A707E0F193 /* DropDown+Appearance.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "DropDown+Appearance.swift"; path = "DropDown/src/DropDown+Appearance.swift"; sourceTree = "<group>"; };
 		F7C6685B5A9ACB8694AE726FE4B6FCAF /* Pods-Aggie Transit-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Aggie Transit-Info.plist"; sourceTree = "<group>"; };
-		F8F61850F82D6CC477FAF8326336FD5A /* DropDown-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DropDown-umbrella.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		06304361780F4732388DC32081B1FEC5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C886E6F3A5E63C79D747F9C65D06CFC8 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		808BE4E171BD75B6477EC2B77490C2B1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -71,53 +129,43 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CE5136EC47E4A7E9B710AE8AA65CDFC8 /* Frameworks */ = {
+		AFF472590F7E17200944CB3BE693B9D6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3BE3B6C8B88066D1731109BAAA186F25 /* Foundation.framework in Frameworks */,
+				716F1AB371C1DBC5A91F85053DE427FD /* Foundation.framework in Frameworks */,
+				8D158FB7773B86AAE9F81A3DFF8F7275 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		03D114B328A63C934E528549C2DCFE8D /* Support Files */ = {
+		0060C3F7B7257CA6ED030699C32EA7E5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DCD9DE78A7260CA1D999340CF0124D1D /* DropDown.modulemap */,
-				AF17E1BF2597D8F37F69DB34CA024E5C /* DropDown-dummy.m */,
-				2F8A529C653A26F8D0B57E1CD7B2B5E6 /* DropDown-Info.plist */,
-				730D85BE0320FD50EA665A82042E5742 /* DropDown-prefix.pch */,
-				F8F61850F82D6CC477FAF8326336FD5A /* DropDown-umbrella.h */,
-				E5834E7BD925BD3ED29331C1938CC0B7 /* DropDown.debug.xcconfig */,
-				9C15EB8657063755722D9C7DC8D72885 /* DropDown.release.xcconfig */,
+				9B6725B782188F18CB76A740433F14E4 /* DropDown */,
+				6FAAB7D3DE9B2564509ABD18687E938E /* FloatingPanel.framework */,
+				EEF18C767B8E5956D948A536E488FC5F /* Pods-Aggie Transit */,
 			);
-			name = "Support Files";
-			path = "../Target Support Files/DropDown";
+			name = Products;
 			sourceTree = "<group>";
 		};
-		057ED11B9D5977F85CBBBEF7C3E69DDB /* Pods */ = {
+		1628BF05B4CAFDCC3549A101F5A10A17 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1340602042F82FB2F98974EB1B0C2387 /* DropDown */,
+				59DA5C1F72E1D5BABC43EACBA672C3BA /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		257426E3D974F9A7CE2D16F97495B4BA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				977EA33004AB920670DF09598E2C0EBB /* DropDown */,
+				EB087AB5DFBDA7D27D8A33E726F3D819 /* FloatingPanel */,
 			);
 			name = Pods;
-			sourceTree = "<group>";
-		};
-		1340602042F82FB2F98974EB1B0C2387 /* DropDown */ = {
-			isa = PBXGroup;
-			children = (
-				3761A77A038E79C8451C03293CDA4FC0 /* DPDConstants.swift */,
-				8DBB2377069976EC65992A59335066D3 /* DPDKeyboardListener.swift */,
-				451F84589A96D52448FD74E261268404 /* DPDUIView+Extension.swift */,
-				2FCC1AD54C344AFD4E184B9586BFE267 /* DropDown.swift */,
-				A87586FE2C9DECB6AE7FCA3238E4A1B8 /* DropDown+Appearance.swift */,
-				93EA092CDFBD4C66A29A9CDEA1DE78E1 /* DropDownCell.swift */,
-				C59647B6F3C67ED72D999C113D892AF0 /* Resources */,
-				03D114B328A63C934E528549C2DCFE8D /* Support Files */,
-			);
-			path = DropDown;
 			sourceTree = "<group>";
 		};
 		432E4541D2A3D8A78F6486D53E19252D /* Targets Support Files */ = {
@@ -128,12 +176,43 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		578452D2E740E91742655AC8F1636D1F /* iOS */ = {
+		59DA5C1F72E1D5BABC43EACBA672C3BA /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */,
+				EAB6F611E86A4758835A715E4B4184F6 /* Foundation.framework */,
+				D245E0514AAC1A2B9A6D5EA2F383E90F /* UIKit.framework */,
 			);
 			name = iOS;
+			sourceTree = "<group>";
+		};
+		63B4EEFCF748F6BEB01B54B69DFC1035 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				86D0153CF9539665FBD51F4E3A5A9084 /* DropDown.modulemap */,
+				C4082FA2482A82DF91DF92CE45812BF6 /* DropDown-dummy.m */,
+				42E1B8E5B0C3C5A8E971F5BEDF2FA856 /* DropDown-Info.plist */,
+				44860DA338FD11893D5E91F4A33394F4 /* DropDown-prefix.pch */,
+				369C58C642C43FFEB6114AC612AEEB9E /* DropDown-umbrella.h */,
+				2097785508C928FCF1AF280336749A42 /* DropDown.debug.xcconfig */,
+				E1ED70D0710E71E370B76868D425BDB8 /* DropDown.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/DropDown";
+			sourceTree = "<group>";
+		};
+		977EA33004AB920670DF09598E2C0EBB /* DropDown */ = {
+			isa = PBXGroup;
+			children = (
+				6EDBECB709AECB236BEB78F324233C16 /* DPDConstants.swift */,
+				A98E3629684A80B864A9DD0BB1543131 /* DPDKeyboardListener.swift */,
+				2CB65E100A6E69D0407957EA4F4C72BB /* DPDUIView+Extension.swift */,
+				DA4D91D05E2A4CF98AE43559D2935E95 /* DropDown.swift */,
+				F3A1604BE022B077B37183A707E0F193 /* DropDown+Appearance.swift */,
+				BFBD3DEDD7CC1D3D8561CD6861F10D76 /* DropDownCell.swift */,
+				EAD582A7F3E2F638168E3FB3BEF269F8 /* Resources */,
+				63B4EEFCF748F6BEB01B54B69DFC1035 /* Support Files */,
+			);
+			path = DropDown;
 			sourceTree = "<group>";
 		};
 		A1A5AC7F210751249384F182BF7DD679 /* Pods-Aggie Transit */ = {
@@ -153,40 +232,61 @@
 			path = "Target Support Files/Pods-Aggie Transit";
 			sourceTree = "<group>";
 		};
-		C59647B6F3C67ED72D999C113D892AF0 /* Resources */ = {
+		AD3A75545C008D92528F0A9C4BEC0395 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				EEBC6D732E1B0C41C6A8D03A8C81CF47 /* DropDownCell.xib */,
+				4EF2003688C71E1B87A75369AAD452A8 /* FloatingPanel.modulemap */,
+				D741F49B482AC0CC99C54DFBF5B79B15 /* FloatingPanel-dummy.m */,
+				55947CFD1D2849A0184CAC78ABFBC288 /* FloatingPanel-Info.plist */,
+				64771CD0A0B9ECBF2F52A04AD098F1DF /* FloatingPanel-prefix.pch */,
+				E6474B3F99B7FFE7262E7A49FEE22DFD /* FloatingPanel-umbrella.h */,
+				C2FBDFF23DBF912FCF02031B00FCC285 /* FloatingPanel.debug.xcconfig */,
+				B6DAB076E1FC1470574C78B74C25346E /* FloatingPanel.release.xcconfig */,
 			);
-			name = Resources;
+			name = "Support Files";
+			path = "../Target Support Files/FloatingPanel";
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
 			isa = PBXGroup;
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
-				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
-				057ED11B9D5977F85CBBBEF7C3E69DDB /* Pods */,
-				DE1177B5BAABC9C3118F89AFCE44BBEC /* Products */,
+				1628BF05B4CAFDCC3549A101F5A10A17 /* Frameworks */,
+				257426E3D974F9A7CE2D16F97495B4BA /* Pods */,
+				0060C3F7B7257CA6ED030699C32EA7E5 /* Products */,
 				432E4541D2A3D8A78F6486D53E19252D /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
 		};
-		D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */ = {
+		EAD582A7F3E2F638168E3FB3BEF269F8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				578452D2E740E91742655AC8F1636D1F /* iOS */,
+				DA9FBA6C2223E0FB03D790CF83AAF662 /* DropDownCell.xib */,
 			);
-			name = Frameworks;
+			name = Resources;
 			sourceTree = "<group>";
 		};
-		DE1177B5BAABC9C3118F89AFCE44BBEC /* Products */ = {
+		EB087AB5DFBDA7D27D8A33E726F3D819 /* FloatingPanel */ = {
 			isa = PBXGroup;
 			children = (
-				9B6725B782188F18CB76A740433F14E4 /* DropDown.framework */,
-				EEF18C767B8E5956D948A536E488FC5F /* Pods-Aggie Transit */,
+				374C495FCA291842FB602F9786359E98 /* BackdropView.swift */,
+				A61448FA57D14679A9E32966EAA91028 /* Behavior.swift */,
+				833BA7E4A6187D54DCEA82BFA8FE7E4F /* Controller.swift */,
+				9711763EE3C531B0758B85266E7BCDB6 /* Core.swift */,
+				E2BDDEC5C7CF8AAE9CE96D631187F51E /* Extensions.swift */,
+				F096273C73F3452610796FB4CF426B8C /* GrabberView.swift */,
+				EF4E1B17E0D1E0F0E9DCB394AD9D82A3 /* Layout.swift */,
+				EEDAC8920EB2A14BF1DC4C9708CFD205 /* LayoutAnchoring.swift */,
+				4EC968EE3DBEA5B89B0F732BD690FE5C /* LayoutReferences.swift */,
+				30E0C993B1769E8D84EC44AD1D20EBEC /* Logger.swift */,
+				ECA6524A9E98CAA5A1950C6C8FBC313A /* PassthroughView.swift */,
+				642DE14EBDCE041D772748D7E783796C /* Position.swift */,
+				A30F97A088A24A47EE1EDDBDB8647C47 /* State.swift */,
+				5617E05A31A408DCB765147EA428BD97 /* SurfaceView.swift */,
+				C8D8BEB79F2792C53C4184356D2C1BA5 /* Transitioning.swift */,
+				AD3A75545C008D92528F0A9C4BEC0395 /* Support Files */,
 			);
-			name = Products;
+			path = FloatingPanel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -200,30 +300,57 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EB264439304711875695573720790C5C /* Headers */ = {
+		B3AA2CB941BCBEE110EBB79219FEF11F /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF69E5BF686E5FAC7E744918D2101E77 /* Pods-Aggie Transit-umbrella.h in Headers */,
+				17D22B11CA5E699C088CAEF2054DEC4E /* Pods-Aggie Transit-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E0F1E1EBF83F19100B7EABB591F1D634 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC0EDBA61967D32C87F4A9AE587BBC30 /* FloatingPanel-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		502A77DB603117BAA4A3F7297137D1D7 /* Pods-Aggie Transit */ = {
+		4874E7E655CEB4C01E4572AD903AEA21 /* FloatingPanel */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AE6F6B27ACB8C8B128A2FA6D08516E7E /* Build configuration list for PBXNativeTarget "Pods-Aggie Transit" */;
+			buildConfigurationList = 1FF3C92FABCE4BE1998FD8441567F565 /* Build configuration list for PBXNativeTarget "FloatingPanel" */;
 			buildPhases = (
-				EB264439304711875695573720790C5C /* Headers */,
-				38D102E4CD843B2678CC2FF2FE6A4B7F /* Sources */,
-				CE5136EC47E4A7E9B710AE8AA65CDFC8 /* Frameworks */,
-				F9E51C0276EF2D745709045F14142B60 /* Resources */,
+				E0F1E1EBF83F19100B7EABB591F1D634 /* Headers */,
+				E688186B502D27CF6D0D230BBD478C5B /* Sources */,
+				AFF472590F7E17200944CB3BE693B9D6 /* Frameworks */,
+				6B1709DCDD61B255A2B2EF302AA6C832 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				8393B0CB6DE231253E3C16431D46BE49 /* PBXTargetDependency */,
+			);
+			name = FloatingPanel;
+			productName = FloatingPanel;
+			productReference = 6FAAB7D3DE9B2564509ABD18687E938E /* FloatingPanel.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		502A77DB603117BAA4A3F7297137D1D7 /* Pods-Aggie Transit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 69EC32911F76532CBB131C2403B34802 /* Build configuration list for PBXNativeTarget "Pods-Aggie Transit" */;
+			buildPhases = (
+				B3AA2CB941BCBEE110EBB79219FEF11F /* Headers */,
+				B548EFA27236DBE103E4E17B3A5F460B /* Sources */,
+				06304361780F4732388DC32081B1FEC5 /* Frameworks */,
+				E248A9DD983B23E396216437BB14AB4A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E567EA2D928E22B976CB5FE3FDAE7798 /* PBXTargetDependency */,
+				313271F2E8EA82E9975D1F86A43A6AC2 /* PBXTargetDependency */,
 			);
 			name = "Pods-Aggie Transit";
 			productName = Pods_Aggie_Transit;
@@ -245,7 +372,7 @@
 			);
 			name = DropDown;
 			productName = DropDown;
-			productReference = 9B6725B782188F18CB76A740433F14E4 /* DropDown.framework */;
+			productReference = 9B6725B782188F18CB76A740433F14E4 /* DropDown */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -255,7 +382,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1300;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1300;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -266,17 +393,32 @@
 				en,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
-			productRefGroup = DE1177B5BAABC9C3118F89AFCE44BBEC /* Products */;
+			productRefGroup = 0060C3F7B7257CA6ED030699C32EA7E5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				E9F9401E9C74C0C393164FD8D86D0068 /* DropDown */,
+				4874E7E655CEB4C01E4572AD903AEA21 /* FloatingPanel */,
 				502A77DB603117BAA4A3F7297137D1D7 /* Pods-Aggie Transit */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		6B1709DCDD61B255A2B2EF302AA6C832 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E248A9DD983B23E396216437BB14AB4A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EFDE5B37A62BFF2F9A9BD2023B960CD7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -285,24 +427,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F9E51C0276EF2D745709045F14142B60 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		38D102E4CD843B2678CC2FF2FE6A4B7F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7BA8B7E6822A082F499EACEBCF435BF7 /* Pods-Aggie Transit-dummy.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		48864C435B3DB37698CF568C638CF98F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -317,19 +444,129 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B548EFA27236DBE103E4E17B3A5F460B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C3C7A18AF793362282248D7053AC8D2 /* Pods-Aggie Transit-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E688186B502D27CF6D0D230BBD478C5B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F2420A40C03E49F006049ED28E2FB9B9 /* BackdropView.swift in Sources */,
+				F6EAB031EC78E19521E63ED440DC15AA /* Behavior.swift in Sources */,
+				9D66E8AD3A20F55B92E6CB49F089C3C2 /* Controller.swift in Sources */,
+				A65E412AD3B7A1609BF969A3391C580C /* Core.swift in Sources */,
+				7710872EF59C44450E1F77B4FBD39FCA /* Extensions.swift in Sources */,
+				4A8302D4217225D733A57186901C75FE /* FloatingPanel-dummy.m in Sources */,
+				A31289357678E530EFF9517E474993F6 /* GrabberView.swift in Sources */,
+				F0B761F245A992BFDE8F666B84BD8785 /* Layout.swift in Sources */,
+				C1E5844B29EE2237714811788C847A59 /* LayoutAnchoring.swift in Sources */,
+				5330D3C08FFBC78B7775222678E1828B /* LayoutReferences.swift in Sources */,
+				4D05A3C2AC3151DA8B382D5A01D9A3D9 /* Logger.swift in Sources */,
+				B6567FD239CBF5B53B810FE0B0BF142F /* PassthroughView.swift in Sources */,
+				080B162C169B2332706ACF0144FE752D /* Position.swift in Sources */,
+				20A7F7A81D66E3C3E55734CC77F1E214 /* State.swift in Sources */,
+				88A6CF5082770229B0B4F12E27931BE4 /* SurfaceView.swift in Sources */,
+				0D5CBE55518A62CFB9B5CFFBABD9F30F /* Transitioning.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		8393B0CB6DE231253E3C16431D46BE49 /* PBXTargetDependency */ = {
+		313271F2E8EA82E9975D1F86A43A6AC2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FloatingPanel;
+			target = 4874E7E655CEB4C01E4572AD903AEA21 /* FloatingPanel */;
+			targetProxy = 2E3B6D6875F3FBF470BD0A7763D73866 /* PBXContainerItemProxy */;
+		};
+		E567EA2D928E22B976CB5FE3FDAE7798 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = DropDown;
 			target = E9F9401E9C74C0C393164FD8D86D0068 /* DropDown */;
-			targetProxy = 59E356942A97620BDCD3F4E6D5B42197 /* PBXContainerItemProxy */;
+			targetProxy = 2C7128290957FAE24A93C89DBC47EB11 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		62A9801086A1A31D81E830FE23AF8B81 /* Debug */ = {
+		015E22A73CAD0B0C23449B5D42BF727C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C2FBDFF23DBF912FCF02031B00FCC285 /* FloatingPanel.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/FloatingPanel/FloatingPanel-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/FloatingPanel/FloatingPanel-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/FloatingPanel/FloatingPanel.modulemap";
+				PRODUCT_MODULE_NAME = FloatingPanel;
+				PRODUCT_NAME = FloatingPanel;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.3;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		0AD01D900FF2FE1A5E8060E1F25BDA05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D281BF28A7AAF6D63AD91509917C1985 /* Pods-Aggie Transit.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-Aggie Transit/Pods-Aggie Transit-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Aggie Transit/Pods-Aggie Transit.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		3134D188283E78FD52F9C29FE30406D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2A2D29C1DFC5E6D709B82CACB21E8304 /* Pods-Aggie Transit.debug.xcconfig */;
 			buildSettings = {
@@ -401,7 +638,6 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -468,7 +704,6 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -496,9 +731,45 @@
 			};
 			name = Release;
 		};
+		B4839F2001B527E038BBEF4FA5C00EA3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B6DAB076E1FC1470574C78B74C25346E /* FloatingPanel.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/FloatingPanel/FloatingPanel-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/FloatingPanel/FloatingPanel-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/FloatingPanel/FloatingPanel.modulemap";
+				PRODUCT_MODULE_NAME = FloatingPanel;
+				PRODUCT_NAME = FloatingPanel;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.3;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		C24518E891FAA59668669823639498EB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9C15EB8657063755722D9C7DC8D72885 /* DropDown.release.xcconfig */;
+			baseConfigurationReference = E1ED70D0710E71E370B76868D425BDB8 /* DropDown.release.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -511,7 +782,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/DropDown/DropDown-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/DropDown/DropDown-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -533,7 +804,7 @@
 		};
 		E2CDE7BD114C532701D2E79C5CB4CAA8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E5834E7BD925BD3ED29331C1938CC0B7 /* DropDown.debug.xcconfig */;
+			baseConfigurationReference = 2097785508C928FCF1AF280336749A42 /* DropDown.debug.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -546,7 +817,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/DropDown/DropDown-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/DropDown/DropDown-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -565,47 +836,18 @@
 			};
 			name = Debug;
 		};
-		EAF38D78EA85E46BB6E17E5B77BC58C5 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = D281BF28A7AAF6D63AD91509917C1985 /* Pods-Aggie Transit.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-Aggie Transit/Pods-Aggie Transit-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-Aggie Transit/Pods-Aggie Transit.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1FF3C92FABCE4BE1998FD8441567F565 /* Build configuration list for PBXNativeTarget "FloatingPanel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				015E22A73CAD0B0C23449B5D42BF727C /* Debug */,
+				B4839F2001B527E038BBEF4FA5C00EA3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -624,11 +866,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AE6F6B27ACB8C8B128A2FA6D08516E7E /* Build configuration list for PBXNativeTarget "Pods-Aggie Transit" */ = {
+		69EC32911F76532CBB131C2403B34802 /* Build configuration list for PBXNativeTarget "Pods-Aggie Transit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				62A9801086A1A31D81E830FE23AF8B81 /* Debug */,
-				EAF38D78EA85E46BB6E17E5B77BC58C5 /* Release */,
+				3134D188283E78FD52F9C29FE30406D4 /* Debug */,
+				0AD01D900FF2FE1A5E8060E1F25BDA05 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
