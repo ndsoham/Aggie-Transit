@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import MapKit
+import FloatingPanel
 //MARK: - UI Color Extension to create rgb color from string
 extension UIColor {
      static func colorFromRGBString(string: String) -> UIColor {
@@ -100,7 +101,7 @@ extension CLLocationCoordinate2D {
         MKMapPoint(self).distance(to: MKMapPoint(to))
     }
 }
-//MARK: - Use this to order the bus stops
+//MARK: - Use this to order the bus stops, insertions
 extension Array {
     mutating func rotateLeft(positions: Int) {
         let index = self.index(startIndex, offsetBy: positions, limitedBy: endIndex) ?? endIndex
@@ -108,4 +109,11 @@ extension Array {
         removeSubrange(..<index)
         insert(contentsOf: slice, at: endIndex)
     }
+    mutating func moveItem(at sourceIndex: Int, to destinationIndex: Int) {
+        guard sourceIndex != destinationIndex else {return}
+        let item = self[sourceIndex]
+        self.remove(at: sourceIndex)
+        self.insert(item, at: destinationIndex)
+    }
 }
+

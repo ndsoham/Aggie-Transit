@@ -11,6 +11,7 @@ import MapKit
 protocol PathMakerDelegate {
     func displayBusesOnMap(buses:[Bus])
     func displayBusRouteOnMap(color: UIColor, points: [BusPattern], stops: [BusStop])
+    func displayPartialRouteOnMap(color: UIColor, points: [BusPattern], startStop: BusStop, endStop: BusStop)
 }
 class BusRoute: NSObject {
     var name: String
@@ -40,17 +41,17 @@ class BusRoute: NSObject {
                         }
                     }) as? Date {
                         let difference = maxTime.timeIntervalSince(minTime)
-                        self.timeDiffMin = difference
+                        self.routeTime = difference + 300
                     }
-                
             }
         }
     }
     var currentlyRunning: Bool?
     var startTime: Date?
     var stopTime: Date?
-    var timeDiffMin: Double?
-    private var timer: Timer?
+    var routeTime: Double?
+    private var busUpdateTimer: Timer?
+    private var busDisplayTimer: Timer?
     private let dataGatherer = DataGatherer()
     init(name: String, number: String, color: UIColor, campus: String){
         self.name = name
@@ -63,6 +64,7 @@ class BusRoute: NSObject {
         gatherPattern()
         gatherStops()
         gatherTimeTable()
+        gatherBuses()
     }
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -81,7 +83,7 @@ class BusRoute: NSObject {
     }
     // this gathers time data
     func gatherTimeTable(){
-        let endpoint = "route/\(number)/TimeTable/01-09"
+        let endpoint = "route/\(number)/timetable"
         dataGatherer.busRouteDelegate = self
         dataGatherer.gatherData(endpoint: endpoint)
     }
@@ -91,7 +93,12 @@ class BusRoute: NSObject {
             let endpoint = "route/\(self.number)/buses"
             self.dataGatherer.busRouteDelegate = self
             self.dataGatherer.gatherData(endpoint: endpoint)
-            self.timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true, block: { timer in
+            self.busUpdateTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true, block: { timer in
+                if let currentlyRunning = self.currentlyRunning {
+                    if !currentlyRunning {
+                        timer.invalidate()
+                    }
+                }
                 let endpoint = "route/\(self.number)/buses"
                 self.dataGatherer.busRouteDelegate = self
                 self.dataGatherer.gatherData(endpoint: endpoint)
@@ -104,13 +111,31 @@ class BusRoute: NSObject {
             delegate.displayBusRouteOnMap(color: self.color, points: pattern, stops: stops)
         }
     }
+    // use this to display a partial bus route
+    func displayPartialRoute(startStop: BusStop, endStop: BusStop) {
+        if let delegate = delegate, var pattern = pattern {
+            if let startIndex = pattern.firstIndex(where: {$0.key==startStop.key}) {
+                pattern.rotateLeft(positions: startIndex)
+                if let stopIndex = pattern.firstIndex(where: { $0.key == endStop.key}){
+                    delegate.displayPartialRouteOnMap(color: self.color, points: Array(pattern[0...stopIndex]), startStop: startStop, endStop: endStop)
+                }
+            }
+        }
+    }
     // use this to display the buses on the map
     func displayBuses(){
-        gatherBuses()
+        if let delegate = self.delegate, let buses = self.buses {
+            delegate.displayBusesOnMap(buses: buses)
+        }
+        self.busDisplayTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true, block: { timer in
+            if let delegate = self.delegate, let buses = self.buses {
+                delegate.displayBusesOnMap(buses: buses)
+            }
+        })
     }
     // use this to invalidate the timer
     @objc func invalidateTimer(){
-        if let timer = timer {
+        if let timer = busDisplayTimer {
             timer.invalidate()
         }
     }
@@ -132,9 +157,6 @@ extension BusRoute: BusRouteDataGathererDelegate {
     }
     func didGatherBuses(buses: [Bus]) {
         self.buses = buses
-        if let delegate = delegate, let buses = self.buses {
-            delegate.displayBusesOnMap(buses: buses)
-        }
     }
     func didGatherTimeTable(table: [[String : Date?]]) {
         self.timeTable = table
@@ -175,6 +197,8 @@ extension BusRoute: BusRouteDataGathererDelegate {
                     }
                     if let startTime = self.startTime, let stopTime = self.stopTime {
                         let now = NSDate.now
+                        let formatter = DateFormatter()
+                        formatter.setLocalizedDateFormatFromTemplate("hh:mm a")
                         if startTime < now && stopTime > now {
                             self.currentlyRunning = true
                         } else {

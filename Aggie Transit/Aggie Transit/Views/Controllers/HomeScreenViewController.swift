@@ -26,7 +26,11 @@ class HomeScreenViewController: UIViewController {
     private var homeScreenMenu: HomeScreenMenuViewController?
     private var animationDuration:TimeInterval = 0.5
     private var navigationBar: UINavigationBar?
-    private var currentlyDisplayedPattern: MKPolyline?
+    private var currentlyDisplayedWalkingRoutes: [MKPolyline] = []
+    private var currentlyDisplayedEndpoints: [EndpointAnnotation]?
+    private var currentlyDisplayedPartialPattern: [BusRouteOverlay] = []
+    private var currentlyDisplayedPartialStops: [MKAnnotation] = []
+    private var currentlyDisplayedPattern: BusRouteOverlay?
     private var currentlyDisplayedStops: [MKAnnotation]?
     private var currentlyDisplayedColor: UIColor?
     private var currentlyDisplayedBuses: [BusAnnotation]?
@@ -34,7 +38,9 @@ class HomeScreenViewController: UIViewController {
     private var longitudeDelta: Double?
     private var latitudeDelta: Double?
     private var activityIndicator: UIActivityIndicatorView?
-    private var fpc: FloatingPanelController?
+    private var menuFpc: FloatingPanelController?
+    private var locationsFpc: FloatingPanelController?
+    private var directionsFpc: FloatingPanelController?
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -44,7 +50,8 @@ class HomeScreenViewController: UIViewController {
         setUpActivityIndicator()
         registerKeyboardNotification()
         registerCollapseNotification()
-        registerAnnotationViews()
+        registerClearNotification()
+        setUpRouteGenerator()
     }
     override func viewWillAppear(_ animated: Bool) {
         // hide the navigation bar
@@ -69,6 +76,14 @@ class HomeScreenViewController: UIViewController {
     //MARK: - Register collapse notification
     func registerCollapseNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(dismissMenu), name: Notification.Name(rawValue: "collapseMenu"), object: nil)
+    }
+    //MARK: - this is used to rid the map of the displayed notifications
+    func registerClearNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(clearDisplayedLocationFromMap), name: Notification.Name("clearLocationsFromMap"), object: nil)
+    }
+    //MARK: - setup route generator
+    func setUpRouteGenerator(){
+        RouteGenerator.shared.progressDelegate = self
     }
     //MARK: - layout subviews of main view
     func layoutSubviews() {
@@ -108,83 +123,54 @@ class HomeScreenViewController: UIViewController {
                             map.trailingAnchor.constraint(equalTo: superViewMargins.trailingAnchor).isActive = true
                             map.topAnchor.constraint(equalTo: superViewMargins.topAnchor).isActive = true
                             map.bottomAnchor.constraint(equalTo: superViewMargins.bottomAnchor).isActive = true
-                        }
-                        // configure the buttons
-                        buttonStack = UIStackView()
-                        if let buttonStack = buttonStack{
-                            fabHeight = 40 * (height/812)
-                            fabWidth = fabHeight
-                            if let fabHeight = fabHeight, let fabWidth  = fabWidth{
-                                // configure settings button
-                                homeScreenSettingsFAB = HomeScreenFAB(frame:  CGRect(x: 0, y: 0, width: fabWidth, height: fabHeight), backgroundImage: .settings, buttonName: .settings)
-                                if let homeScreenSettingsFAB = homeScreenSettingsFAB{
-                                    homeScreenSettingsFAB.translatesAutoresizingMaskIntoConstraints = false
-                                    // constrain settings button
-                                    homeScreenSettingsFAB.widthAnchor.constraint(equalToConstant: fabWidth).isActive = true
-                                    homeScreenSettingsFAB.heightAnchor.constraint(equalToConstant: fabHeight).isActive = true
-                                }
-                                // configure notifications button
-                                homeScreenNotificationsFAB = HomeScreenFAB(frame: CGRect(x: 0, y: 0, width: fabWidth, height: fabHeight), backgroundImage: .notifications, buttonName: .notifications)
-                                if let homeScreenNotificationsFAB = homeScreenNotificationsFAB, let homeScreenSettingsFAB = homeScreenSettingsFAB{
-                                    homeScreenNotificationsFAB.translatesAutoresizingMaskIntoConstraints = false
-                                    // constrain the notifications button
-                                    homeScreenNotificationsFAB.widthAnchor.constraint(equalToConstant: fabWidth).isActive = true
-                                    homeScreenNotificationsFAB.heightAnchor.constraint(equalToConstant: fabHeight).isActive = true
-                                    // add event handlers to the buttons
-                                    homeScreenSettingsFAB.addTarget(self, action: #selector(handleButtonPress), for: .touchUpInside)
-                                    homeScreenNotificationsFAB.addTarget(self, action: #selector(handleButtonPress), for: .touchUpInside)
-                                    // add the buttons to a stackview
-                                    buttonStack.addArrangedSubview(homeScreenNotificationsFAB)
-                                    buttonStack.addArrangedSubview(homeScreenSettingsFAB)
-                                }
-                            }
-                            // configure the stackview
-                            buttonStack.axis = .vertical
-                            buttonStack.spacing = buttonSpacing
-                            buttonStack.alignment = .center
-                            buttonStack.translatesAutoresizingMaskIntoConstraints = false
-                            // add the button stack to the view hierarchy
-                            map.addSubview(buttonStack)
-                            // constrain the button stack
-                            mapMargins = map.safeAreaLayoutGuide
-                            if let mapMargins = mapMargins{
-                                buttonStack.trailingAnchor.constraint(equalTo: mapMargins.trailingAnchor, constant: -10).isActive = true
-                                buttonStack.topAnchor.constraint(equalTo: mapMargins.topAnchor,constant: 10).isActive = true
-                            }
-                        }
-//                        // configure home screen menu view
-                        fpc = FloatingPanelController()
-                        if let fpc = fpc {
-                            // configure floating panel
-                            let appearance = SurfaceAppearance()
-                            appearance.cornerRadius = 15
-                            appearance.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                            fpc.surfaceView.appearance = appearance
-                            fpc.delegate = self
-                            // set a content view
-                            homeScreenMenu = HomeScreenMenuViewController()
-                            // configure the homeScreenMenu view
-                            if let homeScreenMenu = homeScreenMenu {
-                                homeScreenMenu.view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                                homeScreenMenu.pathDelegate = self
-                                homeScreenMenu.locationIdentifierDelegate = self
-                                homeScreenMenu.map = map
-                            }
-                            fpc.set(contentViewController: homeScreenMenu)
-                            // add and show the views managed by the floating panel controller object to self.view
-                            fpc.addPanel(toParent: self)
                             
+                            menuFpc = FloatingPanelController()
+                            if let fpc = menuFpc {
+                                // configure floating panel
+                                let appearance = SurfaceAppearance()
+                                appearance.cornerRadius = 15
+                                appearance.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                                fpc.surfaceView.appearance = appearance
+                                fpc.delegate = self
+                                // set a content view
+                                homeScreenMenu = HomeScreenMenuViewController()
+                                // configure the homeScreenMenu view
+                                if let homeScreenMenu = homeScreenMenu {
+                                    homeScreenMenu.view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                                    homeScreenMenu.pathDelegate = self
+                                    homeScreenMenu.locationIdentifierDelegate = self
+                                    homeScreenMenu.map = map
+                                }
+                                fpc.set(contentViewController: homeScreenMenu)
+                                // add and show the views managed by the floating panel controller object to self.view
+                                self.view.addSubview(fpc.view)
+                                fpc.view.frame = self.view.bounds
+                                fpc.view.translatesAutoresizingMaskIntoConstraints = false
+                                // add constraints
+                                fpc.view.topAnchor.constraint(equalTo: superViewMargins.topAnchor).isActive = true
+                                fpc.view.bottomAnchor.constraint(equalTo: superViewMargins.bottomAnchor).isActive = true
+                                fpc.view.leadingAnchor.constraint(equalTo: superViewMargins.leadingAnchor).isActive = true
+                                fpc.view.trailingAnchor.constraint(equalTo: superViewMargins.trailingAnchor).isActive = true
+                                // add to controller hierarchy
+                                self.addChild(fpc)
+                                // show
+                                fpc.show(animated: false) {
+                                    fpc.didMove(toParent: self)
+                                }
+                            }
                         }
                         
                     }
+                    
                 }
             }
-           
-           
         }
         
+        
     }
+    
 }
+
 //MARK: - top right buttons pressed
 extension HomeScreenViewController{
     @objc func handleButtonPress(sender: HomeScreenFAB) {
@@ -217,9 +203,86 @@ extension HomeScreenViewController{
 //MARK: - handle the map and creating patterns and points
 
 extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
+    // use this to display walking routes on the map
+    func displayWalkingRoutes(route: MKPolyline){
+        if let map = map, let fpc = menuFpc {
+            if !currentlyDisplayedWalkingRoutes.isEmpty {
+                self.currentlyDisplayedWalkingRoutes.append(route)
+                map.addOverlay(route)
+                if currentlyDisplayedWalkingRoutes.count == 2 {
+                    let union = currentlyDisplayedWalkingRoutes[0].boundingMapRect.union(currentlyDisplayedWalkingRoutes[1].boundingMapRect)
+                    map.setVisibleMapRect(union, edgePadding: UIEdgeInsets(top: 25, left: 25, bottom: fpc.surfaceView.frame.height * (1/7), right: 25), animated: true)
+                } else if currentlyDisplayedWalkingRoutes.count == 3 {
+                    let union = currentlyDisplayedWalkingRoutes[0].boundingMapRect.union(currentlyDisplayedWalkingRoutes[1].boundingMapRect).union(currentlyDisplayedWalkingRoutes[2].boundingMapRect)
+                    map.setVisibleMapRect(union, edgePadding: UIEdgeInsets(top: 25, left: 25, bottom: fpc.surfaceView.frame.height * (1/7), right: 25), animated: true)
+                }
+            } else {
+                self.currentlyDisplayedWalkingRoutes = [route]
+                map.addOverlay(route)
+                map.setVisibleMapRect(route.boundingMapRect,edgePadding: UIEdgeInsets(top: 25, left: 25, bottom: fpc.surfaceView.frame.height * (1/7), right: 25), animated: true)
+            }
+        }
+    }
+    // use this to display endpoints on the map
+    func displayEndPoints(start: Location, end: Location){
+        if let map = map{
+            let startAnnotation = EndpointAnnotation()
+            startAnnotation.coordinate = start.location
+            startAnnotation.title = "Start"
+            let endAnnotation = EndpointAnnotation()
+            endAnnotation.title = "End"
+            endAnnotation.coordinate = end.location
+            map.addAnnotations([startAnnotation, endAnnotation])
+            self.currentlyDisplayedEndpoints = [startAnnotation, endAnnotation]
+            
+        }
+    }
+    // use this to display partial routes on the map
+    func displayPartialRouteOnMap(color: UIColor, points: [BusPattern], startStop: BusStop, endStop: BusStop) {
+        var wayPoints: [CLLocationCoordinate2D] = []
+        for point in points {
+            wayPoints.append(point.location)
+        }
+        var stopAnnotations: [MKAnnotation] = []
+        let startStopAnnotation = MKPointAnnotation()
+        startStopAnnotation.coordinate = startStop.location
+        startStopAnnotation.title = startStop.name
+        startStopAnnotation.subtitle = startStop.isTimePoint ? "Time Point":"Waypoint"
+        let endStopAnnotation = MKPointAnnotation()
+        endStopAnnotation.coordinate = endStop.location
+        endStopAnnotation.title = endStop.name
+        endStopAnnotation.subtitle = endStop.isTimePoint ? "Time Point":"Waypoint"
+        stopAnnotations.append(startStopAnnotation)
+        stopAnnotations.append(endStopAnnotation)
+        if let map = map, let fpc = menuFpc {
+            if !currentlyDisplayedPartialStops.isEmpty && !currentlyDisplayedPartialPattern.isEmpty, let _ = currentlyDisplayedColor {
+                let openLine = BusRouteOverlay(coordinates: wayPoints, count: wayPoints.count)
+                self.currentlyDisplayedColor = color
+                self.currentlyDisplayedPartialPattern.append(openLine)
+                self.currentlyDisplayedPartialStops.append(contentsOf: stopAnnotations)
+                DispatchQueue.main.async {
+                    map.addOverlay(openLine)
+                    map.addAnnotations(stopAnnotations)
+                    // change the region
+                    let union = self.currentlyDisplayedPartialPattern[0].boundingMapRect.union(self.currentlyDisplayedPartialPattern[1].boundingMapRect)
+                    map.setVisibleMapRect(union, edgePadding: UIEdgeInsets(top: 25, left: 25, bottom: fpc.surfaceView.frame.height * (1/7), right: 25), animated: true)
+                }
+            } else {
+                let openLine = BusRouteOverlay(coordinates: wayPoints, count: wayPoints.count)
+                self.currentlyDisplayedPartialStops = stopAnnotations
+                self.currentlyDisplayedPartialPattern = [openLine]
+                self.currentlyDisplayedColor = color
+                DispatchQueue.main.async {
+                    map.addOverlay(openLine)
+                    map.addAnnotations(stopAnnotations)
+                    // change the region
+                    map.setVisibleMapRect(openLine.boundingMapRect, edgePadding: UIEdgeInsets(top: 25, left: 10, bottom: fpc.surfaceView.frame.height * (1/7), right: 10), animated: true)
+                }
+            }
+        }
+    }
     // this displays the buttern pattern and stops
     func displayBusRouteOnMap(color: UIColor, points: [BusPattern], stops: [BusStop]) {
-
         var wayPoints: [CLLocationCoordinate2D] = []
         for point in points {
             wayPoints.append(point.location)
@@ -229,17 +292,16 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
             let stopAnnotation = MKPointAnnotation()
             stopAnnotation.coordinate = stop.location
             stopAnnotation.title = stop.name
-            stopAnnotation.title = stop.name
             stopAnnotation.subtitle = stop.isTimePoint ? "Time Point":"Waypoint"
             stopAnnotations.append(stopAnnotation)
         }
-        if let map = map, let fpc = fpc {
+        if let map = map, let fpc = menuFpc {
             if let currentlyDisplayedPattern = currentlyDisplayedPattern, let currentlyDisplayedStops = currentlyDisplayedStops, let _ = currentlyDisplayedColor {
                 DispatchQueue.main.async {
                     map.removeAnnotations(currentlyDisplayedStops)
                     map.removeOverlay(currentlyDisplayedPattern)
                 }
-                let boundedLine = MKPolyline(coordinates: wayPoints, count: points.count)
+                let boundedLine = BusRouteOverlay(coordinates: wayPoints, count: wayPoints.count)
                 self.currentlyDisplayedColor = color
                 self.currentlyDisplayedPattern = boundedLine
                 self.currentlyDisplayedStops = stopAnnotations
@@ -247,11 +309,11 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
                     map.addOverlay(boundedLine)
                     map.addAnnotations(stopAnnotations)
                     // change the region of the map based on currently displayed bus route
-                    map.visibleMapRect = map.mapRectThatFits(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: fpc.surfaceView.frame.height * 0.33, left: 10, bottom: fpc.surfaceView.frame.height * (1/8), right: 10))
+                    map.setVisibleMapRect(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: 25, left: 10, bottom: fpc.surfaceView.frame.height * (1/8), right: 10), animated: true)
                 }
             }
             else {
-                let boundedLine = MKPolyline(coordinates: wayPoints, count: points.count)
+                let boundedLine = BusRouteOverlay(coordinates: wayPoints, count: wayPoints.count)
                 self.currentlyDisplayedPattern = boundedLine
                 self.currentlyDisplayedColor = color
                 self.currentlyDisplayedStops = stopAnnotations
@@ -259,7 +321,7 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
                     map.addOverlay(boundedLine)
                     map.addAnnotations(stopAnnotations)
                     // change the region of the map based on currently displayed bus route
-                    map.visibleMapRect = map.mapRectThatFits(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: fpc.surfaceView.frame.height * 0.33, left: 10, bottom: fpc.surfaceView.frame.height * (1/8), right: 10))
+                    map.setVisibleMapRect(boundedLine.boundingMapRect, edgePadding: UIEdgeInsets(top: 25, left: 10, bottom: fpc.surfaceView.frame.height * (1/8), right: 10), animated: true)
                 }
             }
         }
@@ -267,7 +329,7 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
     
     // this returns an appropriate renderer for overlay
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        if overlay is MKPolyline {
+        if overlay.isKind(of: BusRouteOverlay.self) {
             if let _ = currentlyDisplayedPattern, let color = currentlyDisplayedColor {
                 let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
                 renderer.lineWidth = 5
@@ -275,6 +337,23 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
                 renderer.alpha = 1.0
                 return renderer
             }
+            else if !currentlyDisplayedPartialPattern.isEmpty, let color = currentlyDisplayedColor {
+                let renderer = MKPolylineRenderer(overlay: overlay)
+                renderer.lineWidth = 8
+                renderer.strokeColor = color
+                renderer.alpha = 1.0
+                return renderer
+            }
+        }
+        else {
+            let renderer = MKPolylineRenderer(overlay: overlay)
+            renderer.lineWidth = 4.5
+            renderer.strokeColor = .systemBlue
+            renderer.lineCap = .round
+            renderer.lineDashPattern = [0.1,9]
+            renderer.alpha = 1.0
+            
+            return renderer
         }
         fatalError("Overlay is of the wrong type")
     }
@@ -286,10 +365,17 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
             view.canShowCallout = true
             return view
         }
+        
+        else if annotation.isKind(of: EndpointAnnotation.self), let annotation = annotation as? EndpointAnnotation {
+            let view = MKMarkerAnnotationView()
+            view.markerTintColor = annotation.title == "Start" ? .systemGreen:.systemRed
+            view.displayPriority = .required
+            return view
+        }
         else if annotation.isKind(of: LocationAnnotation.self) {
-            let view = mapView.dequeueReusableAnnotationView(withIdentifier: NSStringFromClass(LocationAnnotation.self)) as! LocationAnnotationView
+            let view = MKMarkerAnnotationView()
             view.canShowCallout = true
-            view.routeDisplayerDelegate = self
+            view.clusteringIdentifier = "cluster"
             return view
         }
         else if annotation.isKind(of: MKClusterAnnotation.self) {
@@ -306,7 +392,6 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
                 return MKMarkerAnnotationView()
             }
         }
-        
         fatalError("Annotation is of the wrong kind")
     }
     // this displays the buses on the map
@@ -346,26 +431,23 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
             }
         }
     }
-  
+    
 }
 //MARK: - Create methods to dismiss and present the menu
 
 extension HomeScreenViewController {
     @objc func dismissMenu(){
-        if let fpc = fpc {
+        if let fpc = menuFpc {
             DispatchQueue.main.async {
                 fpc.move(to: .tip, animated: true)
             }
         }
     }
     @objc func presentMenu(){
-        if let fpc = fpc{
+        if let fpc = menuFpc{
             DispatchQueue.main.async {
                 fpc.move(to: .half, animated: true)
-                self.clearBusRoutePatternFromMap()
-                self.clearBusRouteStopsFromMap()
-                self.clearBusesFromMap()
-                self.clearDisplayedLocationFromMap()
+                self.clearMap()
                 if let region = self.region, let map = self.map {
                     map.setRegion(region, animated: false)
                 }
@@ -376,6 +458,17 @@ extension HomeScreenViewController {
 }
 //MARK: - Allow a way to deselect bus route
 extension HomeScreenViewController {
+    // this function calls all the other ones to clear stuff from the map
+    func clearMap(){
+        clearBusRoutePatternFromMap()
+        clearBusRouteStopsFromMap()
+        clearBusesFromMap()
+        clearDisplayedLocationFromMap()
+        clearPartialBusRoutePatternFromMap()
+        clearPartialBusStopsFromMap()
+        clearWalkingRoutesFromMap()
+        clearEndpointsFromMap()
+    }
     // this function cleans the map and sets it to the default region
     func clearBusRoutePatternFromMap(){
         if let map = map, let _ = currentlyDisplayedColor, let currentlyDisplayedPattern = currentlyDisplayedPattern , let region = region{
@@ -411,7 +504,7 @@ extension HomeScreenViewController {
         }
     }
     // this function removes the currently displayed location from the map
-    func clearDisplayedLocationFromMap(){
+    @objc func clearDisplayedLocationFromMap(){
         if let map = map, let currentlyDisplayedLocation = currentlyDisplayedLocations, let region = region {
             DispatchQueue.main.async {
                 map.removeAnnotations(currentlyDisplayedLocation)
@@ -420,14 +513,59 @@ extension HomeScreenViewController {
             }
         }
     }
+    // this function removes the currently displayed partial pattern information
+    func clearPartialBusRoutePatternFromMap() {
+        if let map = map, !currentlyDisplayedPartialPattern.isEmpty, let region = region {
+            DispatchQueue.main.async {
+                map.removeOverlays(self.currentlyDisplayedPartialPattern)
+                map.setRegion(region, animated: true)
+                self.currentlyDisplayedPartialPattern = []
+                self.currentlyDisplayedColor = nil
+            }
+        }
+    }
+    // this function removes the currently displayed partial stops
+    func clearPartialBusStopsFromMap(){
+        if let map = map, !currentlyDisplayedPartialStops.isEmpty, let region = region {
+            DispatchQueue.main.async {
+                map.removeAnnotations(self.currentlyDisplayedPartialStops)
+                map.setRegion(region, animated: true)
+                self.currentlyDisplayedPartialStops = []
+            }
+        }
+    }
+    // this function removes the currently displayed walking routes
+    func clearWalkingRoutesFromMap(){
+        if let map = map, !currentlyDisplayedWalkingRoutes.isEmpty, let region = region {
+            DispatchQueue.main.async {
+                map.removeOverlays(self.currentlyDisplayedWalkingRoutes)
+                map.setRegion(region, animated: true)
+                self.currentlyDisplayedWalkingRoutes = []
+            }
+        }
+    }
+    // this function removes the currently displayed endpoints
+    func clearEndpointsFromMap(){
+        if let map = map, let currentlyDisplayedEndpoints = currentlyDisplayedEndpoints, let region = region {
+            DispatchQueue.main.async {
+                map.removeAnnotations(currentlyDisplayedEndpoints)
+                map.setRegion(region, animated: true)
+                self.currentlyDisplayedEndpoints = nil
+            }
+        }
+    }
 }
+
 //MARK: - Handle Keyboard popping up on screen
 
 extension HomeScreenViewController {
     @objc func keyboardIsDisplayedOnScreen(){
         DispatchQueue.main.async {
-            if let fpc = self.fpc {
+            if let fpc = self.menuFpc {
                 fpc.move(to: .full, animated: true)
+                if let directionsFpc = self.directionsFpc {
+                        directionsFpc.move(to: .full, animated: true)
+                }
             }
         }
     }
@@ -437,7 +575,7 @@ extension HomeScreenViewController {
 extension HomeScreenViewController {
     @objc func keyboardDidDisappear() {
         DispatchQueue.main.async {
-            if let fpc = self.fpc {
+            if let fpc = self.menuFpc {
                 fpc.move(to: .half, animated: true)
             }
         }
@@ -451,7 +589,9 @@ extension HomeScreenViewController {
 }
 //MARK: - Handle showing search location
 extension HomeScreenViewController: LocationIdentifierDelegate {
+    
     func showLocationOnMap(results: [Location]) {
+        self.showLocationsPanel(results: results)
         if let map = map {
             if let currentlyDisplayedLocations = currentlyDisplayedLocations {
                 DispatchQueue.main.async {
@@ -490,14 +630,6 @@ extension HomeScreenViewController: LocationIdentifierDelegate {
     
     
 }
-//MARK: - Use this to register annotation views
-extension HomeScreenViewController {
-    func registerAnnotationViews() {
-        if let map = map {
-            map.register(LocationAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(LocationAnnotation.self))
-        }
-    }
-}
 //MARK: - Set up activity indicator while route is generating
 extension HomeScreenViewController: RouteGenerationProgressDelegate {
     // use this to set up the activity indicator
@@ -510,6 +642,7 @@ extension HomeScreenViewController: RouteGenerationProgressDelegate {
                 activityIndicator.hidesWhenStopped = true
                 map.addSubview(activityIndicator)
                 // add constraints
+                mapMargins = map.safeAreaLayoutGuide
                 if let mapMargins = mapMargins {
                     activityIndicator.centerXAnchor.constraint(equalTo: mapMargins.centerXAnchor).isActive = true
                     activityIndicator.centerYAnchor.constraint(equalTo: mapMargins.centerYAnchor).isActive = true
@@ -532,34 +665,75 @@ extension HomeScreenViewController: RouteGenerationProgressDelegate {
 }
 //MARK: - Use this to display the route
 extension HomeScreenViewController: RouteDisplayerDelegate {
-    func displayRouteOnMap(userLocation: CLLocationCoordinate2D, firstStop: BusStop, secondStop: BusStop, destinationStop: BusStop, initialStop: BusStop) {
-        if let map = map {
-            let userLocationAnnotation = MKPointAnnotation()
-            userLocationAnnotation.coordinate = userLocation
-            let firstStopAnnotation = MKPointAnnotation()
-            firstStopAnnotation.coordinate = firstStop.location
-            let secondStopAnnotation = MKPointAnnotation()
-            secondStopAnnotation.coordinate = secondStop.location
-            let destinationStopAnnotation = MKPointAnnotation()
-            destinationStopAnnotation.coordinate = destinationStop.location
-            map.addAnnotations([userLocationAnnotation, firstStopAnnotation, secondStopAnnotation, destinationStopAnnotation])
-            map.showAnnotations([userLocationAnnotation, firstStopAnnotation, secondStopAnnotation, destinationStopAnnotation], animated: true)
-            if let currentlyDisplayedLocations = currentlyDisplayedLocations{
-                map.removeAnnotations(currentlyDisplayedLocations)
+    func displayRouteOnMap(userLocation: Location, route: [(BusRoute, BusStop)], destination: Location, ETA: Double) {
+        self.showDirectionsPanel(start: userLocation, end: destination, route: route)
+        self.dismissMenu()
+        self.clearMap()
+        if route.count == 0 {
+            RouteGenerator.shared.findWalkingRoute(origin: userLocation.location, destination: destination.location) { walkingPath, progressDelegate  in
+                self.displayEndPoints(start: userLocation, end: destination)
+                self.displayWalkingRoutes(route: walkingPath)
+                progressDelegate?.routeGenerationDidEnd()
+            }
+        } else if route.count == 2 {
+            // first display the start and end points
+            self.displayEndPoints(start: userLocation, end: destination)
+            let originBusStop = route[0].1
+            let destinationBusStop = route[1].1
+            let busRoute = route[0].0
+            RouteGenerator.shared.findWalkingRoute(origin: userLocation.location, destination: originBusStop.location) { walkingPath, progressDelegate in
+                // then display the walking path from user location to first bus stop
+                self.displayWalkingRoutes(route: walkingPath)
+                // then display the route from the origin bus stop to the destination bus stop
+                busRoute.delegate = self
+                busRoute.displayPartialRoute(startStop: originBusStop, endStop: destinationBusStop)
+                // finally display the route from the desination bus stop to the destination
+                RouteGenerator.shared.findWalkingRoute(origin: destinationBusStop.location, destination: destination.location) { walkingPath, progressDelegate in
+                    self.displayWalkingRoutes(route: walkingPath)
+                    progressDelegate?.routeGenerationDidEnd()
+                }
+            }
+        } else if route.count == 4 {
+            // first display the start and end points
+            self.displayEndPoints(start: userLocation, end: destination)
+            let originBusStop = route[0].1
+            let firstBusRoute = route[0].0
+            let firstViaBusStop = route[1].1
+            let secondBusRoute = route[2].0
+            let secondViaBusStop = route[2].1
+            let destinationBusStop = route[3].1
+            // find the walking route from the users location to the origin bus stop
+            RouteGenerator.shared.findWalkingRoute(origin: userLocation.location, destination: originBusStop.location) { walkingPath, progressDelegate in
+                self.displayWalkingRoutes(route: walkingPath)
+                // display the first partial route
+                firstBusRoute.delegate = self
+                firstBusRoute.displayPartialRoute(startStop: originBusStop, endStop: firstViaBusStop)
+                // display the walking path between the two bus stops
+                RouteGenerator.shared.findWalkingRoute(origin: firstViaBusStop.location, destination: secondViaBusStop.location) { walkingPath, progressDelegate in
+                    self.displayWalkingRoutes(route: walkingPath)
+                    // next display the second partial route
+                    secondBusRoute.delegate = self
+                    secondBusRoute.displayPartialRoute(startStop: secondViaBusStop, endStop: destinationBusStop)
+                    // finally display the final walking route
+                    RouteGenerator.shared.findWalkingRoute(origin: destinationBusStop.location, destination: destination.location) { walkingPath, progressDelegate in
+                        self.displayWalkingRoutes(route: walkingPath)
+                        progressDelegate?.routeGenerationDidEnd()
+                    }
+                }
             }
         }
     }
 }
+
 //MARK: - Conform to floating panel's delegate
 extension HomeScreenViewController: FloatingPanelControllerDelegate, FloatingPanelBehavior {
     func floatingPanelWillEndDragging(_ fpc: FloatingPanelController, withVelocity velocity: CGPoint, targetState: UnsafeMutablePointer<FloatingPanelState>) {
-        if fpc.state == .tip && targetState.pointee == .half {
-            self.clearBusRoutePatternFromMap()
-            self.clearBusRouteStopsFromMap()
-            self.clearBusesFromMap()
-            self.clearDisplayedLocationFromMap()
-            if let region = self.region, let map = self.map {
-                map.setRegion(region, animated: true)
+        if fpc == self.menuFpc {
+            if fpc.state == .tip && targetState.pointee == .half {
+                self.clearMap()
+                if let region = self.region, let map = self.map {
+                    map.setRegion(region, animated: true)
+                }
             }
         }
     }
@@ -568,4 +742,104 @@ extension HomeScreenViewController: FloatingPanelControllerDelegate, FloatingPan
     }
     
 }
-//MARK: - customize the half state
+//MARK: - use this to show directions panel
+extension HomeScreenViewController: directionsPanelClosedDelegate {
+    func closeDirectionsPanel() {
+        if let directionsFpc = directionsFpc, let menuFpc = menuFpc {
+            menuFpc.show(animated: true)
+            directionsFpc.willMove(toParent: nil)
+            directionsFpc.hide(animated: true) {
+                directionsFpc.view.removeFromSuperview()
+                directionsFpc.removeFromParent()
+            }
+            self.clearMap()
+        }
+    }
+    
+    func showDirectionsPanel(start: Location, end: Location, route: [(BusRoute, BusStop)]) {
+        directionsFpc = FloatingPanelController()
+        let directionsViewController = DirectionsViewController()
+        directionsViewController.endpoints = [start, end]
+        directionsViewController.delegate = self
+        directionsViewController.routeDisplayerDelegate = self
+        directionsViewController.route = route
+        if let directionsFpc = directionsFpc, let fpc = menuFpc, let superViewMargins = superViewMargins {
+            directionsFpc.set(contentViewController: directionsViewController)
+            self.view.addSubview(directionsFpc.view)
+            directionsFpc.view.frame = self.view.bounds
+            directionsFpc.view.translatesAutoresizingMaskIntoConstraints = false
+            // add constraints
+            directionsFpc.view.topAnchor.constraint(equalTo: superViewMargins.topAnchor).isActive = true
+            directionsFpc.view.bottomAnchor.constraint(equalTo: superViewMargins.bottomAnchor).isActive = true
+            directionsFpc.view.leadingAnchor.constraint(equalTo: superViewMargins.leadingAnchor).isActive = true
+            directionsFpc.view.trailingAnchor.constraint(equalTo: superViewMargins.trailingAnchor).isActive = true
+            // add as child
+            self.addChild(directionsFpc)
+            // show
+            directionsFpc.show(animated: true) {
+                directionsFpc.didMove(toParent: self)
+            }
+//            directionsFpc.move(to: .tip, animated: true)
+            let appearance = SurfaceAppearance()
+            appearance.cornerRadius = 15
+            appearance.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+            directionsFpc.surfaceView.appearance = appearance
+            fpc.hide(animated: true)
+        }
+    }
+    func hideDirectionsPanel(){
+        if let directionsFpc = directionsFpc {
+            directionsFpc.hide(animated: true)
+        }
+    }
+}
+//MARK: - use this to show the locations pane
+
+extension HomeScreenViewController: searchResultsPanelClosedDelegate {
+    func closeSearchResultsPanel() {
+        if let menuFpc = menuFpc{
+            hideLocationsPanel()
+            menuFpc.show(animated: true)
+        }
+    }
+    
+    func showLocationsPanel(results: [Location]) {
+        locationsFpc = FloatingPanelController()
+        let searchResultsViewController = SearchResultsViewController()
+        searchResultsViewController.searchResults = results
+        searchResultsViewController.routeDisplayerDelegate = self
+        searchResultsViewController.closeDelegate = self
+        if let locationsFpc = locationsFpc, let fpc = menuFpc, let superViewMargins = superViewMargins {
+            locationsFpc.set(contentViewController: searchResultsViewController)
+            self.view.addSubview(locationsFpc.view)
+            locationsFpc.view.frame = self.view.bounds
+            locationsFpc.view.translatesAutoresizingMaskIntoConstraints = false
+            // add constraints
+            locationsFpc.view.topAnchor.constraint(equalTo: superViewMargins.topAnchor).isActive = true
+            locationsFpc.view.bottomAnchor.constraint(equalTo: superViewMargins.bottomAnchor).isActive = true
+            locationsFpc.view.leadingAnchor.constraint(equalTo: superViewMargins.leadingAnchor).isActive = true
+            locationsFpc.view.trailingAnchor.constraint(equalTo: superViewMargins.trailingAnchor).isActive = true
+           // add as child
+            self.addChild(locationsFpc)
+            // show
+            locationsFpc.show(animated: true) {
+                locationsFpc.didMove(toParent: self)
+            }
+            let appearance = SurfaceAppearance()
+            appearance.cornerRadius = 15
+            appearance.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+            locationsFpc.surfaceView.appearance = appearance
+            fpc.hide(animated: true)
+        }
+    }
+    func hideLocationsPanel(){
+        if let locationsFpc = locationsFpc {
+            locationsFpc.willMove(toParent: nil)
+            locationsFpc.hide(animated: true) {
+                locationsFpc.view.removeFromSuperview()
+                locationsFpc.removeFromParent()
+            }
+        }
+    }
+}
+

@@ -10,8 +10,10 @@ import MapKit
 @objc class BusPattern: NSObject {
     var name: String
     var location: CLLocationCoordinate2D
-    init(name: String, location: CLLocationCoordinate2D) {
+    var key: String
+    init(name: String, location: CLLocationCoordinate2D, id: String) {
         self.name = name
         self.location = location
+        self.key = id
     }
 }

@@ -10,6 +10,4 @@ import UIKit
 import DropDown
 class SearchResultsDropDownCell: DropDownCell {
     @IBOutlet weak var addressLabel: UILabel!
-    
-  
 }

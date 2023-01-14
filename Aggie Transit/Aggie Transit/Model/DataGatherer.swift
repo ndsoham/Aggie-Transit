@@ -40,7 +40,7 @@ class DataGatherer {
                     }
                     do {
                         let decoder = JSONDecoder()
-                        if endpoint == "Routes" {
+                        if endpoint == "routes" {
                             let routes = try decoder.decode([RouteData].self, from: data)
                             let onCampusRoutes = self.gatherOnCampusBusRoutes(data: routes)
                             let offCampusRoutes = self.gatherOffCampusBusRoutes(data: routes)
@@ -71,7 +71,7 @@ class DataGatherer {
                                 busRouteDelegate.didGatherBuses(buses: buses)
                             }
                         }
-                        else {//if endpoint.split(separator: "/").last == "TimeTable" {
+                        else {//if endpoint.split(separator: "/").last == "timetable" {
                             
                             let timeData = try decoder.decode([[String:String?]].self, from: data)
                             let timeTable = self.gatherTime(data: timeData)
@@ -113,7 +113,7 @@ class DataGatherer {
         var points: [BusPattern] = []
         for point in data {
             let coordinates = CoordinateConverter(latitude: point.Latitude, longitude: point.Longtitude)
-            let busPoint = BusPattern(name: point.Name, location: CLLocationCoordinate2D(latitude: coordinates.0, longitude: coordinates.1))
+            let busPoint = BusPattern(name: point.Name, location: CLLocationCoordinate2D(latitude: coordinates.0, longitude: coordinates.1),id: point.Key)
             points.append(busPoint)
         }
         return points
@@ -123,7 +123,7 @@ class DataGatherer {
         var stops: [BusStop] = []
         for stop in data {
             let coordinates = CoordinateConverter(latitude: stop.Latitude, longitude: stop.Longtitude)
-            let busStop = BusStop(name: stop.Name, location: CLLocationCoordinate2D(latitude: coordinates.0, longitude: coordinates.1), isTimePoint: stop.Stop.IsTimePoint)
+            let busStop = BusStop(name: stop.Name, location: CLLocationCoordinate2D(latitude: coordinates.0, longitude: coordinates.1), isTimePoint: stop.Stop.IsTimePoint, key: stop.Key)
             stops.append(busStop)
         }
         return stops

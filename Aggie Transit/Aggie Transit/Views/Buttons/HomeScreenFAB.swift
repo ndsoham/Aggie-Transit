@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 enum HomeScreenFABPath: String {
-    case settings = "homeScreenSettingsFAB"
+    case settings = "homeScreenSettingsFABV3"
     case notifications = "homeScreenNotificationsFAB"
 }
 enum ButtonName: String {

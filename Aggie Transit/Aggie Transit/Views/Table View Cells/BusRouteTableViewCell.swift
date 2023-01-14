@@ -7,9 +7,9 @@
 
 import UIKit
 
-class HomeScreenModalTableViewCell: UITableViewCell {
+class BusRouteTableViewCell: UITableViewCell {
     private var cornerRadius: Double? = 36.75
-    private let borderWidth = 2.0
+    private let borderWidth = 1.5
     private var width: Double?
     private var height: Double?
     private var view: UIView?
@@ -20,12 +20,11 @@ class HomeScreenModalTableViewCell: UITableViewCell {
     private var iconLabel: UILabel?
     private var customTextLabel: UILabel?
     private var stackView: UIStackView?
-    var icon: String?
+    var icon: NSAttributedString?
     var text: String?
     var cellColor: UIColor?
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layoutSubviews()
     }
     required init?(coder: NSCoder){
         fatalError()
@@ -77,14 +76,14 @@ class HomeScreenModalTableViewCell: UITableViewCell {
                             // add constraints
                             viewMargins = view.safeAreaLayoutGuide
                             if let viewMargins = viewMargins {
-                                stackView.leadingAnchor.constraint(equalTo: viewMargins.leadingAnchor,constant: 10).isActive = true
+                                stackView.leadingAnchor.constraint(equalTo: viewMargins.leadingAnchor,constant: 30).isActive = true
                                 stackView.centerYAnchor.constraint(equalTo: viewMargins.centerYAnchor).isActive = true
                             }
                             // create icon label and text label
                             iconLabel = UILabel()
                             customTextLabel = UILabel()
                             if let iconLabel = iconLabel, let customTextLabel = customTextLabel, let icon = icon, let text = text {
-                                iconLabel.text = icon
+                                iconLabel.attributedText = icon
                                 iconLabel.textColor = UIColor(named: "modalTableCellTextColor")
                                 customTextLabel.text = text
                                 customTextLabel.textColor = UIColor(named: "modalTableCellTextColor")
