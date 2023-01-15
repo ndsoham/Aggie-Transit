@@ -7,12 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0F031B9A2929BAF800055421 /* SettingsScreenTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F031B992929BAF800055421 /* SettingsScreenTableViewCell.swift */; };
 		0F031B9C2929BB1200055421 /* NotificationsScreenTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F031B9B2929BB1200055421 /* NotificationsScreenTableViewCell.swift */; };
 		0F0F8C922952398600BB617E /* BusRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C912952398600BB617E /* BusRoute.swift */; };
 		0F0F8C95295293E300BB617E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C94295293E300BB617E /* Extensions.swift */; };
 		0F0F8C972953F95800BB617E /* PatternData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C962953F95800BB617E /* PatternData.swift */; };
 		0F0F8C992953FBAB00BB617E /* BusPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C982953FBAB00BB617E /* BusPattern.swift */; };
+		0F17E7A82973A47C00B7A389 /* RecentLocationsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F17E7A72973A47C00B7A389 /* RecentLocationsTableViewCell.swift */; };
+		0F17E7AA2973D2B700B7A389 /* HomeScreenMenuViewController+Route Generation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F17E7A92973D2B700B7A389 /* HomeScreenMenuViewController+Route Generation.swift */; };
+		0F17E7AC2973EB5800B7A389 /* BusInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F17E7AB2973EB5800B7A389 /* BusInformationViewController.swift */; };
+		0F17E7AE2973ECDE00B7A389 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F17E7AD2973ECDE00B7A389 /* Protocols.swift */; };
 		0F1AF87E2950E46100BE0C85 /* RouteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F1AF87D2950E46100BE0C85 /* RouteData.swift */; };
 		0F22D400296296A9000AAC01 /* SearchResultsDropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F22D3FE296296A9000AAC01 /* SearchResultsDropDownCell.swift */; };
 		0F22D401296296A9000AAC01 /* SearchResultsDropDownCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F22D3FF296296A9000AAC01 /* SearchResultsDropDownCell.xib */; };
@@ -22,12 +25,9 @@
 		0F36CD3F29155B460059BC24 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F36CD3D29155B460059BC24 /* Main.storyboard */; };
 		0F36CD4129155B460059BC24 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F36CD4029155B460059BC24 /* Assets.xcassets */; };
 		0F36CD4429155B460059BC24 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F36CD4229155B460059BC24 /* LaunchScreen.storyboard */; };
-		0F36CD512915602B0059BC24 /* SettingsScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD502915602B0059BC24 /* SettingsScreenViewController.swift */; };
 		0F36CD53291560A80059BC24 /* NotificationsScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD52291560A80059BC24 /* NotificationsScreenViewController.swift */; };
-		0F36CD56291562C40059BC24 /* HomeScreenFAB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */; };
 		0F475E80296378B600571B8A /* BusData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F475E7F296378B600571B8A /* BusData.swift */; };
 		0F475E822963797900571B8A /* Bus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F475E812963797900571B8A /* Bus.swift */; };
-		0F4C502B2963993C000D9771 /* BusAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4C502A2963993C000D9771 /* BusAnnotation.swift */; };
 		0F62CD0A2938847700374C63 /* HomeScreenMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */; };
 		0F770040294CB243008C421A /* BusRouteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F77003F294CB243008C421A /* BusRouteTableViewCell.swift */; };
 		0F7C72BB2968AEC00094151C /* RouteGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7C72BA2968AEC00094151C /* RouteGenerator.swift */; };
@@ -40,23 +40,25 @@
 		0FA90874297165F1002E6AEA /* DirectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA90873297165F1002E6AEA /* DirectionsViewController.swift */; };
 		0FA90876297166A5002E6AEA /* EndpointsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA90875297166A5002E6AEA /* EndpointsTableViewCell.swift */; };
 		0FA908782971F70B002E6AEA /* DirectionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA908772971F70B002E6AEA /* DirectionsTableViewCell.swift */; };
-		0FA9087C29723D6E002E6AEA /* ChangeStopSearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA9087B29723D6E002E6AEA /* ChangeStopSearchResultsViewController.swift */; };
+		0FA9087E29726968002E6AEA /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA9087D29726968002E6AEA /* LocationManager.swift */; };
+		0FA90880297272E1002E6AEA /* HomeScreenMenuViewController+Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA9087F297272E1002E6AEA /* HomeScreenMenuViewController+Alerts.swift */; };
+		0FA90882297279C5002E6AEA /* CustomAnnotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA90881297279C5002E6AEA /* CustomAnnotations.swift */; };
 		0FB4FB5C2960C02A0091B616 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0FB4FB5A2960C02A0091B616 /* Model.xcdatamodeld */; };
-		0FC4F0492964EFCF00E0FBA8 /* LocationAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC4F0482964EFCF00E0FBA8 /* LocationAnnotation.swift */; };
-		0FCC6F72296F7AF200DDB646 /* EndpointAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCC6F71296F7AF200DDB646 /* EndpointAnnotation.swift */; };
-		0FCC6F74296F865D00DDB646 /* Overlays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCC6F73296F865D00DDB646 /* Overlays.swift */; };
 		0FCD554A2965351C0091EAD1 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD55492965351C0091EAD1 /* Location.swift */; };
 		0FEB8F9B29555E6200D2BB1A /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEB8F9A29555E6200D2BB1A /* CoordinateConverter.swift */; };
 		7A8363F15CFBB4406D490A79 /* Pods_Aggie_Transit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98533FCA8E57C99C2F068E7C /* Pods_Aggie_Transit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0F031B992929BAF800055421 /* SettingsScreenTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenTableViewCell.swift; sourceTree = "<group>"; };
 		0F031B9B2929BB1200055421 /* NotificationsScreenTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsScreenTableViewCell.swift; sourceTree = "<group>"; };
 		0F0F8C912952398600BB617E /* BusRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusRoute.swift; sourceTree = "<group>"; };
 		0F0F8C94295293E300BB617E /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		0F0F8C962953F95800BB617E /* PatternData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternData.swift; sourceTree = "<group>"; };
 		0F0F8C982953FBAB00BB617E /* BusPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusPattern.swift; sourceTree = "<group>"; };
+		0F17E7A72973A47C00B7A389 /* RecentLocationsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentLocationsTableViewCell.swift; sourceTree = "<group>"; };
+		0F17E7A92973D2B700B7A389 /* HomeScreenMenuViewController+Route Generation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenMenuViewController+Route Generation.swift"; sourceTree = "<group>"; };
+		0F17E7AB2973EB5800B7A389 /* BusInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusInformationViewController.swift; sourceTree = "<group>"; };
+		0F17E7AD2973ECDE00B7A389 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		0F1AF87D2950E46100BE0C85 /* RouteData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteData.swift; sourceTree = "<group>"; };
 		0F22D3FE296296A9000AAC01 /* SearchResultsDropDownCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsDropDownCell.swift; sourceTree = "<group>"; };
 		0F22D3FF296296A9000AAC01 /* SearchResultsDropDownCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchResultsDropDownCell.xib; sourceTree = "<group>"; };
@@ -68,12 +70,9 @@
 		0F36CD4029155B460059BC24 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0F36CD4329155B460059BC24 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0F36CD4529155B460059BC24 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0F36CD502915602B0059BC24 /* SettingsScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenViewController.swift; sourceTree = "<group>"; };
 		0F36CD52291560A80059BC24 /* NotificationsScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsScreenViewController.swift; sourceTree = "<group>"; };
-		0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenFAB.swift; sourceTree = "<group>"; };
 		0F475E7F296378B600571B8A /* BusData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusData.swift; sourceTree = "<group>"; };
 		0F475E812963797900571B8A /* Bus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bus.swift; sourceTree = "<group>"; };
-		0F4C502A2963993C000D9771 /* BusAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAnnotation.swift; sourceTree = "<group>"; };
 		0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenMenuViewController.swift; sourceTree = "<group>"; };
 		0F77003F294CB243008C421A /* BusRouteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusRouteTableViewCell.swift; sourceTree = "<group>"; };
 		0F7C72BA2968AEC00094151C /* RouteGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteGenerator.swift; sourceTree = "<group>"; };
@@ -86,11 +85,10 @@
 		0FA90873297165F1002E6AEA /* DirectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsViewController.swift; sourceTree = "<group>"; };
 		0FA90875297166A5002E6AEA /* EndpointsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointsTableViewCell.swift; sourceTree = "<group>"; };
 		0FA908772971F70B002E6AEA /* DirectionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsTableViewCell.swift; sourceTree = "<group>"; };
-		0FA9087B29723D6E002E6AEA /* ChangeStopSearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeStopSearchResultsViewController.swift; sourceTree = "<group>"; };
+		0FA9087D29726968002E6AEA /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		0FA9087F297272E1002E6AEA /* HomeScreenMenuViewController+Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenMenuViewController+Alerts.swift"; sourceTree = "<group>"; };
+		0FA90881297279C5002E6AEA /* CustomAnnotations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotations.swift; sourceTree = "<group>"; };
 		0FB4FB5B2960C02A0091B616 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		0FC4F0482964EFCF00E0FBA8 /* LocationAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationAnnotation.swift; sourceTree = "<group>"; };
-		0FCC6F71296F7AF200DDB646 /* EndpointAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointAnnotation.swift; sourceTree = "<group>"; };
-		0FCC6F73296F865D00DDB646 /* Overlays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Overlays.swift; sourceTree = "<group>"; };
 		0FCD55492965351C0091EAD1 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		0FEB8F9A29555E6200D2BB1A /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
 		3611905BF7494E3A8B6F07BB /* Pods-Aggie Transit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aggie Transit.debug.xcconfig"; path = "Target Support Files/Pods-Aggie Transit/Pods-Aggie Transit.debug.xcconfig"; sourceTree = "<group>"; };
@@ -125,8 +123,19 @@
 			isa = PBXGroup;
 			children = (
 				0F0F8C94295293E300BB617E /* Extensions.swift */,
+				0F17E7AD2973ECDE00B7A389 /* Protocols.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		0F17E7AF2973F46000B7A389 /* Home Screen Menu */ = {
+			isa = PBXGroup;
+			children = (
+				0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */,
+				0F17E7A92973D2B700B7A389 /* HomeScreenMenuViewController+Route Generation.swift */,
+				0FA9087F297272E1002E6AEA /* HomeScreenMenuViewController+Alerts.swift */,
+			);
+			path = "Home Screen Menu";
 			sourceTree = "<group>";
 		};
 		0F36CD2B29155B460059BC24 = {
@@ -152,6 +161,7 @@
 			children = (
 				0F36CD3729155B460059BC24 /* AppDelegate.swift */,
 				0F36CD3929155B460059BC24 /* SceneDelegate.swift */,
+				0FA9087D29726968002E6AEA /* LocationManager.swift */,
 				0F933381294FC07D00180E0E /* Model */,
 				0F36CD4D29155F560059BC24 /* Views */,
 				0F36CD3D29155B460059BC24 /* Main.storyboard */,
@@ -167,29 +177,16 @@
 			children = (
 				0F0F8C93295293D300BB617E /* Extensions */,
 				0FEE66092919E464004E2C93 /* Table View Cells */,
-				0F36CD54291562070059BC24 /* Buttons */,
 				0F6E78952960FF2400C81F81 /* Controllers */,
 				0F4C5029296398F9000D9771 /* Annotation Views */,
-				0FCC6F73296F865D00DDB646 /* Overlays.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		0F36CD54291562070059BC24 /* Buttons */ = {
-			isa = PBXGroup;
-			children = (
-				0F36CD55291562C40059BC24 /* HomeScreenFAB.swift */,
-			);
-			path = Buttons;
 			sourceTree = "<group>";
 		};
 		0F4C5029296398F9000D9771 /* Annotation Views */ = {
 			isa = PBXGroup;
 			children = (
-				0F36CD502915602B0059BC24 /* SettingsScreenViewController.swift */,
-				0F4C502A2963993C000D9771 /* BusAnnotation.swift */,
-				0FC4F0482964EFCF00E0FBA8 /* LocationAnnotation.swift */,
-				0FCC6F71296F7AF200DDB646 /* EndpointAnnotation.swift */,
+				0FA90881297279C5002E6AEA /* CustomAnnotations.swift */,
 			);
 			path = "Annotation Views";
 			sourceTree = "<group>";
@@ -197,12 +194,12 @@
 		0F6E78952960FF2400C81F81 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */,
+				0F17E7AF2973F46000B7A389 /* Home Screen Menu */,
 				0F2F37FD29318150005998AF /* HomeScreenViewController.swift */,
 				0F36CD52291560A80059BC24 /* NotificationsScreenViewController.swift */,
 				0FA9086B2970EC7D002E6AEA /* SearchResultsViewController.swift */,
-				0FA9087B29723D6E002E6AEA /* ChangeStopSearchResultsViewController.swift */,
 				0FA90873297165F1002E6AEA /* DirectionsViewController.swift */,
+				0F17E7AB2973EB5800B7A389 /* BusInformationViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -238,7 +235,7 @@
 				0FA9087129711BE2002E6AEA /* SearchResultsHeaderTableViewCell.swift */,
 				0FA9086D2970ED10002E6AEA /* SearchResultsTableViewCell.swift */,
 				0F77003F294CB243008C421A /* BusRouteTableViewCell.swift */,
-				0F031B992929BAF800055421 /* SettingsScreenTableViewCell.swift */,
+				0F17E7A72973A47C00B7A389 /* RecentLocationsTableViewCell.swift */,
 				0F031B9B2929BB1200055421 /* NotificationsScreenTableViewCell.swift */,
 				0F22D3FE296296A9000AAC01 /* SearchResultsDropDownCell.swift */,
 				0F22D3FF296296A9000AAC01 /* SearchResultsDropDownCell.xib */,
@@ -381,26 +378,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FA90880297272E1002E6AEA /* HomeScreenMenuViewController+Alerts.swift in Sources */,
 				0F0F8C922952398600BB617E /* BusRoute.swift in Sources */,
 				0F8B6351295A92E7000385C6 /* StopData.swift in Sources */,
 				0F7C72BB2968AEC00094151C /* RouteGenerator.swift in Sources */,
 				0FA90876297166A5002E6AEA /* EndpointsTableViewCell.swift in Sources */,
 				0F2F37FE29318150005998AF /* HomeScreenViewController.swift in Sources */,
-				0F4C502B2963993C000D9771 /* BusAnnotation.swift in Sources */,
-				0F36CD56291562C40059BC24 /* HomeScreenFAB.swift in Sources */,
 				0F933383294FC09100180E0E /* DataGatherer.swift in Sources */,
-				0FCC6F72296F7AF200DDB646 /* EndpointAnnotation.swift in Sources */,
+				0F17E7AA2973D2B700B7A389 /* HomeScreenMenuViewController+Route Generation.swift in Sources */,
+				0FA9087E29726968002E6AEA /* LocationManager.swift in Sources */,
 				0FCD554A2965351C0091EAD1 /* Location.swift in Sources */,
 				0FEB8F9B29555E6200D2BB1A /* CoordinateConverter.swift in Sources */,
 				0FA9087229711BE2002E6AEA /* SearchResultsHeaderTableViewCell.swift in Sources */,
 				0F36CD3829155B460059BC24 /* AppDelegate.swift in Sources */,
 				0FB4FB5C2960C02A0091B616 /* Model.xcdatamodeld in Sources */,
-				0F36CD512915602B0059BC24 /* SettingsScreenViewController.swift in Sources */,
 				0FA9086E2970ED10002E6AEA /* SearchResultsTableViewCell.swift in Sources */,
 				0F8B6353295A93B6000385C6 /* BusStop.swift in Sources */,
-				0F031B9A2929BAF800055421 /* SettingsScreenTableViewCell.swift in Sources */,
 				0F0F8C95295293E300BB617E /* Extensions.swift in Sources */,
 				0F475E80296378B600571B8A /* BusData.swift in Sources */,
+				0F17E7AC2973EB5800B7A389 /* BusInformationViewController.swift in Sources */,
+				0F17E7A82973A47C00B7A389 /* RecentLocationsTableViewCell.swift in Sources */,
 				0F0F8C972953F95800BB617E /* PatternData.swift in Sources */,
 				0F36CD3A29155B460059BC24 /* SceneDelegate.swift in Sources */,
 				0FA9086C2970EC7D002E6AEA /* SearchResultsViewController.swift in Sources */,
@@ -409,12 +406,11 @@
 				0F031B9C2929BB1200055421 /* NotificationsScreenTableViewCell.swift in Sources */,
 				0F1AF87E2950E46100BE0C85 /* RouteData.swift in Sources */,
 				0FA90874297165F1002E6AEA /* DirectionsViewController.swift in Sources */,
-				0FC4F0492964EFCF00E0FBA8 /* LocationAnnotation.swift in Sources */,
-				0FA9087C29723D6E002E6AEA /* ChangeStopSearchResultsViewController.swift in Sources */,
 				0F22D400296296A9000AAC01 /* SearchResultsDropDownCell.swift in Sources */,
 				0F36CD53291560A80059BC24 /* NotificationsScreenViewController.swift in Sources */,
+				0F17E7AE2973ECDE00B7A389 /* Protocols.swift in Sources */,
+				0FA90882297279C5002E6AEA /* CustomAnnotations.swift in Sources */,
 				0F475E822963797900571B8A /* Bus.swift in Sources */,
-				0FCC6F74296F865D00DDB646 /* Overlays.swift in Sources */,
 				0F0F8C992953FBAB00BB617E /* BusPattern.swift in Sources */,
 				0F62CD0A2938847700374C63 /* HomeScreenMenuViewController.swift in Sources */,
 			);

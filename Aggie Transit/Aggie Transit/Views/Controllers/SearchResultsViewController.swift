@@ -8,12 +8,8 @@
 import Foundation
 import UIKit
 import MapKit
-protocol RouteDisplayerDelegate {
-    func displayRouteOnMap(userLocation: Location, route: [(BusRoute, BusStop)], destination: Location, ETA: Double)
-}
-protocol searchResultsPanelClosedDelegate {
-    func closeSearchResultsPanel()
-}
+import CoreData
+
 class SearchResultsViewController: UIViewController {
     private var tableView: UITableView?
     private var tableViewRowHeight: Double = 75
@@ -22,10 +18,23 @@ class SearchResultsViewController: UIViewController {
     public var routeDisplayerDelegate: RouteDisplayerDelegate?
     var searchResults: [Location]?
     private var clearNotification: Notification?
-    var closeDelegate: searchResultsPanelClosedDelegate?
+    var closeDelegate: SearchResultsPanelClosedDelegate?
+    var container: NSPersistentContainer! = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+    var refreshDelegate: RefreshDelegate?
     override func viewDidLoad() {
         layoutSubviews()
+        checkContainerStatus()
     }
+    //MARK: - check container status
+    func checkContainerStatus() {
+        guard container != nil else {
+            let alert = UIAlertController(title: "Alert", message: "Database not initialized correctly.", preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+            self.present(alert, animated: true)
+            return
+        }
+    }
+    //MARK: - layout subviews
     func layoutSubviews() {
         self.view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
         leftInset = 15 * Double(self.view.frame.width/375)
@@ -61,6 +70,7 @@ class SearchResultsViewController: UIViewController {
 
 //MARK: - conform to table view delegate methods
 extension SearchResultsViewController: UITableViewDelegate, UITableViewDataSource {
+    // row height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
             return tableViewRowHeight * 1.15
@@ -69,6 +79,7 @@ extension SearchResultsViewController: UITableViewDelegate, UITableViewDataSourc
             return tableViewRowHeight
         }
     }
+    // number
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let searchResults = searchResults {
             return searchResults.count + 1
@@ -76,7 +87,7 @@ extension SearchResultsViewController: UITableViewDelegate, UITableViewDataSourc
             return -1
         }
     }
-    
+    // cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             if let searchResults = searchResults {
@@ -91,26 +102,25 @@ extension SearchResultsViewController: UITableViewDelegate, UITableViewDataSourc
             let cell = tableView.dequeueReusableCell(withIdentifier:"searchResultsTableViewCell") as! SearchResultsTableViewCell
             cell.locationName = searchResults[indexPath.row-1].name
             cell.locationAddress = searchResults[indexPath.row-1].address
-            cell.locationDistance = "0.5 mi"
+            cell.locationDistance = "\(String(describing: searchResults[indexPath.row-1].distance ?? 0.5)) mi"
             return cell
         }
         return UITableViewCell()
     }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return tableViewRowHeight
-    }
+    // header
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row != 0 {
             if let searchResults = searchResults {
-                let userLocation = Location(name: "User Location", location: CLLocationCoordinate2D(latitude: 30.599268155848463, longitude: -96.34196677916258), address: "Park West")
-                let destinationLocation = searchResults[indexPath.row-1]
-                self.generateRoute(origin: userLocation, destination: destinationLocation)
-                self.dismiss(animated: true)
+                if let userLocation = LocationManager.shared.currentLocation {
+                    let originLocation = Location(name: "Current Location", location: userLocation.coordinate, address: "")
+                    let destinationLocation = searchResults[indexPath.row-1]
+                    self.generateRoute(origin: originLocation, destination: destinationLocation)
+                    self.addLocationToRecentLocations(location: searchResults[indexPath.row-1])
+                    self.dismiss(animated: true)
+                }
             }
         }
     }
-    
 }
 //MARK: - generate the route when the user clicks the table view cell
 extension SearchResultsViewController {
@@ -146,5 +156,28 @@ extension SearchResultsViewController: CloseDelegate {
             }
         }
         
+    }
+}
+//MARK: - use this to add to recent locations
+extension SearchResultsViewController {
+    func addLocationToRecentLocations(location: Location) {
+        let recentLocation = RecentLocation(context: container.viewContext)
+        recentLocation.name = location.name
+        recentLocation.address = location.address
+        recentLocation.latitude = location.location.latitude
+        recentLocation.longitude = location.location.longitude
+        recentLocation.date = NSDate.now
+        do{
+            try container.viewContext.save()
+            if let refreshDelegate {
+                if let refresh = refreshDelegate.refreshRecentLocations {
+                    refresh()
+                }
+            }
+        } catch {
+            let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+            self.present(alert,animated: true)
+        }
     }
 }

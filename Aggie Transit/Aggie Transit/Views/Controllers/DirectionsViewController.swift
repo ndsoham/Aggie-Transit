@@ -8,10 +8,6 @@
 import Foundation
 import UIKit
 import MapKit
-protocol directionsPanelClosedDelegate {
-    func closeDirectionsPanel()
-}
-
 class DirectionsViewController: UIViewController {
     private var directionsTableView: UITableView?
     private var endpointsTableView: UITableView?
@@ -20,11 +16,12 @@ class DirectionsViewController: UIViewController {
     private var safeMargins: UILayoutGuide?
     private var sidePadding: Double?
     private var topInset: Double?
-    var delegate: directionsPanelClosedDelegate?
+    var delegate: DirectionsPanelClosedDelegate?
     var endpoints: [Location]?
     var route: [(BusRoute, BusStop)]?
     var routeDisplayerDelegate: RouteDisplayerDelegate?
     override func viewDidLoad() {
+        super.viewDidLoad()
         layoutSubviews()
     }
     func layoutSubviews() {
@@ -39,7 +36,7 @@ class DirectionsViewController: UIViewController {
         safeMargins = self.view.safeAreaLayoutGuide
         topInset = 10
         sidePadding =  22.5 *  Double(self.view.frame.width/375)
-        if let headingLabel = headingLabel, let closeButton = closeButton, let safeMargins = safeMargins, let topInset = topInset, let sidePadding = sidePadding {
+        if let headingLabel, let closeButton, let safeMargins, let topInset, let sidePadding {
             // configure
             headingLabel.translatesAutoresizingMaskIntoConstraints = false
             closeButton.translatesAutoresizingMaskIntoConstraints = false

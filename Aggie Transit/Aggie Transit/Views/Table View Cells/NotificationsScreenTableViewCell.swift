@@ -25,7 +25,7 @@ class NotificationsScreenTableViewCell: UITableViewCell {
     private var margins: UILayoutGuide?
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layoutSubviews()
+        layoutIfNeeded()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

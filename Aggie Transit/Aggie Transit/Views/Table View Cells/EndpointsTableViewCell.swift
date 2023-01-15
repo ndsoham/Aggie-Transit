@@ -20,7 +20,7 @@ class EndpointsTableViewCell: UITableViewCell {
     var iconTintColor: UIColor?
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layoutSubviews()
+        layoutIfNeeded()
     }
     
     required init?(coder: NSCoder) {
@@ -75,6 +75,7 @@ class EndpointsTableViewCell: UITableViewCell {
                 icon.widthAnchor.constraint(equalToConstant: 20).isActive = true
                 textField.translatesAutoresizingMaskIntoConstraints = false
                 textField.text = text
+                textField.isEnabled = false
                 moveIcon.translatesAutoresizingMaskIntoConstraints = false
                 textField.placeholder = "Memorial Student Center"
                 // add to view hierarchy

@@ -13,18 +13,11 @@ class HomeScreenViewController: UIViewController {
     private var safeAreaHeight:Double?
     private var height: Double?
     private var width: Double?
-    private var buttonSpacing = 0.0
-    private var fabHeight: Double?
-    private var fabWidth: Double?
     private var map: MKMapView?
     private var region: MKCoordinateRegion?
     private var superViewMargins: UILayoutGuide?
-    private var homeScreenNotificationsFAB: HomeScreenFAB?
-    private var homeScreenSettingsFAB: HomeScreenFAB?
-    private var buttonStack: UIStackView?
     private var mapMargins: UILayoutGuide?
     private var homeScreenMenu: HomeScreenMenuViewController?
-    private var animationDuration:TimeInterval = 0.5
     private var navigationBar: UINavigationBar?
     private var currentlyDisplayedWalkingRoutes: [MKPolyline] = []
     private var currentlyDisplayedEndpoints: [EndpointAnnotation]?
@@ -41,6 +34,7 @@ class HomeScreenViewController: UIViewController {
     private var menuFpc: FloatingPanelController?
     private var locationsFpc: FloatingPanelController?
     private var directionsFpc: FloatingPanelController?
+    private var busInfoFpc: FloatingPanelController?
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -52,6 +46,7 @@ class HomeScreenViewController: UIViewController {
         registerCollapseNotification()
         registerClearNotification()
         setUpRouteGenerator()
+        configureLocationManager()
     }
     override func viewWillAppear(_ animated: Bool) {
         // hide the navigation bar
@@ -66,6 +61,11 @@ class HomeScreenViewController: UIViewController {
             navigationController.setNavigationBarHidden(false, animated: true)
         }
         super.viewWillDisappear(animated)
+    }
+    //MARK: - Configure location manager
+    func configureLocationManager() {
+        LocationManager.shared.delegate = self
+        LocationManager.shared.startUpdatingLocation()
     }
     //MARK: - Register the keyboard notification
     func registerKeyboardNotification() {
@@ -99,7 +99,6 @@ class HomeScreenViewController: UIViewController {
             height = self.view.frame.height - safeAreaHeight
             width = self.view.frame.width
             if let height = height, let width = width{
-                buttonSpacing = 7.15 * (height/812)
                 // configure super view backbround
                 self.view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                 // configure the map
@@ -139,7 +138,9 @@ class HomeScreenViewController: UIViewController {
                                     homeScreenMenu.view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                                     homeScreenMenu.pathDelegate = self
                                     homeScreenMenu.locationIdentifierDelegate = self
+                                    homeScreenMenu.routeDisplayerDelegate = self
                                     homeScreenMenu.map = map
+                                    RouteGenerator.shared.alertDelegate = homeScreenMenu
                                 }
                                 fpc.set(contentViewController: homeScreenMenu)
                                 // add and show the views managed by the floating panel controller object to self.view
@@ -169,36 +170,6 @@ class HomeScreenViewController: UIViewController {
         
     }
     
-}
-
-//MARK: - top right buttons pressed
-extension HomeScreenViewController{
-    @objc func handleButtonPress(sender: HomeScreenFAB) {
-        if sender.buttonName.rawValue == "Settings Button"{
-            presentSettingsScreen()
-        }
-        
-        else if sender.buttonName.rawValue == "Notifications Button" {
-            presentNotificationsScreen()
-        }
-        else {
-            print("An error has occured")
-        }
-    }
-    func presentSettingsScreen() {
-        if let navigationController = navigationController{
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let settingsViewController = storyboard.instantiateViewController(withIdentifier: "SettingsScreenViewController") as! SettingsScreenViewController
-            navigationController.pushViewController(settingsViewController, animated: true)
-        }
-    }
-    func presentNotificationsScreen() {
-        if let navigationController = navigationController{
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let notificationsViewController = storyboard.instantiateViewController(withIdentifier: "NotificationsScreenViewController") as! NotificationsScreenViewController
-            navigationController.pushViewController(notificationsViewController, animated: true)
-        }
-    }
 }
 //MARK: - handle the map and creating patterns and points
 
@@ -282,7 +253,8 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
         }
     }
     // this displays the buttern pattern and stops
-    func displayBusRouteOnMap(color: UIColor, points: [BusPattern], stops: [BusStop]) {
+    func displayBusRouteOnMap(color: UIColor, points: [BusPattern], stops: [BusStop], route: BusRoute) {
+        self.showBusInformationPanel(route: route)
         var wayPoints: [CLLocationCoordinate2D] = []
         for point in points {
             wayPoints.append(point.location)
@@ -355,7 +327,7 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
             
             return renderer
         }
-        fatalError("Overlay is of the wrong type")
+        return MKOverlayRenderer()
     }
     // this provides the annotation view
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -392,7 +364,7 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
                 return MKMarkerAnnotationView()
             }
         }
-        fatalError("Annotation is of the wrong kind")
+        return MKMarkerAnnotationView()
     }
     // this displays the buses on the map
     func displayBusesOnMap(buses: [Bus]) {
@@ -563,6 +535,7 @@ extension HomeScreenViewController {
         DispatchQueue.main.async {
             if let fpc = self.menuFpc {
                 fpc.move(to: .full, animated: true)
+                fpc.panGestureRecognizer.isEnabled = false
                 if let directionsFpc = self.directionsFpc {
                         directionsFpc.move(to: .full, animated: true)
                 }
@@ -577,6 +550,7 @@ extension HomeScreenViewController {
         DispatchQueue.main.async {
             if let fpc = self.menuFpc {
                 fpc.move(to: .half, animated: true)
+                fpc.panGestureRecognizer.isEnabled = true
             }
         }
     }
@@ -667,7 +641,6 @@ extension HomeScreenViewController: RouteGenerationProgressDelegate {
 extension HomeScreenViewController: RouteDisplayerDelegate {
     func displayRouteOnMap(userLocation: Location, route: [(BusRoute, BusStop)], destination: Location, ETA: Double) {
         self.showDirectionsPanel(start: userLocation, end: destination, route: route)
-        self.dismissMenu()
         self.clearMap()
         if route.count == 0 {
             RouteGenerator.shared.findWalkingRoute(origin: userLocation.location, destination: destination.location) { walkingPath, progressDelegate  in
@@ -729,7 +702,7 @@ extension HomeScreenViewController: RouteDisplayerDelegate {
 extension HomeScreenViewController: FloatingPanelControllerDelegate, FloatingPanelBehavior {
     func floatingPanelWillEndDragging(_ fpc: FloatingPanelController, withVelocity velocity: CGPoint, targetState: UnsafeMutablePointer<FloatingPanelState>) {
         if fpc == self.menuFpc {
-            if fpc.state == .tip && targetState.pointee == .half {
+            if fpc.state == .tip && (targetState.pointee == .half || targetState.pointee == .full) {
                 self.clearMap()
                 if let region = self.region, let map = self.map {
                     map.setRegion(region, animated: true)
@@ -743,9 +716,12 @@ extension HomeScreenViewController: FloatingPanelControllerDelegate, FloatingPan
     
 }
 //MARK: - use this to show directions panel
-extension HomeScreenViewController: directionsPanelClosedDelegate {
+extension HomeScreenViewController: DirectionsPanelClosedDelegate {
     func closeDirectionsPanel() {
-        if let directionsFpc = directionsFpc, let menuFpc = menuFpc {
+        if let directionsFpc = directionsFpc, let menuFpc = menuFpc{
+            menuFpc.surfaceView.isUserInteractionEnabled = true
+            menuFpc.surfaceView.clearsContextBeforeDrawing = true
+            menuFpc.panGestureRecognizer.isEnabled = true
             menuFpc.show(animated: true)
             directionsFpc.willMove(toParent: nil)
             directionsFpc.hide(animated: true) {
@@ -763,7 +739,7 @@ extension HomeScreenViewController: directionsPanelClosedDelegate {
         directionsViewController.delegate = self
         directionsViewController.routeDisplayerDelegate = self
         directionsViewController.route = route
-        if let directionsFpc = directionsFpc, let fpc = menuFpc, let superViewMargins = superViewMargins {
+        if let directionsFpc, let menuFpc, let superViewMargins {
             directionsFpc.set(contentViewController: directionsViewController)
             self.view.addSubview(directionsFpc.view)
             directionsFpc.view.frame = self.view.bounds
@@ -779,26 +755,25 @@ extension HomeScreenViewController: directionsPanelClosedDelegate {
             directionsFpc.show(animated: true) {
                 directionsFpc.didMove(toParent: self)
             }
-//            directionsFpc.move(to: .tip, animated: true)
+            directionsFpc.move(to: .tip, animated: true)
             let appearance = SurfaceAppearance()
             appearance.cornerRadius = 15
             appearance.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
             directionsFpc.surfaceView.appearance = appearance
-            fpc.hide(animated: true)
-        }
-    }
-    func hideDirectionsPanel(){
-        if let directionsFpc = directionsFpc {
-            directionsFpc.hide(animated: true)
+            menuFpc.hide(animated: true)
+            menuFpc.panGestureRecognizer.isEnabled = false
+            menuFpc.surfaceView.isUserInteractionEnabled = false
         }
     }
 }
 //MARK: - use this to show the locations pane
 
-extension HomeScreenViewController: searchResultsPanelClosedDelegate {
+extension HomeScreenViewController: SearchResultsPanelClosedDelegate {
     func closeSearchResultsPanel() {
         if let menuFpc = menuFpc{
             hideLocationsPanel()
+            menuFpc.surfaceView.isUserInteractionEnabled = true
+            menuFpc.panGestureRecognizer.isEnabled = true
             menuFpc.show(animated: true)
         }
     }
@@ -809,7 +784,8 @@ extension HomeScreenViewController: searchResultsPanelClosedDelegate {
         searchResultsViewController.searchResults = results
         searchResultsViewController.routeDisplayerDelegate = self
         searchResultsViewController.closeDelegate = self
-        if let locationsFpc = locationsFpc, let fpc = menuFpc, let superViewMargins = superViewMargins {
+        if let locationsFpc, let menuFpc, let superViewMargins, let homeScreenMenu {
+            searchResultsViewController.refreshDelegate = homeScreenMenu
             locationsFpc.set(contentViewController: searchResultsViewController)
             self.view.addSubview(locationsFpc.view)
             locationsFpc.view.frame = self.view.bounds
@@ -829,11 +805,13 @@ extension HomeScreenViewController: searchResultsPanelClosedDelegate {
             appearance.cornerRadius = 15
             appearance.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
             locationsFpc.surfaceView.appearance = appearance
-            fpc.hide(animated: true)
+            menuFpc.hide(animated: true)
+            menuFpc.panGestureRecognizer.isEnabled = false
+            menuFpc.surfaceView.isUserInteractionEnabled = false
         }
     }
     func hideLocationsPanel(){
-        if let locationsFpc = locationsFpc {
+        if let locationsFpc {
             locationsFpc.willMove(toParent: nil)
             locationsFpc.hide(animated: true) {
                 locationsFpc.view.removeFromSuperview()
@@ -842,4 +820,88 @@ extension HomeScreenViewController: searchResultsPanelClosedDelegate {
         }
     }
 }
+//MARK: - Use to show bus info panel
+extension HomeScreenViewController: BusInformationPanelClosedDelegate {
+    func closeBusInformationPanel() {
+        if let busInfoFpc, let menuFpc {
+            menuFpc.surfaceView.isUserInteractionEnabled = true
+            menuFpc.panGestureRecognizer.isEnabled = true
+            menuFpc.show(animated: true)
+            busInfoFpc.willMove(toParent: nil)
+            busInfoFpc.hide(animated: true) {
+                busInfoFpc.view.removeFromSuperview()
+                busInfoFpc.removeFromParent()
+            }
+            self.clearMap()
+        }
+    }
+    
+    func showBusInformationPanel(route: BusRoute) {
+        busInfoFpc = FloatingPanelController()
+        let busInformationViewController = BusInformationViewController()
+        busInformationViewController.busNumber = route.number
+        busInformationViewController.busName = route.name
+        busInformationViewController.busColor = route.color
+        busInformationViewController.closeDelegate = self
+        busInformationViewController.favorited = route.isFavorited
+        if let busInfoFpc, let menuFpc, let superViewMargins, let homeScreenMenu {
+            busInformationViewController.refreshDelegate = homeScreenMenu
+            busInfoFpc.set(contentViewController: busInformationViewController)
+            self.view.addSubview(busInfoFpc.view)
+            busInfoFpc.view.frame = self.view.bounds
+            busInfoFpc.view.translatesAutoresizingMaskIntoConstraints = false
+            // add constraints
+            busInfoFpc.view.topAnchor.constraint(equalTo: superViewMargins.topAnchor).isActive = true
+            busInfoFpc.view.bottomAnchor.constraint(equalTo: superViewMargins.bottomAnchor).isActive = true
+            busInfoFpc.view.leadingAnchor.constraint(equalTo: superViewMargins.leadingAnchor).isActive = true
+            busInfoFpc.view.trailingAnchor.constraint(equalTo: superViewMargins.trailingAnchor).isActive = true
+            // add as child
+            self.addChild(busInfoFpc)
+            //  show
+            busInfoFpc.show(animated: true) {
+                busInfoFpc.didMove(toParent: self)
+            }
+            busInfoFpc.move(to: .tip, animated: true)
+            let appearance = SurfaceAppearance()
+            appearance.cornerRadius = 15
+            appearance.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+            busInfoFpc.surfaceView.appearance = appearance
+            menuFpc.hide(animated: true)
+            menuFpc.panGestureRecognizer.isEnabled = false
+            menuFpc.surfaceView.isUserInteractionEnabled = false
+        }
+    }
+}
+//MARK: - deal with location data
+extension HomeScreenViewController: CLLocationManagerDelegate {
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let authorizationStatus: CLAuthorizationStatus
+        if #available(iOS 14, *) {
+            authorizationStatus = manager.authorizationStatus
+        } else {
+            authorizationStatus = CLLocationManager.authorizationStatus()
+        }
+        switch authorizationStatus {
+        case .authorizedAlways:
+            manager.startUpdatingLocation()
+            break
+        case .restricted, .denied:
+            manager.requestAlwaysAuthorization()
+            break
+        case .notDetermined:
+            manager.requestAlwaysAuthorization()
+            break
+        default:
+            break
+        }
+        
+    }
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            LocationManager.shared.currentLocation = location
+        }
+    }
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
 
+    }
+}

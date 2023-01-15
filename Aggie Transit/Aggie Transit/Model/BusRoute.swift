@@ -8,11 +8,6 @@
 import Foundation
 import UIKit
 import MapKit
-protocol PathMakerDelegate {
-    func displayBusesOnMap(buses:[Bus])
-    func displayBusRouteOnMap(color: UIColor, points: [BusPattern], stops: [BusStop])
-    func displayPartialRouteOnMap(color: UIColor, points: [BusPattern], startStop: BusStop, endStop: BusStop)
-}
 class BusRoute: NSObject {
     var name: String
     var number: String
@@ -22,6 +17,7 @@ class BusRoute: NSObject {
     var stops: [BusStop]? 
     var pattern: [BusPattern]?
     var buses: [Bus]?
+    var isFavorited: Bool?
     var timeTable: [[String:Date?]]? {
         didSet {
             if let timeTable = timeTable {
@@ -108,7 +104,7 @@ class BusRoute: NSObject {
     // use this to display the route on the map
     func displayBusRoute() {
         if let delegate = delegate, let stops = stops, let pattern = pattern {
-            delegate.displayBusRouteOnMap(color: self.color, points: pattern, stops: stops)
+            delegate.displayBusRouteOnMap(color: self.color, points: pattern, stops: stops, route: self)
         }
     }
     // use this to display a partial bus route
@@ -129,6 +125,11 @@ class BusRoute: NSObject {
         }
         self.busDisplayTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true, block: { timer in
             if let delegate = self.delegate, let buses = self.buses {
+                if let currentlyRunning = self.currentlyRunning {
+                    if !currentlyRunning {
+                        timer.invalidate()
+                    }
+                }
                 delegate.displayBusesOnMap(buses: buses)
             }
         })

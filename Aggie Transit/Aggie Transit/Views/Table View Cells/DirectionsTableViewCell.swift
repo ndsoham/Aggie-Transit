@@ -20,7 +20,7 @@ class DirectionsTableViewCell: UITableViewCell {
     private var leftPadding: Double?
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layoutSubviews()
+        layoutIfNeeded()
     }
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -69,6 +69,7 @@ class DirectionsTableViewCell: UITableViewCell {
                     directionsLabel.text = directions
                     directionsLabel.translatesAutoresizingMaskIntoConstraints = false
                     directionsLabel.numberOfLines = 0
+                    directionsLabel.adjustsFontSizeToFitWidth = true
                     // add to view hierarchy and constrain
                     horizontalStack.addArrangedSubview(icon)
                     horizontalStack.addArrangedSubview(directionsLabel)

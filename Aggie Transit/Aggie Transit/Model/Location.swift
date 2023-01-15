@@ -12,6 +12,7 @@ import MapKit
     var name: String
     var location: CLLocationCoordinate2D
     var address: String
+    var distance: Double?
     init(name: String, location: CLLocationCoordinate2D, address: String) {
         self.name = name
         self.location = location

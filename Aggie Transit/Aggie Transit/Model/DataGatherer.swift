@@ -23,6 +23,7 @@ class DataGatherer {
     private let dateFormatter = DateFormatter()
     public var delegate: DataGathererDelegate?
     public var busRouteDelegate: BusRouteDataGathererDelegate?
+    var alertDelegate: AlertDelegate?
     init(){
         configureDateFormatter()
     }
@@ -31,12 +32,16 @@ class DataGatherer {
         if let url = url{
             let task = URLSession.shared.dataTask(with: url) { data, response, error in
                 if let error = error {
-                    print("An error has occured")
-                    print(error.localizedDescription)
+                    let alert = UIAlertController(title: "Alert", message: "\(error.localizedDescription)", preferredStyle: .actionSheet)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                    self.alertDelegate?.displayAlert(alert: alert)
                 }
                 else {
                     guard let data = data else {
-                        fatalError("An error has occured")
+                        let alert = UIAlertController(title: "Alert", message: "An error has occured.", preferredStyle: .actionSheet)
+                        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                        self.alertDelegate?.displayAlert(alert: alert)
+                        return
                     }
                     do {
                         let decoder = JSONDecoder()
@@ -80,7 +85,9 @@ class DataGatherer {
                             }
                         }
                     } catch {
-                        print("An error has occured: \(error)")
+                        let alert = UIAlertController(title: "Alert", message: "\(error.localizedDescription)", preferredStyle: .actionSheet)
+                        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                        self.alertDelegate?.displayAlert(alert: alert)
                     }
                 }
             }
