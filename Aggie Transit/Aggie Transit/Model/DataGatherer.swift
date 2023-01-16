@@ -76,7 +76,7 @@ class DataGatherer {
                                 busRouteDelegate.didGatherBuses(buses: buses)
                             }
                         }
-                        else {//if endpoint.split(separator: "/").last == "timetable" {
+                        else if endpoint.split(separator: "/").last == "timetable" {
                             
                             let timeData = try decoder.decode([[String:String?]].self, from: data)
                             let timeTable = self.gatherTime(data: timeData)
@@ -157,7 +157,7 @@ class DataGatherer {
                 if let value = value, let date = dateFormatter.date(from: value) {
                     rowCopy[key] = date
                 } else {
-                    rowCopy[key] = nil
+                    rowCopy[key] = nil as Date?
                 }
             }
             timeTable.append(rowCopy)

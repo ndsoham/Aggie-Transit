@@ -16,6 +16,23 @@ class BusInformationViewController: UIViewController {
     var busColor: UIColor?
     var busName: String?
     var favorited: Bool?
+    var timeTable: [[String:Date?]]?
+    var keyOrder: [String]? {
+        get {
+            if let timeTable{
+                let keys = Array(timeTable[timeTable.count/2].keys)
+                let sortedKeys = keys.sorted {
+                    if let firstDate = timeTable[timeTable.count/2][$0], let secondDate =  timeTable[timeTable.count/2][$1], let firstDate, let secondDate {
+                        return firstDate < secondDate
+                    } else {
+                        return false
+                    }
+                }
+                return sortedKeys
+            }
+           return nil
+        }
+    }
     private var safeMargins: UILayoutGuide?
     private var sidePadding: Double?
     private var topInset: Double?
@@ -27,6 +44,7 @@ class BusInformationViewController: UIViewController {
     var container: NSPersistentContainer! = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     var refreshDelegate: RefreshDelegate?
     var center: UNUserNotificationCenter = UNUserNotificationCenter.current()
+    private var timesTableView: UITableView?
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
@@ -52,7 +70,8 @@ class BusInformationViewController: UIViewController {
         safeMargins = self.view.safeAreaLayoutGuide
         topInset = 10
         sidePadding =  22.5 *  Double(self.view.frame.width/375)
-        if let headingLabel, let busNumberView, let closeButton, let safeMargins, let topInset, let sidePadding, let busName, let busNumber, let busColor, let busNumberLabel, let favoriteButton {
+        timesTableView = UITableView()
+        if let headingLabel, let busNumberView, let closeButton, let safeMargins, let topInset, let sidePadding, let busName, let busNumber, let busColor, let busNumberLabel, let favoriteButton, let timesTableView {
             busNumberLabel.translatesAutoresizingMaskIntoConstraints = false
             headingLabel.translatesAutoresizingMaskIntoConstraints = false
             busNumberView.translatesAutoresizingMaskIntoConstraints = false
@@ -103,7 +122,22 @@ class BusInformationViewController: UIViewController {
             favoriteButton.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -sidePadding/2).isActive = true
             favoriteButton.centerYAnchor.constraint(equalTo: headingLabel.centerYAnchor).isActive = true
             favoriteButton.addTarget(self, action: #selector(addBusRouteToFavorites), for: .touchUpInside)
-            
+            // set up the table view
+            timesTableView.register(TimeTableTableViewCell.self, forCellReuseIdentifier: "timeTableTableViewCell")
+            timesTableView.allowsSelection = false
+            timesTableView.translatesAutoresizingMaskIntoConstraints = false
+            timesTableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            timesTableView.separatorColor = UIColor(named: "borderColor")
+            timesTableView.dataSource = self
+            timesTableView.delegate = self
+            timesTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+            timesTableView.rowHeight = busNumberViewHeight
+            // add to view hierarchy and constrain
+            self.view.addSubview(timesTableView)
+            timesTableView.topAnchor.constraint(equalTo: headingLabel.bottomAnchor, constant: topInset).isActive = true
+            timesTableView.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor, constant: sidePadding).isActive = true
+            timesTableView.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -sidePadding).isActive = true
+            timesTableView.bottomAnchor.constraint(equalTo: safeMargins.bottomAnchor).isActive = true
         }
     }
 }
@@ -143,5 +177,83 @@ extension BusInformationViewController {
                 }
             }
         }
+    }
+}
+//MARK: - deal with tableview delegate
+extension BusInformationViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let timeTable, let first = timeTable.first, first[" "] != nil as Date? {
+            return timeTable.count
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "timeTableTableViewCell") as! TimeTableTableViewCell
+        if let timeTable, let keyOrder = keyOrder {
+            let row = timeTable[indexPath.row]
+            var dates: [Date?] = []
+            for key in keyOrder {
+                if let date = row[key] {
+                    dates.append(date)
+                }
+            }
+            cell.times = dates
+            
+        }
+        if indexPath.row % 2 == 0 {
+            cell.cellColor = UIColor(named: "menuColor")
+        } else {
+            cell.cellColor = UIColor(named: "launchScreenBackgroundColor")
+        }
+        return cell
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return busNumberViewHeight
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let view = UIView()
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+        let safeMargins = view.safeAreaLayoutGuide
+        let labelStack = UIStackView()
+        labelStack.axis = .horizontal
+        labelStack.translatesAutoresizingMaskIntoConstraints = false
+        labelStack.distribution = .fill
+        view.addSubview(labelStack)
+        labelStack.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor).isActive = true
+        labelStack.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor).isActive = true
+        labelStack.bottomAnchor.constraint(equalTo: safeMargins.bottomAnchor).isActive = true
+        labelStack.topAnchor.constraint(equalTo: safeMargins.topAnchor).isActive = true
+        let labelAttributes: [NSAttributedString.Key:Any] = [
+            .font:UIFont.boldSystemFont(ofSize: 11),
+            .foregroundColor:UIColor(named: "textColor") ?? .black
+        ]
+        if let keyOrder, let topInset {
+            for key in keyOrder {
+                if key == " " {
+                    let label = UILabel()
+                    label.text = "No service scheduled."
+                    label.translatesAutoresizingMaskIntoConstraints = false
+                    view.addSubview(label)
+                    label.topAnchor.constraint(equalTo: safeMargins.topAnchor, constant: topInset).isActive = true
+                    label.centerXAnchor.constraint(equalTo: safeMargins.centerXAnchor).isActive = true
+                    return view
+                }
+                let label = UILabel()
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.widthAnchor.constraint(equalToConstant: tableView.frame.width/CGFloat(keyOrder.count)).isActive = true
+                let index = key.index(key.startIndex, offsetBy: 36)
+                label.attributedText = NSAttributedString(string: (String(key[index...])), attributes: labelAttributes)
+                label.textAlignment = .center
+                label.numberOfLines = 3
+                labelStack.addArrangedSubview(label)
+            }
+        }
+        return view
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return tableView.rowHeight * 2
     }
 }

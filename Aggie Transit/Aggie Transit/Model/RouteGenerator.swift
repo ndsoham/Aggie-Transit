@@ -91,9 +91,9 @@ class RouteGenerator {
                             let destinationStopMapItem = MKMapItem(placemark: MKPlacemark(coordinate: desStop.location))
                             let destinationMapItem = MKMapItem(placemark: MKPlacemark(coordinate: destination.location))
                             destinationWalkTime = self.findWalkingETA(source: destinationStopMapItem, destination: destinationMapItem)
-                            print(originWalkTime, busArrivalTime, firstRideTime, destinationWalkTime)
+//                            print(originWalkTime, busArrivalTime, firstRideTime, destinationWalkTime)
                             travelTime = originWalkTime + busArrivalTime + firstRideTime + destinationWalkTime
-                            print(userLocation.address, "->", userStop.name, "->", "(\(userRoute.name) - \(userRoute.number))", "->", desStop.name, "->", destination.name, ": ", travelTime)
+//                            print(userLocation.address, "->", userStop.name, "->", "(\(userRoute.name) - \(userRoute.number))", "->", desStop.name, "->", destination.name, ": ", travelTime)
                             if travelTime <= minTravelTime && (busArrivalTime>0 && originWalkTime>0 && firstRideTime>0 && destinationWalkTime>0) {
                                 minTravelTime = travelTime
                                 route = (userLocation, [(userRoute, userStop), (desRoute, desStop)], destination, travelTime)

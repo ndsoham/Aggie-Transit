@@ -18,7 +18,7 @@ class HomeScreenMenuViewController: UIViewController {
     private var recentsTableView: UITableView?
     private var favoritesTableView: UITableView?
     private var allRoutesTableView: UITableView?
-    private var scrollView: UIScrollView?
+    var scrollView: UIScrollView?
     private var height: Double?
     private var width: Double?
     private var searchBarHeight: Double?
@@ -296,7 +296,7 @@ extension HomeScreenMenuViewController: UITableViewDataSource {
                 if indexPath.section == 0 {
                     let boldedIcon = NSAttributedString(string: onCampusRoutes[indexPath.row].number, attributes: attributes)
                     cell.icon = boldedIcon
-                    cell.text = onCampusRoutes[indexPath.row].name
+                    cell.text = NSAttributedString(string: onCampusRoutes[indexPath.row].name, attributes: attributes)
                     cell.cellColor = onCampusRoutes[indexPath.row].color
                     onCampusRoutes[indexPath.row].delegate = delegate
                     return cell
@@ -304,7 +304,7 @@ extension HomeScreenMenuViewController: UITableViewDataSource {
                 else if indexPath.section == 1 {
                     let boldedIcon = NSAttributedString(string: offCampusRoutes[indexPath.row].number,attributes: attributes)
                     cell.icon = boldedIcon
-                    cell.text = offCampusRoutes[indexPath.row].name
+                    cell.text = NSAttributedString(string: offCampusRoutes[indexPath.row].name, attributes: attributes)
                     cell.cellColor = offCampusRoutes[indexPath.row].color
                     offCampusRoutes[indexPath.row].delegate = delegate
                     return cell
@@ -320,7 +320,7 @@ extension HomeScreenMenuViewController: UITableViewDataSource {
             if let pathDelegate, let favoriteBusRoutes {
                 let boldedIcon = NSAttributedString(string: favoriteBusRoutes[indexPath.row].number, attributes: attributes)
                 cell.icon = boldedIcon
-                cell.text = favoriteBusRoutes[indexPath.row].name
+//                cell.text = favoriteBusRoutes[indexPath.row].name
                 cell.cellColor = favoriteBusRoutes[indexPath.row].color
                 favoriteBusRoutes[indexPath.row].delegate = pathDelegate
                 return cell

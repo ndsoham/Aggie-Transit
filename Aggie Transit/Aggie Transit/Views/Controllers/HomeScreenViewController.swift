@@ -141,9 +141,13 @@ class HomeScreenViewController: UIViewController {
                                     homeScreenMenu.routeDisplayerDelegate = self
                                     homeScreenMenu.map = map
                                     RouteGenerator.shared.alertDelegate = homeScreenMenu
+                                    
+                                    fpc.set(contentViewController: homeScreenMenu)
+                                    // add and show the views managed by the floating panel controller object to self.view
+                                    if let scrollView = homeScreenMenu.scrollView {
+                                        fpc.track(scrollView: scrollView)
+                                    }
                                 }
-                                fpc.set(contentViewController: homeScreenMenu)
-                                // add and show the views managed by the floating panel controller object to self.view
                                 self.view.addSubview(fpc.view)
                                 fpc.view.frame = self.view.bounds
                                 fpc.view.translatesAutoresizingMaskIntoConstraints = false
@@ -333,8 +337,9 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation.isKind(of: BusAnnotation.self), let annotation = annotation as? BusAnnotation, let direction = annotation.direction {
             let view = MKAnnotationView()
-            view.image = UIImage(named: "bus")?.rotate(radians: rad(direction))
+            view.image = UIImage(named: "bus")?.rotate(radians: rad(direction-mapView.camera.heading))
             view.canShowCallout = true
+            
             return view
         }
         
@@ -842,6 +847,7 @@ extension HomeScreenViewController: BusInformationPanelClosedDelegate {
         busInformationViewController.busNumber = route.number
         busInformationViewController.busName = route.name
         busInformationViewController.busColor = route.color
+        busInformationViewController.timeTable = route.timeTable
         busInformationViewController.closeDelegate = self
         busInformationViewController.favorited = route.isFavorited
         if let busInfoFpc, let menuFpc, let superViewMargins, let homeScreenMenu {
