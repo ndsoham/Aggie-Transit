@@ -9,17 +9,16 @@ import Foundation
 import UIKit
 
 class SearchResultsTableViewCell: UITableViewCell {
-    private var locationNameLabel: UILabel?
+    private var locationNameLabel: UILabel = UILabel()
     public var locationName: String?
-    private var verticalTextStack: UIStackView?
-    private var locationAddressLabel: UILabel?
+    private var verticalTextStack: UIStackView = UIStackView()
+    private var locationAddressLabel: UILabel = UILabel()
     public var locationAddress: String?
-    private var locationDistanceLabel: UILabel?
+    private var locationDistanceLabel: UILabel = UILabel()
     public var locationDistance: String?
     private var safeLayoutMargins: UILayoutGuide?
     private var horizontalStackPadding: Double?
     private var verticalStackSpacing: Double = 2.5
-    private var baseView: UIView?
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layoutSubviews()
@@ -29,12 +28,10 @@ class SearchResultsTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     override func prepareForReuse() {
-        self.locationNameLabel?.text = nil
-        self.locationDistanceLabel?.text = nil
-        self.locationAddressLabel?.text = nil
         super.prepareForReuse()
-        self.clearsContextBeforeDrawing = true
-       
+        self.locationName = nil
+        self.locationDistance = nil
+        self.locationAddress = nil
     }
 
     override func layoutSubviews() {
@@ -44,28 +41,11 @@ class SearchResultsTableViewCell: UITableViewCell {
         horizontalStackPadding = 22.5 * Double(self.contentView.frame.width/375)
         // constrain the stack view
         safeLayoutMargins = self.contentView.safeAreaLayoutGuide
-        if let safeLayoutMargins = safeLayoutMargins, let horizontalStackPadding = horizontalStackPadding {
-            // configure the base view - this is added so text doesnt get magically bolder
-            baseView = UIView()
-            if let baseView = baseView {
-                baseView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                baseView.translatesAutoresizingMaskIntoConstraints = false
-                // add to view hierarchy
-                self.contentView.addSubview(baseView)
-                // add constraints
-                baseView.leadingAnchor.constraint(equalTo: safeLayoutMargins.leadingAnchor).isActive = true
-                baseView.trailingAnchor.constraint(equalTo: safeLayoutMargins.trailingAnchor).isActive = true
-                baseView.topAnchor.constraint(equalTo: safeLayoutMargins.topAnchor).isActive = true
-                baseView.bottomAnchor.constraint(equalTo: safeLayoutMargins.bottomAnchor).isActive = true
-
-            }
-            // configure the vertical stack
-            verticalTextStack = UIStackView()
-            if let verticalTextStack = verticalTextStack {
+        if let safeLayoutMargins, let horizontalStackPadding {
                 // configure the text stack
                 verticalTextStack.spacing = verticalStackSpacing
                 verticalTextStack.alignment = .leading
-                verticalTextStack.distribution = .equalSpacing
+                verticalTextStack.distribution = .fill
                 verticalTextStack.axis = .vertical
                 verticalTextStack.translatesAutoresizingMaskIntoConstraints = false
                 // add to view hierarchy
@@ -73,12 +53,9 @@ class SearchResultsTableViewCell: UITableViewCell {
                 // add contraints
                 verticalTextStack.leadingAnchor.constraint(equalTo: safeLayoutMargins.leadingAnchor, constant: horizontalStackPadding).isActive = true
                 verticalTextStack.centerYAnchor.constraint(equalTo: safeLayoutMargins.centerYAnchor).isActive = true
-                verticalTextStack.widthAnchor.constraint(equalToConstant: self.contentView.frame.width * 0.75).isActive = true
-                // create the labels with relevant attributes
-                locationNameLabel = UILabel()
-                locationAddressLabel = UILabel()
-                locationDistanceLabel = UILabel()
-                if let locationName = locationName, let locationAddress = locationAddress, let locationDistance = locationDistance, let locationNameLabel = locationNameLabel, let locationAddressLabel = locationAddressLabel, let locationDistanceLabel = locationDistanceLabel {
+                verticalTextStack.widthAnchor.constraint(equalToConstant: self.contentView.frame.width * 0.8).isActive = true
+
+                if let locationName = locationName, let locationAddress = locationAddress, let locationDistance = locationDistance {
                     let nameAttributes: [NSAttributedString.Key:Any] = [
                         .font:UIFont.boldSystemFont(ofSize: 18),
                         .foregroundColor:UIColor(named: "textColor") ?? .black
@@ -93,9 +70,11 @@ class SearchResultsTableViewCell: UITableViewCell {
                     let attributedAddress = NSAttributedString(string: locationAddress, attributes: addressAttributes)
                     locationAddressLabel.attributedText = attributedAddress
                     locationAddressLabel.textAlignment = .left
+                    locationAddressLabel.lineBreakMode = .byTruncatingTail
                     let attributedDistance = NSAttributedString(string: locationDistance, attributes: addressAttributes)
                     locationDistanceLabel.attributedText = attributedDistance
                     locationDistanceLabel.translatesAutoresizingMaskIntoConstraints = false
+                    locationDistanceLabel.lineBreakMode = .byTruncatingTail
                     // add to view hierarchy
                     verticalTextStack.addArrangedSubview(locationNameLabel)
                     verticalTextStack.addArrangedSubview(locationAddressLabel)
@@ -105,7 +84,7 @@ class SearchResultsTableViewCell: UITableViewCell {
                     locationDistanceLabel.trailingAnchor.constraint(equalTo: safeLayoutMargins.trailingAnchor, constant: -horizontalStackPadding).isActive = true
                     locationDistanceLabel.centerYAnchor.constraint(equalTo: safeLayoutMargins.centerYAnchor).isActive = true
                 }
-            }
+            
         }
         
         

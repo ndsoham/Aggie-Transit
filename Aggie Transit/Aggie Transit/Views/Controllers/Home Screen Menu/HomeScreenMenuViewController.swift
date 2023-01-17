@@ -14,10 +14,10 @@ protocol LocationIdentifierDelegate {
     func showLocationOnMap(results: [Location])
 }
 class HomeScreenMenuViewController: UIViewController {
-    public var searchBar: UISearchBar?
-    private var recentsTableView: UITableView?
-    private var favoritesTableView: UITableView?
-    private var allRoutesTableView: UITableView?
+    public var searchBar: UISearchBar = UISearchBar()
+    private var recentsTableView: UITableView = UITableView()
+    private var allRoutesTableView: UITableView = UITableView()
+    private var notificationsTableView: UITableView = UITableView()
     var scrollView: UIScrollView?
     private var height: Double?
     private var width: Double?
@@ -25,12 +25,12 @@ class HomeScreenMenuViewController: UIViewController {
     private var pageControllerHeight: Double?
     private var scrollMargins: UILayoutGuide?
     private var safeMargins: UILayoutGuide?
-    private var pageController: UISegmentedControl?
+    private var pageController: UISegmentedControl = UISegmentedControl()
     private var dataGatherer: DataGatherer = DataGatherer()
     private var onCampusRoutes: [BusRoute]?
     private var offCampusRoutes: [BusRoute]?
     private var recentLocations: [RecentLocation]?
-    private var favoriteBusRoutes: [BusRoute]?
+    private var notifications: [BusNotification]?
     private var programmedScroll: Bool = false
     public var pathDelegate: PathMakerDelegate?
     public var locationIdentifierDelegate: LocationIdentifierDelegate?
@@ -52,39 +52,33 @@ class HomeScreenMenuViewController: UIViewController {
         setUpDataGatherer()
         checkContainerStatus()
         fetchRecentLocations()
-        
-    }
-    //MARK: - Fetch favorite bus routes
-    func fetchFavoriteBusRoutes(allRoutes: [BusRoute]) {
-        
     }
     //MARK: - Fetch recent locations
     func fetchRecentLocations() {
-        if let recentsTableView {
-            do {
-                let request = RecentLocation.fetchRequest() as NSFetchRequest<RecentLocation>
-                let sort = NSSortDescriptor(key: "date", ascending: false)
-                request.sortDescriptors = [sort]
-                var retrievedLocations = try container.viewContext.fetch(request)
-                // delete some if more than ten locations are present
-                if retrievedLocations.count > 10 {
-                    retrievedLocations = Array(retrievedLocations[...9])
-                    let locationsToBeDeleted = retrievedLocations[10...]
-                    for location in locationsToBeDeleted {
-                        container.viewContext.delete(location)
-                    }
+        do {
+            let request = RecentLocation.fetchRequest() as NSFetchRequest<RecentLocation>
+            let sort = NSSortDescriptor(key: "date", ascending: false)
+            request.sortDescriptors = [sort]
+            var retrievedLocations = try container.viewContext.fetch(request)
+            // delete some if more than ten locations are present
+            if retrievedLocations.count > 10 {
+                retrievedLocations = Array(retrievedLocations[...9])
+                let locationsToBeDeleted = retrievedLocations[10...]
+                for location in locationsToBeDeleted {
+                    container.viewContext.delete(location)
                 }
-                recentLocations = retrievedLocations
-                try container.viewContext.save()
-                DispatchQueue.main.async {
-                    recentsTableView.reloadData()
-                }
-            } catch {
-                let alert = UIAlertController(title: "Alert", message: "\(error.localizedDescription)", preferredStyle: .actionSheet)
-                alert.addAction(UIAlertAction(title: "OK", style: .cancel))
-                self.present(alert, animated: true)
             }
+            recentLocations = retrievedLocations
+            try container.viewContext.save()
+            DispatchQueue.main.async {
+                self.recentsTableView.reloadData()
+            }
+        } catch {
+            let alert = UIAlertController(title: "Alert", message: "\(error.localizedDescription)", preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+            self.present(alert, animated: true)
         }
+        
     }
     //MARK: - check container status
     func checkContainerStatus() {
@@ -111,10 +105,9 @@ class HomeScreenMenuViewController: UIViewController {
             let searchBarHeight = 52 * (height/812)
             let pageControllerHeight = 30 * (height/812)
             let scrollViewHeight = height - searchBarHeight - pageControllerHeight - topPadding*3
-            searchBar = UISearchBar()
             pageController = UISegmentedControl()
             scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: scrollViewWidth, height: scrollViewHeight))
-            if let searchBar, let pageController, let scrollView {
+            if let scrollView {
                 searchBar.placeholder = "Memorial Student Center (MSC)"
                 searchBar.searchBarStyle = .minimal
                 searchBar.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
@@ -136,10 +129,9 @@ class HomeScreenMenuViewController: UIViewController {
                 // configure page controller
                 pageController.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                 pageController.insertSegment(with: UIImage(systemName: "mappin.and.ellipse"), at: 0, animated: false)
-                pageController.insertSegment(with: UIImage(systemName: "bookmark"), at: 1, animated: false)
-                pageController.insertSegment(with: UIImage(systemName: "bus.fill"), at: 2, animated: false)
-                pageController.insertSegment(with: UIImage(systemName: "exclamationmark.circle"), at: 3, animated: false)
-                pageController.selectedSegmentIndex = 2
+                pageController.insertSegment(with: UIImage(systemName: "bus.fill"), at: 1, animated: false)
+                pageController.insertSegment(with: UIImage(systemName: "exclamationmark.circle"), at: 2, animated: false)
+                pageController.selectedSegmentIndex = 1
                 pageController.translatesAutoresizingMaskIntoConstraints = false
                 pageController.isUserInteractionEnabled = true
                 pageController.addTarget(self, action: #selector(handleControlPageChanged), for: .valueChanged)
@@ -167,58 +159,54 @@ class HomeScreenMenuViewController: UIViewController {
                 scrollView.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -edgePadding).isActive = true
                 scrollView.bottomAnchor.constraint(equalTo: safeMargins.bottomAnchor).isActive = true
                 // configure table views
-                recentsTableView = UITableView()
-                favoritesTableView = UITableView()
-                allRoutesTableView = UITableView()
-                
                 scrollMargins = scrollView.safeAreaLayoutGuide
-                if let recentsTableView, let favoritesTableView, let allRoutesTableView {
-                    
-                    // register the cell
-                    recentsTableView.register(RecentLocationsTableViewCell.self, forCellReuseIdentifier: "recentLocationsTableViewCell")
-                    favoritesTableView.register(BusRouteTableViewCell.self, forCellReuseIdentifier: "busRoutesTableViewCell")
-                    allRoutesTableView.register(BusRouteTableViewCell.self, forCellReuseIdentifier: "busRoutesTableViewCell")
-                    // configure the recents table view
-                    recentsTableView.dataSource = self
-                    recentsTableView.delegate = self
-                    recentsTableView.translatesAutoresizingMaskIntoConstraints = false
-                    recentsTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                    recentsTableView.separatorStyle = .none
-                    recentsTableView.allowsSelection = true
-                    recentsTableView.allowsMultipleSelection = false
-                    recentsTableView.frame = CGRect(x: 0, y: 0, width: scrollViewWidth, height: scrollViewHeight-54)
-                    // configure the favorites table view
-                    favoritesTableView.dataSource = self
-                    favoritesTableView.delegate = self
-                    favoritesTableView.translatesAutoresizingMaskIntoConstraints = false
-                    favoritesTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                    favoritesTableView.separatorStyle = .none
-                    favoritesTableView.allowsSelection = true
-                    favoritesTableView.frame = CGRect(x: scrollViewWidth, y: 0, width: scrollViewWidth, height: scrollViewHeight-54)
-                    // configure the all routes table view
-                    allRoutesTableView.allowsMultipleSelection = false
-                    allRoutesTableView.allowsSelection = true
-                    allRoutesTableView.dataSource = self
-                    allRoutesTableView.delegate = self
-                    allRoutesTableView.translatesAutoresizingMaskIntoConstraints = false
-                    allRoutesTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                    allRoutesTableView.separatorStyle = .none
-                    allRoutesTableView.frame = CGRect(x: scrollViewWidth*2, y: 0, width: scrollViewWidth, height: scrollViewHeight-54)
-                    allRoutesTableView.scrollsToTop = true
-                    scrollView.scrollRectToVisible(CGRect(x: scrollViewWidth*Double(pageController.selectedSegmentIndex), y: 0, width: scrollViewWidth, height: scrollViewHeight), animated: false)
-                    scrollView.addSubview(recentsTableView)
-                    scrollView.addSubview(favoritesTableView)
-                    scrollView.addSubview(allRoutesTableView)
-                }
+                // register the cell
+                recentsTableView.register(RecentLocationsTableViewCell.self, forCellReuseIdentifier: "recentLocationsTableViewCell")
+                allRoutesTableView.register(BusRouteTableViewCell.self, forCellReuseIdentifier: "busRoutesTableViewCell")
+                notificationsTableView.register(NotificationsTableViewCell.self, forCellReuseIdentifier: "notificationsTableViewCell")
+                // configure the recents table view
+                recentsTableView.dataSource = self
+                recentsTableView.delegate = self
+                recentsTableView.translatesAutoresizingMaskIntoConstraints = false
+                recentsTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                recentsTableView.separatorStyle = .none
+                recentsTableView.allowsSelection = true
+                recentsTableView.allowsMultipleSelection = false
+                recentsTableView.frame = CGRect(x: 0, y: 0, width: scrollViewWidth, height: scrollViewHeight-54)
+                // configure the all routes table view
+                allRoutesTableView.allowsMultipleSelection = false
+                allRoutesTableView.allowsSelection = true
+                allRoutesTableView.dataSource = self
+                allRoutesTableView.delegate = self
+                allRoutesTableView.translatesAutoresizingMaskIntoConstraints = false
+                allRoutesTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                allRoutesTableView.separatorStyle = .none
+                allRoutesTableView.frame = CGRect(x: scrollViewWidth, y: 0, width: scrollViewWidth, height: scrollViewHeight-54)
+                allRoutesTableView.scrollsToTop = true
+                // configure the notifications table view
+                notificationsTableView.dataSource = self
+                notificationsTableView.delegate = self
+                notificationsTableView.translatesAutoresizingMaskIntoConstraints = false
+                notificationsTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
+                notificationsTableView.separatorStyle = .none
+                notificationsTableView.allowsSelection = false
+                notificationsTableView.allowsMultipleSelection = false
+                notificationsTableView.frame = CGRect(x: scrollViewWidth*2, y: 0, width: scrollViewWidth, height: scrollViewHeight-54)
+                scrollView.scrollRectToVisible(CGRect(x: scrollViewWidth*Double(pageController.selectedSegmentIndex), y: 0, width: scrollViewWidth, height: scrollViewHeight), animated: false)
+                scrollView.addSubview(recentsTableView)
+                scrollView.addSubview(allRoutesTableView)
+                scrollView.addSubview(notificationsTableView)
+                
             }
         }
     }
     
-
+    
     //MARK: - Setup data gatherer
     func setUpDataGatherer(){
         dataGatherer.delegate = self
         dataGatherer.gatherData(endpoint: "routes")
+        dataGatherer.gatherData(endpoint: "announcements")
         dataGatherer.alertDelegate = self
     }
 }
@@ -232,8 +220,7 @@ extension HomeScreenMenuViewController: UITableViewDataSource {
         }
         else if tableView == recentsTableView {
             return 1
-        }
-        else if tableView == favoritesTableView {
+        } else if tableView == notificationsTableView {
             return 1
         }
         return -1
@@ -251,11 +238,11 @@ extension HomeScreenMenuViewController: UITableViewDataSource {
         if tableView == recentsTableView {
             return "Recent Locations"
         }
-        else {
-            return "Routes"
+        else if tableView == notificationsTableView {
+            return "Notifications"
         }
+        return ""
     }
-
     // provide number of rows in section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == allRoutesTableView {
@@ -270,17 +257,16 @@ extension HomeScreenMenuViewController: UITableViewDataSource {
                 }
             }
         }
-        else if tableView == favoritesTableView {
-            if var favoriteBusRoutes {
-                return favoriteBusRoutes.count
-            }
-            return 0
-        }
         else if tableView == recentsTableView {
             if let recentLocations {
                 return recentLocations.count
             }
-            return 0
+
+        }
+        else if tableView == notificationsTableView {
+            if let notifications {
+                return notifications.count
+            }
         }
         return -1
     }
@@ -293,10 +279,10 @@ extension HomeScreenMenuViewController: UITableViewDataSource {
                     .font:UIFont.boldSystemFont(ofSize: 17),
                     .foregroundColor:UIColor(named: "textColor") ?? .black
                 ]
-                if indexPath.section == 0 {
+                if indexPath.section == 0 && cell.icon == nil, cell.busName == nil, cell.cellColor == nil {
                     let boldedIcon = NSAttributedString(string: onCampusRoutes[indexPath.row].number, attributes: attributes)
                     cell.icon = boldedIcon
-                    cell.text = NSAttributedString(string: onCampusRoutes[indexPath.row].name, attributes: attributes)
+                    cell.busName = NSAttributedString(string: onCampusRoutes[indexPath.row].name, attributes: attributes)
                     cell.cellColor = onCampusRoutes[indexPath.row].color
                     onCampusRoutes[indexPath.row].delegate = delegate
                     return cell
@@ -304,42 +290,38 @@ extension HomeScreenMenuViewController: UITableViewDataSource {
                 else if indexPath.section == 1 {
                     let boldedIcon = NSAttributedString(string: offCampusRoutes[indexPath.row].number,attributes: attributes)
                     cell.icon = boldedIcon
-                    cell.text = NSAttributedString(string: offCampusRoutes[indexPath.row].name, attributes: attributes)
+                    cell.busName = NSAttributedString(string: offCampusRoutes[indexPath.row].name, attributes: attributes)
                     cell.cellColor = offCampusRoutes[indexPath.row].color
                     offCampusRoutes[indexPath.row].delegate = delegate
                     return cell
                 }
             }
         }
-        else if tableView == favoritesTableView {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "busRoutesTableViewCell") as! BusRouteTableViewCell
-            let attributes: [NSAttributedString.Key:Any] = [
-                .font:UIFont.boldSystemFont(ofSize: 17),
-                .foregroundColor:UIColor(named: "textColor") ?? .black
-            ]
-            if let pathDelegate, let favoriteBusRoutes {
-                let boldedIcon = NSAttributedString(string: favoriteBusRoutes[indexPath.row].number, attributes: attributes)
-                cell.icon = boldedIcon
-//                cell.text = favoriteBusRoutes[indexPath.row].name
-                cell.cellColor = favoriteBusRoutes[indexPath.row].color
-                favoriteBusRoutes[indexPath.row].delegate = pathDelegate
-                return cell
-            }
-            
-        }
         else if tableView == recentsTableView {
             if let recentLocations {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "recentLocationsTableViewCell") as! RecentLocationsTableViewCell
-                cell.text = recentLocations[indexPath.row].name
-                cell.address = recentLocations[indexPath.row].address
+                if cell.name == nil, cell.address == nil {
+                    cell.name = recentLocations[indexPath.row].name
+                    cell.address = recentLocations[indexPath.row].address
+                    return cell
+                }
+            }
+        }
+        else if tableView == notificationsTableView {
+            if let notifications {
+                let cell = tableView.dequeueReusableCell(withIdentifier:"notificationsTableViewCell") as! NotificationsTableViewCell
+                cell.alertTitle = notifications[indexPath.row].title
+                cell.alertContent = notifications[indexPath.row].content
                 return cell
             }
         }
-        
         return UITableViewCell()
     }
     // provide a height for each row
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if tableView == notificationsTableView {
+            return 165
+        }
         return 110
     }
 }
@@ -384,16 +366,11 @@ extension HomeScreenMenuViewController {
         // end editing
         self.view.endEditing(true)
         // scroll each table view to the top when the associated button is pressed
-        if let allRoutesTableView = allRoutesTableView, let recentsTableView = recentsTableView, let favoritesTableView = favoritesTableView {
-            if sender.selectedSegmentIndex == 0 {
-                recentsTableView.setContentOffset(.zero, animated: false)
-            }
-            else if sender.selectedSegmentIndex == 1 {
-                favoritesTableView.setContentOffset(.zero, animated: false)
-            }
-            else if sender.selectedSegmentIndex == 2 {
-                allRoutesTableView.setContentOffset(.zero, animated: false)
-            }
+        if sender.selectedSegmentIndex == 0 {
+            recentsTableView.setContentOffset(.zero, animated: false)
+        }
+        else if sender.selectedSegmentIndex == 1 {
+            allRoutesTableView.setContentOffset(.zero, animated: false)
         }
         // change the scroll views position based on the segmented control's selection
         if let scrollView = scrollView {
@@ -414,9 +391,14 @@ extension HomeScreenMenuViewController: DataGathererDelegate {
         self.onCampusRoutes = onCampusRoutes
         self.offCampusRoutes = offCampusRoutes
         RouteGenerator.shared.allRoutes = onCampusRoutes + offCampusRoutes
-        fetchFavoriteBusRoutes(allRoutes: onCampusRoutes + offCampusRoutes)
         DispatchQueue.main.async {
-            self.allRoutesTableView?.reloadData()
+            self.allRoutesTableView.reloadData()
+        }
+    }
+    func didGatherNotifications(notifications: [BusNotification]) {
+        self.notifications = notifications
+        DispatchQueue.main.async {
+            self.notificationsTableView.reloadData()
         }
     }
 }
@@ -537,7 +519,7 @@ extension HomeScreenMenuViewController: MKLocalSearchCompleterDelegate {
 extension HomeScreenMenuViewController {
     func configureSearchResultsMenu() {
         cellNib = UINib(nibName: "SearchResultsDropDownCell", bundle: nil)
-        if let searchResults = searchResults, let searchBar = searchBar, let cellNib = cellNib {
+        if let searchResults = searchResults, let cellNib = cellNib {
             searchResults.anchorView = searchBar.searchTextField
             searchResults.width = searchBar.searchTextField.frame.width
             searchResults.cellNib = cellNib
@@ -552,9 +534,7 @@ extension HomeScreenMenuViewController {
             searchResults.selectionBackgroundColor = modifiedLightGray
             searchResults.selectedTextColor = UIColor(named: "textColor")!
             searchResults.selectionAction = { itemIndex, name in
-                if let searchBar = self.searchBar {
-                    searchBar.text = self.addresses[itemIndex] == "Search Nearby" ? self.options[itemIndex]:self.options[itemIndex]+" "+self.addresses[itemIndex]
-                }
+                self.searchBar.text = self.addresses[itemIndex] == "Search Nearby" ? self.options[itemIndex]:self.options[itemIndex]+" "+self.addresses[itemIndex]
             }
             searchResults.separatorColor = UIColor(named: "borderColor 1") ?? .clear
             
@@ -567,8 +547,4 @@ extension HomeScreenMenuViewController: RefreshDelegate {
     func refreshRecentLocations() {
         self.fetchRecentLocations()
     }
-    func refreshFavoriteBusRoutes() {
-        self.refreshFavoriteBusRoutes()
-    }
-    
 }

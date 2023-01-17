@@ -79,7 +79,7 @@ class BusRoute: NSObject {
     }
     // this gathers time data
     func gatherTimeTable(){
-        let endpoint = "route/\(number)/timetable"
+        let endpoint = "route/\(number)/timetable/01-17"
         dataGatherer.busRouteDelegate = self
         dataGatherer.gatherData(endpoint: endpoint)
     }
@@ -198,8 +198,6 @@ extension BusRoute: BusRouteDataGathererDelegate {
                     }
                     if let startTime = self.startTime, let stopTime = self.stopTime {
                         let now = NSDate.now
-                        let formatter = DateFormatter()
-                        formatter.setLocalizedDateFormatFromTemplate("hh:mm a")
                         if startTime < now && stopTime > now {
                             self.currentlyRunning = true
                         } else {

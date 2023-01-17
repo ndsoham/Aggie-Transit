@@ -63,6 +63,7 @@ class SearchResultsViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor).isActive = true
             tableView.topAnchor.constraint(equalTo: safeMargins.topAnchor).isActive = true
             tableView.bottomAnchor.constraint(equalTo: safeMargins.bottomAnchor).isActive = true
+        
         }
     }
 }
@@ -100,10 +101,12 @@ extension SearchResultsViewController: UITableViewDelegate, UITableViewDataSourc
         }
         else if let searchResults = searchResults {
             let cell = tableView.dequeueReusableCell(withIdentifier:"searchResultsTableViewCell") as! SearchResultsTableViewCell
-            cell.locationName = searchResults[indexPath.row-1].name
-            cell.locationAddress = searchResults[indexPath.row-1].address
-            cell.locationDistance = "\(String(describing: searchResults[indexPath.row-1].distance ?? 0.5)) mi"
-            return cell
+            if cell.locationName == nil, cell.locationAddress == nil, cell.locationDistance == nil {
+                cell.locationName = searchResults[indexPath.row-1].name
+                cell.locationAddress = searchResults[indexPath.row-1].address
+                cell.locationDistance = "\(String(describing: searchResults[indexPath.row-1].distance ?? 0.5)) mi"
+                return cell
+            }
         }
         return UITableViewCell()
     }

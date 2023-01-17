@@ -141,12 +141,11 @@ class HomeScreenViewController: UIViewController {
                                     homeScreenMenu.routeDisplayerDelegate = self
                                     homeScreenMenu.map = map
                                     RouteGenerator.shared.alertDelegate = homeScreenMenu
-                                    
                                     fpc.set(contentViewController: homeScreenMenu)
                                     // add and show the views managed by the floating panel controller object to self.view
-                                    if let scrollView = homeScreenMenu.scrollView {
-                                        fpc.track(scrollView: scrollView)
-                                    }
+//                                    if let scrollView = homeScreenMenu.scrollView {
+//                                        fpc.track(scrollView: scrollView)
+//                                    }
                                 }
                                 self.view.addSubview(fpc.view)
                                 fpc.view.frame = self.view.bounds
@@ -164,16 +163,11 @@ class HomeScreenViewController: UIViewController {
                                 }
                             }
                         }
-                        
                     }
-                    
                 }
             }
         }
-        
-        
     }
-    
 }
 //MARK: - handle the map and creating patterns and points
 

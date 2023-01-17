@@ -7,6 +7,6 @@ target 'Aggie Transit' do
 
   # Pods for Aggie Transit
 pod 'DropDown'
-pod 'FloatingPanel'
+pod 'FloatingPanel', '~> 2.5.5'
 
 end

@@ -10,6 +10,8 @@ import UIKit
 import MapKit
 @objc protocol DataGathererDelegate {
     @objc optional func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute])
+    @objc optional func didGatherNotifications(notifications: [BusNotification])
+
 }
 protocol BusRouteDataGathererDelegate {
     func didGatherBusPattern(points: [BusPattern])
@@ -76,7 +78,16 @@ class DataGatherer {
                                 busRouteDelegate.didGatherBuses(buses: buses)
                             }
                         }
-                        else if endpoint.split(separator: "/").last == "timetable" {
+                        else if endpoint.split(separator: "/").last == "announcements" {
+                            let busNotifications = try decoder.decode(AnnouncementData.self, from: data)
+                            let notifications = self.gatherNotifications(data: busNotifications.Items)
+                            if let delegate = self.delegate {
+                                if let gather = delegate.didGatherNotifications {
+                                    gather(notifications)
+                                }
+                            }
+                        }
+                        else {//if endpoint.split(separator: "/").last == "timetable" {
                             
                             let timeData = try decoder.decode([[String:String?]].self, from: data)
                             let timeTable = self.gatherTime(data: timeData)
@@ -115,7 +126,7 @@ class DataGatherer {
         }
         return routes
     }
-//MARK: - use this to convert from decoded pattern data to bus pattern
+    //MARK: - use this to convert from decoded pattern data to bus pattern
     private func gatherBusPattern(data: [PatternData]) -> [BusPattern] {
         var points: [BusPattern] = []
         for point in data {
@@ -125,7 +136,7 @@ class DataGatherer {
         }
         return points
     }
-//MARK: - use this to convert from decoded stop data to bus stop
+    //MARK: - use this to convert from decoded stop data to bus stop
     private func gatherBusStops(data: [StopData]) -> [BusStop] {
         var stops: [BusStop] = []
         for stop in data {
@@ -135,7 +146,7 @@ class DataGatherer {
         }
         return stops
     }
-//MARK: - use this to convert from decoded bus data to bus
+    //MARK: - use this to convert from decoded bus data to bus
     private func gatherBuses(data: [BusData]) -> [Bus] {
         var buses: [Bus] = []
         for bus in data {
@@ -144,17 +155,34 @@ class DataGatherer {
                 let routeBus = Bus(location: CLLocationCoordinate2D(latitude: coordinates.0, longitude: coordinates.1), direction: direction,name: bus.route, nextStop: bus.nextStop)
                 buses.append(routeBus)
             }
-            
         }
         return buses
     }
-//MARK: - use this to convert from decoded bus data to time data
+    //MARK: - use this to convert from decoded bus data to time data
     private func gatherTime(data: [[String:String?]]) -> [[String:Date?]] {
         var timeTable: [[String:Date?]] = []
         for row in data {
             var rowCopy: [String: Date?] = [:]
             for (key, value) in row {
-                if let value = value, let date = dateFormatter.date(from: value) {
+                if let value = value, var date = dateFormatter.date(from: value) {
+                    let nowComponents = Calendar.current.dateComponents([.day, .hour, .minute], from: NSDate.now)
+                    let dateComponents = Calendar.current.dateComponents([.day, .hour, .minute], from: date)
+                    if let nowHour = nowComponents.hour, let nowDay = nowComponents.day, let dateHour = dateComponents.hour {
+                        if nowHour == 0 && dateHour == 0{
+                            dateFormatter.defaultDate = NSDate.now
+                            date = dateFormatter.date(from: value) ?? date
+                        } else if dateHour == 0 {
+                            dateFormatter.defaultDate = Calendar.current.date(bySetting: .day, value: nowDay+1, of: date)
+                            date = dateFormatter.date(from: value) ?? date
+                        } else if nowHour == 0 {
+                            dateFormatter.defaultDate = Calendar.current.date(bySetting: .day, value: nowDay-1, of: date)
+                            date = dateFormatter.date(from: value) ?? date
+                        }
+                        else {
+                            dateFormatter.defaultDate = NSDate.now
+                            date = dateFormatter.date(from: value) ?? date
+                        }
+                    }
                     rowCopy[key] = date
                 } else {
                     rowCopy[key] = nil as Date?
@@ -164,7 +192,16 @@ class DataGatherer {
         }
         return timeTable
     }
-//MARK: - use this to format the date formatter
+    //MARK: - use this to tather notifications
+    private func gatherNotifications(data: [AnnouncementStruct]) -> [BusNotification]{
+        var notifications:[BusNotification] = []
+        for notification in data {
+            guard let content = notification.Summary.Text.split(separator: ";").last?.trimmingCharacters(in: .whitespaces) else {return []}
+            notifications.append(BusNotification(content: String(content), title: notification.Title.Text))
+        }
+        return notifications
+    }
+    //MARK: - use this to format the date formatter
     // use this to format the date formatter
     func configureDateFormatter() {
         dateFormatter.timeZone = TimeZone(abbreviation: "CST")
@@ -172,7 +209,6 @@ class DataGatherer {
         dateFormatter.timeStyle = .short
         dateFormatter.setLocalizedDateFormatFromTemplate("hh:mm a")
         dateFormatter.locale = Locale(identifier: "en_US")
-        dateFormatter.defaultDate = NSDate.now
     }
 }
 

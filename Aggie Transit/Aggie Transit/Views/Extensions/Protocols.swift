@@ -29,3 +29,6 @@ protocol SearchResultsPanelClosedDelegate {
     @objc optional func refreshRecentLocations()
     @objc optional func refreshFavoriteBusRoutes()
 }
+protocol CloseDelegate {
+    func handleCloseButtonPressed(sender: UIButton)
+}

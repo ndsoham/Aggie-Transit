@@ -43,6 +43,9 @@
 		0FA90880297272E1002E6AEA /* HomeScreenMenuViewController+Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA9087F297272E1002E6AEA /* HomeScreenMenuViewController+Alerts.swift */; };
 		0FA90882297279C5002E6AEA /* CustomAnnotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA90881297279C5002E6AEA /* CustomAnnotations.swift */; };
 		0FB4FB5C2960C02A0091B616 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0FB4FB5A2960C02A0091B616 /* Model.xcdatamodeld */; };
+		0FBD765729764EC30024A627 /* AnnouncementData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD765629764EC30024A627 /* AnnouncementData.swift */; };
+		0FBD7659297651A90024A627 /* BusNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD7658297651A90024A627 /* BusNotification.swift */; };
+		0FBD765B29765AB10024A627 /* NotificationsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD765A29765AB10024A627 /* NotificationsTableViewCell.swift */; };
 		0FCD554A2965351C0091EAD1 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD55492965351C0091EAD1 /* Location.swift */; };
 		0FEB8F9B29555E6200D2BB1A /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEB8F9A29555E6200D2BB1A /* CoordinateConverter.swift */; };
 		7A8363F15CFBB4406D490A79 /* Pods_Aggie_Transit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98533FCA8E57C99C2F068E7C /* Pods_Aggie_Transit.framework */; };
@@ -87,6 +90,9 @@
 		0FA9087F297272E1002E6AEA /* HomeScreenMenuViewController+Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenMenuViewController+Alerts.swift"; sourceTree = "<group>"; };
 		0FA90881297279C5002E6AEA /* CustomAnnotations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotations.swift; sourceTree = "<group>"; };
 		0FB4FB5B2960C02A0091B616 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		0FBD765629764EC30024A627 /* AnnouncementData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementData.swift; sourceTree = "<group>"; };
+		0FBD7658297651A90024A627 /* BusNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusNotification.swift; sourceTree = "<group>"; };
+		0FBD765A29765AB10024A627 /* NotificationsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsTableViewCell.swift; sourceTree = "<group>"; };
 		0FCD55492965351C0091EAD1 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		0FEB8F9A29555E6200D2BB1A /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
 		3611905BF7494E3A8B6F07BB /* Pods-Aggie Transit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aggie Transit.debug.xcconfig"; path = "Target Support Files/Pods-Aggie Transit/Pods-Aggie Transit.debug.xcconfig"; sourceTree = "<group>"; };
@@ -113,6 +119,7 @@
 				0F0F8C962953F95800BB617E /* PatternData.swift */,
 				0F8B6350295A92E7000385C6 /* StopData.swift */,
 				0F475E7F296378B600571B8A /* BusData.swift */,
+				0FBD765629764EC30024A627 /* AnnouncementData.swift */,
 			);
 			path = "API Data";
 			sourceTree = "<group>";
@@ -217,6 +224,7 @@
 			children = (
 				0F77003F294CB243008C421A /* BusRouteTableViewCell.swift */,
 				0F17E7A72973A47C00B7A389 /* RecentLocationsTableViewCell.swift */,
+				0FBD765A29765AB10024A627 /* NotificationsTableViewCell.swift */,
 			);
 			path = "Home Screen Menu";
 			sourceTree = "<group>";
@@ -249,6 +257,7 @@
 				0F0F8C982953FBAB00BB617E /* BusPattern.swift */,
 				0F475E812963797900571B8A /* Bus.swift */,
 				0FCD55492965351C0091EAD1 /* Location.swift */,
+				0FBD7658297651A90024A627 /* BusNotification.swift */,
 				0F0F8C90295238E300BB617E /* API Data */,
 				0FB4FB5A2960C02A0091B616 /* Model.xcdatamodeld */,
 			);
@@ -408,6 +417,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0FA90880297272E1002E6AEA /* HomeScreenMenuViewController+Alerts.swift in Sources */,
+				0FBD765B29765AB10024A627 /* NotificationsTableViewCell.swift in Sources */,
 				0F9300772974BC8700AC7FDB /* TimeTableTableViewCell.swift in Sources */,
 				0F0F8C922952398600BB617E /* BusRoute.swift in Sources */,
 				0F8B6351295A92E7000385C6 /* StopData.swift in Sources */,
@@ -425,7 +435,9 @@
 				0FA9086E2970ED10002E6AEA /* SearchResultsTableViewCell.swift in Sources */,
 				0F8B6353295A93B6000385C6 /* BusStop.swift in Sources */,
 				0F0F8C95295293E300BB617E /* Extensions.swift in Sources */,
+				0FBD765729764EC30024A627 /* AnnouncementData.swift in Sources */,
 				0F475E80296378B600571B8A /* BusData.swift in Sources */,
+				0FBD7659297651A90024A627 /* BusNotification.swift in Sources */,
 				0F17E7AC2973EB5800B7A389 /* BusInformationViewController.swift in Sources */,
 				0F17E7A82973A47C00B7A389 /* RecentLocationsTableViewCell.swift in Sources */,
 				0F0F8C972953F95800BB617E /* PatternData.swift in Sources */,
