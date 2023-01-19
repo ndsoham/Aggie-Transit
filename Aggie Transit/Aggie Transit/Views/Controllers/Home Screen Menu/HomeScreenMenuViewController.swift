@@ -10,9 +10,6 @@ import UIKit
 import MapKit
 import DropDown
 import CoreData
-protocol LocationIdentifierDelegate {
-    func showLocationOnMap(results: [Location])
-}
 class HomeScreenMenuViewController: UIViewController {
     public var searchBar: UISearchBar = UISearchBar()
     private var recentsTableView: UITableView = UITableView()
@@ -46,6 +43,7 @@ class HomeScreenMenuViewController: UIViewController {
     private var edgePadding: Double? = 16
     private var topPadding: Double? = 12
     var container: NSPersistentContainer! = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+    private var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
@@ -100,7 +98,6 @@ class HomeScreenMenuViewController: UIViewController {
         safeMargins = self.view.safeAreaLayoutGuide
         if let height, let width, let safeMargins, let edgePadding, let topPadding {
             let scrollViewWidth = width - edgePadding*2
-            
             // configure the search bar
             let searchBarHeight = 52 * (height/812)
             let pageControllerHeight = 30 * (height/812)
@@ -196,7 +193,12 @@ class HomeScreenMenuViewController: UIViewController {
                 scrollView.addSubview(recentsTableView)
                 scrollView.addSubview(allRoutesTableView)
                 scrollView.addSubview(notificationsTableView)
-                
+                // set up the activity indicator
+                self.view.addSubview(activityIndicator)
+                activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+                activityIndicator.style = .large
+                activityIndicator.centerXAnchor.constraint(equalTo: safeMargins.centerXAnchor).isActive = true
+                activityIndicator.centerYAnchor.constraint(equalTo: safeMargins.centerYAnchor).isActive = true
             }
         }
     }
@@ -445,11 +447,13 @@ extension HomeScreenMenuViewController: UISearchBarDelegate {
         }
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        activityIndicator.stopAnimating()
         searchBar.endEditing(true)
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
         if let map = map {
+            activityIndicator.startAnimating()
             let searchRequest = MKLocalSearch.Request()
             searchRequest.naturalLanguageQuery = searchBar.text
             searchRequest.region = map.region
@@ -480,7 +484,8 @@ extension HomeScreenMenuViewController: UISearchBarDelegate {
                         }
                     }
                     if let locationIdentifierDelegate = self.locationIdentifierDelegate {
-                        locationIdentifierDelegate.showLocationOnMap(results: locations)
+                        self.activityIndicator.stopAnimating()
+                        locationIdentifierDelegate.displaySearchResults(results: locations)
                     }
                     self.collapseNotification = Notification(name: Notification.Name(rawValue: "collapseMenu"))
                     if let collapseNotification = self.collapseNotification {

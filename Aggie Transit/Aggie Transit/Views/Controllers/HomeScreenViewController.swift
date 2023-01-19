@@ -563,7 +563,7 @@ extension HomeScreenViewController {
 //MARK: - Handle showing search location
 extension HomeScreenViewController: LocationIdentifierDelegate {
     
-    func showLocationOnMap(results: [Location]) {
+    func displaySearchResults(results: [Location]) {
         self.showLocationsPanel(results: results)
         if let map = map {
             if let currentlyDisplayedLocations = currentlyDisplayedLocations {
@@ -639,8 +639,8 @@ extension HomeScreenViewController: RouteGenerationProgressDelegate {
 //MARK: - Use this to display the route
 extension HomeScreenViewController: RouteDisplayerDelegate {
     func displayRouteOnMap(userLocation: Location, route: [(BusRoute, BusStop)], destination: Location, ETA: Double) {
-        self.showDirectionsPanel(start: userLocation, end: destination, route: route)
         self.clearMap()
+        self.showDirectionsPanel(start: userLocation, end: destination, route: route)
         if route.count == 0 {
             RouteGenerator.shared.findWalkingRoute(origin: userLocation.location, destination: destination.location) { walkingPath, progressDelegate  in
                 self.displayEndPoints(start: userLocation, end: destination)

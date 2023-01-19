@@ -98,7 +98,7 @@ class RecentLocationsTableViewCell: UITableViewCell {
                     customTextLabel.clipsToBounds = true
                     addressLabel.clipsToBounds = true
                     icon.clipsToBounds = true
-                    customTextLabel.textColor = UIColor(named: "modalTableCellTextColor")
+                    customTextLabel.textColor = UIColor(named: "textColor")
                     icon.tintColor = UIColor(named: "recentLocationRed")
                     icon.translatesAutoresizingMaskIntoConstraints = false
                     // add constraints

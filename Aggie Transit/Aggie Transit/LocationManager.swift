@@ -8,10 +8,9 @@
 import Foundation
 import CoreLocation
 
+// this class is used to manage the user's current location
 class LocationManager: CLLocationManager {
     static let shared = LocationManager()
     var currentLocation: CLLocation?
-    private override init(){
-        
-    }
+    private override init(){}
 }

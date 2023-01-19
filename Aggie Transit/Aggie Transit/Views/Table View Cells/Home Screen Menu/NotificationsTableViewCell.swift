@@ -99,7 +99,7 @@ class NotificationsTableViewCell: UITableViewCell {
                     titleAlertLabel.clipsToBounds = true
                     titleContentLabel.clipsToBounds = true
                     icon.clipsToBounds = true
-                    titleAlertLabel.textColor = UIColor(named: "modalTableCellTextColor")
+                    titleAlertLabel.textColor = UIColor(named: "textColor")
                     titleAlertLabel.numberOfLines = 0
                     titleContentLabel.numberOfLines = 0
                     titleAlertLabel.textAlignment = .left

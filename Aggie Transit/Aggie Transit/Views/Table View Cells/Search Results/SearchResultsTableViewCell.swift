@@ -53,7 +53,6 @@ class SearchResultsTableViewCell: UITableViewCell {
                 // add contraints
                 verticalTextStack.leadingAnchor.constraint(equalTo: safeLayoutMargins.leadingAnchor, constant: horizontalStackPadding).isActive = true
                 verticalTextStack.centerYAnchor.constraint(equalTo: safeLayoutMargins.centerYAnchor).isActive = true
-                verticalTextStack.widthAnchor.constraint(equalToConstant: self.contentView.frame.width * 0.8).isActive = true
 
                 if let locationName = locationName, let locationAddress = locationAddress, let locationDistance = locationDistance {
                     let nameAttributes: [NSAttributedString.Key:Any] = [
@@ -83,6 +82,7 @@ class SearchResultsTableViewCell: UITableViewCell {
                     // add constraints
                     locationDistanceLabel.trailingAnchor.constraint(equalTo: safeLayoutMargins.trailingAnchor, constant: -horizontalStackPadding).isActive = true
                     locationDistanceLabel.centerYAnchor.constraint(equalTo: safeLayoutMargins.centerYAnchor).isActive = true
+                    verticalTextStack.trailingAnchor.constraint(equalTo: locationDistanceLabel.leadingAnchor, constant: -horizontalStackPadding).isActive = true
                 }
             
         }

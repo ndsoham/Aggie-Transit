@@ -56,7 +56,6 @@ class BusRoute: NSObject {
         self.campus = campus
         super.init()
         registerTimerInvalidationNotification()
-        // gather everything except for buses when first initialized to avoid showing the buses on the map
         gatherPattern()
         gatherStops()
         gatherTimeTable()
@@ -79,7 +78,7 @@ class BusRoute: NSObject {
     }
     // this gathers time data
     func gatherTimeTable(){
-        let endpoint = "route/\(number)/timetable/01-17"
+        let endpoint = "route/\(number)/timetable"
         dataGatherer.busRouteDelegate = self
         dataGatherer.gatherData(endpoint: endpoint)
     }
@@ -163,36 +162,24 @@ extension BusRoute: BusRouteDataGathererDelegate {
         self.timeTable = table
         if let timeTable = self.timeTable {
             if let firstRow = timeTable.first {
-                if firstRow.isEmpty {
+                if firstRow[" "] == nil as Date? {
                     self.startTime = nil
                     self.stopTime = nil
                     self.currentlyRunning = false
                 } else {
                     for row in timeTable {
                         if row == timeTable.first {
-                             if let startTime = row.values.min(by: {
-                                if let first = $0, let second = $1 {
-                                    return first < second
-                                } else {
-                                    return false
-                                }
-                             }) {
+                            if let startTime = row.values.compactMap({$0}).min(by: { $0 < $1 }) {
                                  self.startTime = startTime
                              } else {
-                                 self.startTime = nil
+                                 self.startTime = nil as Date?
                              }
                         }
                         if row == timeTable.last {
-                            if let stopTime = row.values.max(by: {
-                                if let first = $0, let second = $1 {
-                                    return first < second
-                                } else {
-                                    return false
-                                }
-                            }) {
+                            if let stopTime = row.values.compactMap({$0}).max(by: {$0 < $1}) {
                                 self.stopTime = stopTime
                             } else {
-                                self.stopTime = nil
+                                self.stopTime = nil as Date?
                             }
                         }
                     }

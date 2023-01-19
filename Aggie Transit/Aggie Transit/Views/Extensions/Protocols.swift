@@ -32,3 +32,10 @@ protocol SearchResultsPanelClosedDelegate {
 protocol CloseDelegate {
     func handleCloseButtonPressed(sender: UIButton)
 }
+protocol RouteGenerationProgressDelegate {
+    func routeGenerationDidStart()
+    func routeGenerationDidEnd()
+}
+protocol LocationIdentifierDelegate {
+    func displaySearchResults(results: [Location])
+}
