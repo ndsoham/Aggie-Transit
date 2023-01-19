@@ -17,19 +17,21 @@ class DirectionsTableViewCell: UITableViewCell {
     var directions: String?
     private var safeMargins: UILayoutGuide?
     private var leftPadding: Double?
+    //MARK: - initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layoutIfNeeded()
     }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    //MARK: - prepare for reuse
     override func prepareForReuse() {
         super.prepareForReuse()
         self.iconImage = nil
         self.iconTint = nil
         self.directions = nil
     }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    //MARK: -  layout subviews
     override func layoutSubviews() {
         super.layoutSubviews()
         safeMargins = self.contentView.layoutMarginsGuide
@@ -68,7 +70,6 @@ class DirectionsTableViewCell: UITableViewCell {
                 // constrain the label
                 directionsLabel.heightAnchor.constraint(equalToConstant: 42).isActive = true
             }
-            
         }
     }
 }

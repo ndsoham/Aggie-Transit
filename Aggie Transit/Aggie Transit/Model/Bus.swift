@@ -7,6 +7,7 @@
 
 import Foundation
 import MapKit
+//MARK: - This object represents a single bus contained inside of a route
 class Bus: NSObject {
     var location: CLLocationCoordinate2D
     var direction: CLLocationDirection

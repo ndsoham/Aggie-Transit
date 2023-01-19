@@ -7,7 +7,7 @@
 
 import Foundation
 import MapKit
-
+//MARK: - This class is used to designate starting and destination locations along a route
 @objc class Location: NSObject {
     var name: String
     var location: CLLocationCoordinate2D

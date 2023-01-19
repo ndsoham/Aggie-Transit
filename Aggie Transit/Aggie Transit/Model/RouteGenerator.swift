@@ -129,6 +129,7 @@ class RouteGenerator {
             guard let first = stops.firstIndex(of: origin) else {
                 return -1000
             }
+            // stops are rotated left so that the origin bus stop is the first in the array
             stops.rotateLeft(positions: first)
             let avgTimePerStop = (time/Double(stops.count-1))/60
             guard let last = stops.firstIndex(of: destination) else {
@@ -144,17 +145,19 @@ class RouteGenerator {
         var travelTime: Double = Double.greatestFiniteMagnitude
         let timeDiff = arrivalTime.timeIntervalSinceNow
         if let buses = route.buses, var stops = route.stops, let time = route.routeTime {
-            let avgTimePerStop = (time/Double(stops.count-1))
-            let stopDiff  = Int(floor((1/avgTimePerStop)/timeDiff))
+            // remove the last stop as it is a repeat of the first one
             stops = Array(stops[0..<stops.count-1])
+            let avgTimePerStop = (time/Double(stops.count)) // how long a bus takes to travel between two stops
+            let stopDiff  = Int(floor((1/avgTimePerStop)/timeDiff)) // how many stops the bus will visit in a given amount of time
             for bus in buses {
                 let potentialNextStops = stops.filter({$0.name == bus.nextStop})
-                let nextStop = potentialNextStops.min(by: {$0.location.distance(to: bus.location) < $1.location.distance(to: bus.location)})
+                let nextStop = potentialNextStops.min(by: {$0.location.distance(to: bus.location) < $1.location.distance(to: bus.location)}) // use this in the case that two stops have the same name
                 if let nextStop {
                     if let closestStopIndex = stops.firstIndex(of: nextStop) {
-                        stops.rotateLeft(positions: closestStopIndex + stopDiff)
+                        stops.rotateLeft(positions: closestStopIndex + stopDiff) // the stop that the bus will be at during a given time
                         if let diff = stops.firstIndex(of: destination) {
                             var potentialTravelTime = Double(diff) * avgTimePerStop
+                            // eliminate this route if the bus will arrive after its closing time
                             if let stopTime = route.stopTime, arrivalTime.addingTimeInterval(potentialTravelTime) > stopTime {
                                 potentialTravelTime = -1000
                             }
@@ -173,8 +176,8 @@ class RouteGenerator {
     func findWalkingETA(source: MKMapItem, destination: MKMapItem) -> Double {
         var eta: Double = -1000
         if let src = source.placemark.location, let dst = destination.placemark.location {
-            let minDistance = src.distance(from: dst)
-            let maxDistance = minDistance*cos(rad(90)) + minDistance*sin(rad(90))
+            let minDistance = src.distance(from: dst) // straight line
+            let maxDistance = minDistance*cos(rad(90)) + minDistance*sin(rad(90)) // legs of the straight line
             let approxDistance = (maxDistance + minDistance)/2
             eta = approxDistance * (1/1.3)
             return eta/60
@@ -195,9 +198,11 @@ class RouteGenerator {
                     return false
                 }
             }
+            // if no routes are running
             if filteredRoutes.isEmpty {
                 return nil
             }
+            // sort the stops within each route and eliminate those that are more than a 1000 m away from the user
             for route in filteredRoutes {
                 if var stops = route.stops{
                     stops = Array(stops[0..<stops.count-1])
@@ -212,7 +217,7 @@ class RouteGenerator {
                     
                 }
             }
-            // sort by distance then apply a distance buffer
+            // sort by distance
             routesAndStops = routesAndStops.sorted(by: {
                 if let closestStop1 = $0.1.first, let closestStop2 = $1.1.first {
                     return closestStop1.location.distance(to: location.location) < closestStop2.location.distance(to: location.location)

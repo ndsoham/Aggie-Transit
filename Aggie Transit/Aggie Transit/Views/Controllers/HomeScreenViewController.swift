@@ -142,10 +142,6 @@ class HomeScreenViewController: UIViewController {
                                     homeScreenMenu.map = map
                                     RouteGenerator.shared.alertDelegate = homeScreenMenu
                                     fpc.set(contentViewController: homeScreenMenu)
-                                    // add and show the views managed by the floating panel controller object to self.view
-//                                    if let scrollView = homeScreenMenu.scrollView {
-//                                        fpc.track(scrollView: scrollView)
-//                                    }
                                 }
                                 self.view.addSubview(fpc.view)
                                 fpc.view.frame = self.view.bounds
@@ -170,7 +166,6 @@ class HomeScreenViewController: UIViewController {
     }
 }
 //MARK: - handle the map and creating patterns and points
-
 extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
     // use this to display walking routes on the map
     func displayWalkingRoutes(route: MKPolyline){
@@ -561,7 +556,7 @@ extension HomeScreenViewController {
     }
 }
 //MARK: - Handle showing search location
-extension HomeScreenViewController: LocationIdentifierDelegate {
+extension HomeScreenViewController: SearchResultsDelegate {
     
     func displaySearchResults(results: [Location]) {
         self.showLocationsPanel(results: results)
@@ -640,7 +635,7 @@ extension HomeScreenViewController: RouteGenerationProgressDelegate {
 extension HomeScreenViewController: RouteDisplayerDelegate {
     func displayRouteOnMap(userLocation: Location, route: [(BusRoute, BusStop)], destination: Location, ETA: Double) {
         self.clearMap()
-        self.showDirectionsPanel(start: userLocation, end: destination, route: route)
+        self.showDirectionsPanel(start: userLocation, end: destination, route: route, eta: ETA)
         if route.count == 0 {
             RouteGenerator.shared.findWalkingRoute(origin: userLocation.location, destination: destination.location) { walkingPath, progressDelegate  in
                 self.displayEndPoints(start: userLocation, end: destination)
@@ -731,13 +726,14 @@ extension HomeScreenViewController: DirectionsPanelClosedDelegate {
         }
     }
     
-    func showDirectionsPanel(start: Location, end: Location, route: [(BusRoute, BusStop)]) {
+    func showDirectionsPanel(start: Location, end: Location, route: [(BusRoute, BusStop)], eta: Double) {
         directionsFpc = FloatingPanelController()
         let directionsViewController = DirectionsViewController()
         directionsViewController.endpoints = [start, end]
         directionsViewController.delegate = self
         directionsViewController.routeDisplayerDelegate = self
         directionsViewController.route = route
+        directionsViewController.eta = eta
         if let directionsFpc, let menuFpc, let superViewMargins {
             directionsFpc.set(contentViewController: directionsViewController)
             self.view.addSubview(directionsFpc.view)

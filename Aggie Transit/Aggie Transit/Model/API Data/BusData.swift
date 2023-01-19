@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+//MARK: - this class parses bus data
 struct BusData: Codable {
     var route: String
     var key: String

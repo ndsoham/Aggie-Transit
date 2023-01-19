@@ -21,10 +21,11 @@ class BusRouteTableViewCell: UITableViewCell {
     private var customTextLabel: UILabel = UILabel()
     private var stackView: UIStackView = UIStackView()
     private var colorViewWidth: Double? = 75 * 0.75
+    private var colorView: UIView = UIView()
     var icon: NSAttributedString?
     var busName: NSAttributedString?
     var cellColor: UIColor?
-    private var colorView: UIView = UIView()
+    //MARK: - initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layoutIfNeeded()
@@ -32,12 +33,14 @@ class BusRouteTableViewCell: UITableViewCell {
     required init?(coder: NSCoder){
         fatalError()
     }
+    //MARK: - prepare for reuse
     override func prepareForReuse() {
         super.prepareForReuse()
         self.icon = nil
         self.busName = nil
         self.cellColor = nil
     }
+    //MARK: - layout subviews
     override func layoutSubviews() {
         super.layoutSubviews()
         self.selectedBackgroundView = nil
@@ -58,8 +61,6 @@ class BusRouteTableViewCell: UITableViewCell {
                         view.layer.borderColor = UIColor(named: "borderColor")?.cgColor
                         view.backgroundColor = UIColor(named: "menuColor")//cellColor
                         view.translatesAutoresizingMaskIntoConstraints = false
-                        // configure base view
-                        // add to the view hierarchy
                         //self.contentView.addSubview(baseView)
                         self.contentView.addSubview(view)
                         // add constraints
@@ -71,50 +72,48 @@ class BusRouteTableViewCell: UITableViewCell {
                             view.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
                         }
                         // create stack view
-                            // configure stackView
-                            stackView.alignment = .center
-                            stackView.distribution = .equalCentering
-                            stackView.axis = .horizontal
-                            stackView.spacing = 10
-                            stackView.translatesAutoresizingMaskIntoConstraints = false
-                            // add stackview to view hierarchy
-                            view.addSubview(stackView)
-                            // add constraints
-                            viewMargins = view.safeAreaLayoutGuide
-                            if let viewMargins = viewMargins {
-                                stackView.leadingAnchor.constraint(equalTo: viewMargins.leadingAnchor,constant: 20).isActive = true
-                                stackView.centerYAnchor.constraint(equalTo: viewMargins.centerYAnchor).isActive = true
-                            }
-                            if let icon, let busName {
-                                iconLabel.translatesAutoresizingMaskIntoConstraints = false
-                                customTextLabel.translatesAutoresizingMaskIntoConstraints = false
-                                colorView.translatesAutoresizingMaskIntoConstraints = false
-                                colorView.backgroundColor = cellColor
-                                colorView.layer.cornerRadius = colorViewWidth * 0.30
-                                iconLabel.clipsToBounds = true
-                                customTextLabel.clipsToBounds = true
-                                colorView.clipsToBounds = true
-                                iconLabel.attributedText = icon
-                                iconLabel.textAlignment = .right
-                                iconLabel.textColor = UIColor(named: "textColor")
-                                customTextLabel.attributedText = busName
-                                customTextLabel.textColor = UIColor(named: "textColor")
-                                // contrain the color
-                                colorView.widthAnchor.constraint(equalToConstant: colorViewWidth).isActive = true
-                                colorView.heightAnchor.constraint(equalToConstant: colorViewWidth - 20).isActive = true
-                                // add to view hierarchy
-                                colorView.addSubview(iconLabel)
-                                iconLabel.centerXAnchor.constraint(equalTo: colorView.centerXAnchor).isActive = true
-                                iconLabel.centerYAnchor.constraint(equalTo: colorView.centerYAnchor).isActive = true
-                                stackView.addArrangedSubview(colorView)
-                                stackView.addArrangedSubview(customTextLabel)
-                            }
+                        // configure stackView
+                        stackView.alignment = .center
+                        stackView.distribution = .equalCentering
+                        stackView.axis = .horizontal
+                        stackView.spacing = 10
+                        stackView.translatesAutoresizingMaskIntoConstraints = false
+                        // add stackview to view hierarchy
+                        view.addSubview(stackView)
+                        // add constraints
+                        viewMargins = view.safeAreaLayoutGuide
+                        if let viewMargins = viewMargins {
+                            stackView.leadingAnchor.constraint(equalTo: viewMargins.leadingAnchor,constant: 20).isActive = true
+                            stackView.centerYAnchor.constraint(equalTo: viewMargins.centerYAnchor).isActive = true
+                        }
+                        // set up icon and bus name labels
+                        if let icon, let busName {
+                            iconLabel.translatesAutoresizingMaskIntoConstraints = false
+                            customTextLabel.translatesAutoresizingMaskIntoConstraints = false
+                            colorView.translatesAutoresizingMaskIntoConstraints = false
+                            colorView.backgroundColor = cellColor
+                            colorView.layer.cornerRadius = colorViewWidth * 0.30
+                            iconLabel.clipsToBounds = true
+                            customTextLabel.clipsToBounds = true
+                            colorView.clipsToBounds = true
+                            iconLabel.attributedText = icon
+                            iconLabel.textAlignment = .right
+                            iconLabel.textColor = UIColor(named: "textColor")
+                            customTextLabel.attributedText = busName
+                            customTextLabel.textColor = UIColor(named: "textColor")
+                            // contrain the color
+                            colorView.widthAnchor.constraint(equalToConstant: colorViewWidth).isActive = true
+                            colorView.heightAnchor.constraint(equalToConstant: colorViewWidth - 20).isActive = true
+                            // add to view hierarchy
+                            colorView.addSubview(iconLabel)
+                            iconLabel.centerXAnchor.constraint(equalTo: colorView.centerXAnchor).isActive = true
+                            iconLabel.centerYAnchor.constraint(equalTo: colorView.centerYAnchor).isActive = true
+                            stackView.addArrangedSubview(colorView)
+                            stackView.addArrangedSubview(customTextLabel)
+                        }
                     }
                 }
             }
-            
         }
-        
     }
-    
 }

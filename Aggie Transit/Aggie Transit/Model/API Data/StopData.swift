@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+//MARK: - this class parses stop data
 struct StopData: Codable {
     var Key: String
     var Name: String

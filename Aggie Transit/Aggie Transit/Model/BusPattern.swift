@@ -7,6 +7,7 @@
 
 import Foundation
 import MapKit
+//MARK: - This is a representation of a single point within a bus route's traveling pattern
 @objc class BusPattern: NSObject {
     var name: String
     var location: CLLocationCoordinate2D

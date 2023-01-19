@@ -11,11 +11,9 @@ import MapKit
 import DropDown
 import CoreData
 class HomeScreenMenuViewController: UIViewController {
-    public var searchBar: UISearchBar = UISearchBar()
     private var recentsTableView: UITableView = UITableView()
     private var allRoutesTableView: UITableView = UITableView()
     private var notificationsTableView: UITableView = UITableView()
-    var scrollView: UIScrollView?
     private var height: Double?
     private var width: Double?
     private var searchBarHeight: Double?
@@ -29,12 +27,8 @@ class HomeScreenMenuViewController: UIViewController {
     private var recentLocations: [RecentLocation]?
     private var notifications: [BusNotification]?
     private var programmedScroll: Bool = false
-    public var pathDelegate: PathMakerDelegate?
-    public var locationIdentifierDelegate: LocationIdentifierDelegate?
-    public var routeDisplayerDelegate: RouteDisplayerDelegate?
     private var editingNotification: Notification?
     private var collapseNotification: Notification?
-    public var map: MKMapView?
     private var searchCompleter: MKLocalSearchCompleter?
     private var searchResults: DropDown?
     private var cellNib: UINib?
@@ -42,8 +36,15 @@ class HomeScreenMenuViewController: UIViewController {
     private var options: [String] = []
     private var edgePadding: Double? = 16
     private var topPadding: Double? = 12
-    var container: NSPersistentContainer! = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     private var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    var searchBar: UISearchBar = UISearchBar()
+    var container: NSPersistentContainer! = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+    var map: MKMapView?
+    var pathDelegate: PathMakerDelegate?
+    var locationIdentifierDelegate: SearchResultsDelegate?
+    var routeDisplayerDelegate: RouteDisplayerDelegate?
+    var scrollView: UIScrollView?
+    //MARK: - view did load
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
@@ -202,8 +203,6 @@ class HomeScreenMenuViewController: UIViewController {
             }
         }
     }
-    
-    
     //MARK: - Setup data gatherer
     func setUpDataGatherer(){
         dataGatherer.delegate = self
@@ -212,7 +211,6 @@ class HomeScreenMenuViewController: UIViewController {
         dataGatherer.alertDelegate = self
     }
 }
-
 //MARK: - Provide Table View with data
 extension HomeScreenMenuViewController: UITableViewDataSource {
     // provide the number of sections
@@ -263,7 +261,7 @@ extension HomeScreenMenuViewController: UITableViewDataSource {
             if let recentLocations {
                 return recentLocations.count
             }
-
+            
         }
         else if tableView == notificationsTableView {
             if let notifications {
@@ -462,6 +460,7 @@ extension HomeScreenMenuViewController: UISearchBarDelegate {
                 if let error = error {
                     let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: .actionSheet)
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                    self.activityIndicator.stopAnimating()
                     self.displayAlert(alert: alert)
                 }
                 if let response {

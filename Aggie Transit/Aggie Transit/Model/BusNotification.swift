@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-
+//MARK: - This class is used to display a single notification recieved from the api
 @objc class BusNotification: NSObject {
     var content: String
     var title: String

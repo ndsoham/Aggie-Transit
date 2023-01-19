@@ -14,31 +14,32 @@ class BusRoute: NSObject {
     var color: UIColor
     var campus: String
     var delegate: PathMakerDelegate?
-    var stops: [BusStop]? 
+    var stops: [BusStop]?
     var pattern: [BusPattern]?
     var buses: [Bus]?
     var isFavorited: Bool?
     var timeTable: [[String:Date?]]? {
+        // when the time table is set, the data obtained is used to calculate the route time property
         didSet {
             if let timeTable = timeTable {
                 let middleRow = timeTable[timeTable.count/2]
-                    if let maxTime = middleRow.values.max(by: {
-                        if let first = $0, let second = $1 {
-                            return first < second
-                        } else {
-                            return false
-                        }
-                    }) as? Date,
-                    let minTime = middleRow.values.min(by: {
-                        if let first = $0, let second = $1 {
-                            return first < second
-                        } else {
-                            return false
-                        }
-                    }) as? Date {
-                        let difference = maxTime.timeIntervalSince(minTime)
-                        self.routeTime = difference + 300
+                if let maxTime = middleRow.values.max(by: {
+                    if let first = $0, let second = $1 {
+                        return first < second
+                    } else {
+                        return false
                     }
+                }) as? Date,
+                   let minTime = middleRow.values.min(by: {
+                       if let first = $0, let second = $1 {
+                           return first < second
+                       } else {
+                           return false
+                       }
+                   }) as? Date {
+                    let difference = maxTime.timeIntervalSince(minTime)
+                    self.routeTime = difference + 300
+                }
             }
         }
     }
@@ -62,27 +63,26 @@ class BusRoute: NSObject {
         gatherBuses()
     }
     deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    // this gathers pattern data
+        NotificationCenter.default.removeObserver(self)}
+//MARK: - this gathers pattern data
     func gatherPattern() {
         let endpoint = "route/\(number)/pattern"
         dataGatherer.busRouteDelegate = self
         dataGatherer.gatherData(endpoint: endpoint)
     }
-    // this gathers stop data
+//MARK: - this gathers stop data
     func gatherStops() {
         let endpoint = "route/\(number)/stops"
         dataGatherer.busRouteDelegate = self
         dataGatherer.gatherData(endpoint: endpoint)
     }
-    // this gathers time data
+//MARK: - this gathers time data
     func gatherTimeTable(){
         let endpoint = "route/\(number)/timetable"
         dataGatherer.busRouteDelegate = self
         dataGatherer.gatherData(endpoint: endpoint)
     }
-    // this gathers bus data
+//MARK: this gathers bus data
     func gatherBuses(){
         DispatchQueue.main.async{
             let endpoint = "route/\(self.number)/buses"
@@ -100,13 +100,13 @@ class BusRoute: NSObject {
             })
         }
     }
-    // use this to display the route on the map
+//MARK: - use this to display the route on the map
     func displayBusRoute() {
         if let delegate = delegate, let stops = stops, let pattern = pattern {
             delegate.displayBusRouteOnMap(color: self.color, points: pattern, stops: stops, route: self)
         }
     }
-    // use this to display a partial bus route
+//MARK: -  use this to display a partial bus route
     func displayPartialRoute(startStop: BusStop, endStop: BusStop) {
         if let delegate = delegate, var pattern = pattern {
             if let startIndex = pattern.firstIndex(where: {$0.key==startStop.key}) {
@@ -117,7 +117,7 @@ class BusRoute: NSObject {
             }
         }
     }
-    // use this to display the buses on the map
+//MARK: - use this to display the buses on the map
     func displayBuses(){
         if let delegate = self.delegate, let buses = self.buses {
             delegate.displayBusesOnMap(buses: buses)
@@ -133,31 +133,31 @@ class BusRoute: NSObject {
             }
         })
     }
-    // use this to invalidate the timer
+//MARK: - This is the function called when the invalidate timer notification is received
     @objc func invalidateTimer(){
         if let timer = busDisplayTimer {
             timer.invalidate()
         }
     }
-    // use this to register the relevant notification
+    //MARK: - This is used to invalidate the timer when the home screen menu is collapsed
     func registerTimerInvalidationNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(invalidateTimer), name: Notification.Name("invalidateTimer"), object: nil)
     }
- 
-    
-  
 }
-
 extension BusRoute: BusRouteDataGathererDelegate {
+    //MARK: - The data obtained from this is used to draw the bus's representation on the map
     func didGatherBusPattern(points: [BusPattern]) {
         self.pattern = points
     }
+    //MARK: - This sets each bus routes bus stops
     func didGatherBusStops(stops: [BusStop]) {
         self.stops = stops
     }
+    //MARK: - This is used to set each routes current buses and is updated frequently
     func didGatherBuses(buses: [Bus]) {
         self.buses = buses
     }
+    //MARK: - This is used to set each routes time table, start time, and stop time
     func didGatherTimeTable(table: [[String : Date?]]) {
         self.timeTable = table
         if let timeTable = self.timeTable {
@@ -170,10 +170,10 @@ extension BusRoute: BusRouteDataGathererDelegate {
                     for row in timeTable {
                         if row == timeTable.first {
                             if let startTime = row.values.compactMap({$0}).min(by: { $0 < $1 }) {
-                                 self.startTime = startTime
-                             } else {
-                                 self.startTime = nil as Date?
-                             }
+                                self.startTime = startTime
+                            } else {
+                                self.startTime = nil as Date?
+                            }
                         }
                         if row == timeTable.last {
                             if let stopTime = row.values.compactMap({$0}).max(by: {$0 < $1}) {

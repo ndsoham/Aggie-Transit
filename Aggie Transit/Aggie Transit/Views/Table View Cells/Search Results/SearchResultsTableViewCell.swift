@@ -19,21 +19,22 @@ class SearchResultsTableViewCell: UITableViewCell {
     private var safeLayoutMargins: UILayoutGuide?
     private var horizontalStackPadding: Double?
     private var verticalStackSpacing: Double = 2.5
+    //MARK: - initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layoutSubviews()
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    //MARK: - Prepare for reuse
     override func prepareForReuse() {
         super.prepareForReuse()
         self.locationName = nil
         self.locationDistance = nil
         self.locationAddress = nil
     }
-
+    //MARK: - Layout subviews
     override func layoutSubviews() {
         self.contentView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
         self.selectedBackgroundView = nil
@@ -84,9 +85,6 @@ class SearchResultsTableViewCell: UITableViewCell {
                     locationDistanceLabel.centerYAnchor.constraint(equalTo: safeLayoutMargins.centerYAnchor).isActive = true
                     verticalTextStack.trailingAnchor.constraint(equalTo: locationDistanceLabel.leadingAnchor, constant: -horizontalStackPadding).isActive = true
                 }
-            
         }
-        
-        
     }
 }

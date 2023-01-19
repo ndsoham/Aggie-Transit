@@ -28,6 +28,7 @@ extension UIColor {
 
             }
         }
+         // these are default colors returned for the bus routes that do not specify an rgb value
         else if string == "Firebrick" {
             return UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1.0)
         }

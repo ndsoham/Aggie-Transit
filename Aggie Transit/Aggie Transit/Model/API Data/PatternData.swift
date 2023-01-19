@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+//MARK: - this class is used to parse pattern data
 struct PatternData: Codable {
     var Key: String
     var Name: String

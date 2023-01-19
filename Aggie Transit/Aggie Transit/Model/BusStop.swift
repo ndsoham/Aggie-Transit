@@ -7,6 +7,7 @@
 
 import Foundation
 import MapKit
+//MARK: - This class represents each bus stop along a bus route
 @objc class BusStop: NSObject {
     var name: String
     var location: CLLocationCoordinate2D

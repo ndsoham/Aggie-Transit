@@ -15,12 +15,13 @@ class SearchResultsViewController: UIViewController {
     private var tableViewRowHeight: Double = 75
     private var safeMargins: UILayoutGuide?
     private var leftInset: Double?
-    public var routeDisplayerDelegate: RouteDisplayerDelegate?
-    var searchResults: [Location]?
     private var clearNotification: Notification?
+    var routeDisplayerDelegate: RouteDisplayerDelegate?
+    var searchResults: [Location]?
     var closeDelegate: SearchResultsPanelClosedDelegate?
     var container: NSPersistentContainer! = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     var refreshDelegate: RefreshDelegate?
+    //MARK: - view did load
     override func viewDidLoad() {
         layoutSubviews()
         checkContainerStatus()

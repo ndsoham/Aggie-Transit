@@ -24,17 +24,20 @@ class RecentLocationsTableViewCell: UITableViewCell {
     private var addressLabel: UILabel = UILabel()
     var address: String?
     var name: String?
+    //MARK: - initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     required init?(coder: NSCoder){
         fatalError()
     }
+    //MARK: - prepare for reuse
     override func prepareForReuse() {
         super.prepareForReuse()
         self.address = nil
         self.name = nil
     }
+    //MARK: - layout subviews
     override func layoutSubviews() {
         super.layoutSubviews()
         self.selectedBackgroundView = nil

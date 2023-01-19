@@ -9,49 +9,44 @@ import Foundation
 import UIKit
 
 class EndpointsTableViewCell: UITableViewCell {
-    private var moveIcon: UIImageView?
-    var textField: UITextField?
-    var text: String?
-    var icon: UIImageView?
-    private var horizontalStack: UIStackView?
+    private var moveIcon: UIImageView =  UIImageView(image: UIImage(systemName: "line.3.horizontal"))
+    private var horizontalStack: UIStackView = UIStackView()
     private var safeMargins: UILayoutGuide?
-    private var inset: Double?
-    private var baseView: UIView?
+    private let inset: Double? = 5
+    private var baseView: UIView = UIView()
     var iconTintColor: UIColor?
+    var textField: UITextField = UITextField()
+    var text: String?
+    var icon: UIImageView =  UIImageView(image: UIImage(systemName:"mappin.circle.fill"))
+    //MARK: - initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layoutIfNeeded()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    //MARK: - prepare for reuse
     override func prepareForReuse() {
         super.prepareForReuse()
     }
+    //MARK: - layout subviews
     override func layoutSubviews() {
         super.layoutSubviews()
         self.selectedBackgroundView = nil
-        horizontalStack = UIStackView()
         safeMargins = self.contentView.layoutMarginsGuide
-        inset = 5.0
-        if let horizontalStack = horizontalStack, let safeMargins = safeMargins, let inset = inset {
+        if let safeMargins = safeMargins, let inset = inset {
             self.contentView.backgroundColor = UIColor(named: "menuColor")
-
             // configure the base view
-            baseView = UIView()
-            if let baseView = baseView {
-                baseView.translatesAutoresizingMaskIntoConstraints = false
-                baseView.backgroundColor =  UIColor(named: "menuColor")
-
-                // add to view hierarchy and constrain
-                self.contentView.addSubview(baseView)
-                // add constraints
-                baseView.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor).isActive = true
-                baseView.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor).isActive = true
-                baseView.topAnchor.constraint(equalTo: safeMargins.topAnchor).isActive = true
-                baseView.bottomAnchor.constraint(equalTo: safeMargins.bottomAnchor).isActive = true
-            }
+            baseView.translatesAutoresizingMaskIntoConstraints = false
+            baseView.backgroundColor =  UIColor(named: "menuColor")
+            // add to view hierarchy and constrain
+            self.contentView.addSubview(baseView)
+            // add constraints
+            baseView.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor).isActive = true
+            baseView.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor).isActive = true
+            baseView.topAnchor.constraint(equalTo: safeMargins.topAnchor).isActive = true
+            baseView.bottomAnchor.constraint(equalTo: safeMargins.bottomAnchor).isActive = true
             // configure the stack view
             horizontalStack.translatesAutoresizingMaskIntoConstraints = false
             horizontalStack.axis = .horizontal
@@ -63,12 +58,8 @@ class EndpointsTableViewCell: UITableViewCell {
             // constrain
             horizontalStack.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor,constant: inset).isActive = true
             horizontalStack.centerYAnchor.constraint(equalTo: safeMargins.centerYAnchor).isActive = true
-            
             // set up the icons and text field
-            icon = UIImageView(image: UIImage(systemName:"mappin.circle.fill"))
-            moveIcon = UIImageView(image: UIImage(systemName: "line.3.horizontal"))
-            textField = UITextField()
-            if let icon = icon, let textField = textField, let moveIcon = moveIcon, let text = text {
+            if let text = text {
                 icon.tintColor = iconTintColor
                 icon.translatesAutoresizingMaskIntoConstraints = false
                 // constrain the icon

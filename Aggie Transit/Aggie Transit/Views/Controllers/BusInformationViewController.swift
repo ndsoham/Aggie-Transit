@@ -9,15 +9,27 @@ import Foundation
 import UIKit
 import CoreData
 class BusInformationViewController: UIViewController {
-    private var timeTableView: UITableView?
-    private var headingLabel: UILabel?
-    private var closeButton: UIButton?
+    private var timeTableView: UITableView = UITableView()
+    private var headingLabel: UILabel = UILabel()
+    private var closeButton: UIButton = UIButton(type: .close)
+    private var safeMargins: UILayoutGuide?
+    private var sidePadding: Double?
+    private let topInset: Double? = 10
+    private var busNumberView: UIView = UIView()
+    private var timesTableView: UITableView = UITableView()
+    private var busNumberLabel: UILabel = UILabel()
+    private var busNumberViewHeight: Double = 42
+    var container: NSPersistentContainer! = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
+    var refreshDelegate: RefreshDelegate?
+    var center: UNUserNotificationCenter = UNUserNotificationCenter.current()
+    var closeDelegate: BusInformationPanelClosedDelegate?
     var busNumber: String?
     var busColor: UIColor?
     var busName: String?
     var favorited: Bool?
     var timeTable: [[String:Date?]]?
     var keyOrder: [String]? {
+        // use this to return the correct key order when displaying time data
         get {
             if let timeTable{
                 let keys = Array(timeTable[timeTable.count/2].keys)
@@ -30,21 +42,9 @@ class BusInformationViewController: UIViewController {
                 }
                 return sortedKeys
             }
-           return nil
+            return nil
         }
     }
-    private var safeMargins: UILayoutGuide?
-    private var sidePadding: Double?
-    private var topInset: Double?
-    private var busNumberView: UIView?
-    var closeDelegate: BusInformationPanelClosedDelegate?
-    private var busNumberLabel: UILabel?
-    private var busNumberViewHeight: Double = 42
-    private var favoriteButton: UIButton?
-    var container: NSPersistentContainer! = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-    var refreshDelegate: RefreshDelegate?
-    var center: UNUserNotificationCenter = UNUserNotificationCenter.current()
-    private var timesTableView: UITableView?
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
@@ -62,16 +62,10 @@ class BusInformationViewController: UIViewController {
     //MARK: - layout subviews
     func layoutSubviews() {
         self.view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-        headingLabel = UILabel()
-        busNumberView = UIView()
-        busNumberLabel = UILabel()
-        closeButton = UIButton(type: .close)
-        favoriteButton = UIButton()
         safeMargins = self.view.safeAreaLayoutGuide
-        topInset = 10
         sidePadding =  22.5 *  Double(self.view.frame.width/375)
         timesTableView = UITableView()
-        if let headingLabel, let busNumberView, let closeButton, let safeMargins, let topInset, let sidePadding, let busName, let busNumber, let busColor, let busNumberLabel, let favoriteButton, let timesTableView {
+        if  let safeMargins, let topInset, let sidePadding, let busName, let busNumber, let busColor {
             busNumberLabel.translatesAutoresizingMaskIntoConstraints = false
             headingLabel.translatesAutoresizingMaskIntoConstraints = false
             busNumberView.translatesAutoresizingMaskIntoConstraints = false
@@ -114,14 +108,6 @@ class BusInformationViewController: UIViewController {
             closeButton.centerYAnchor.constraint(equalTo: headingLabel.centerYAnchor).isActive = true
             // add target
             closeButton.addTarget(self, action: #selector(closeButtonPressed), for: .touchUpInside)
-            // add a favorites button
-            favoriteButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
-            favoriteButton.setImage(UIImage(systemName: "bookmark.fill"), for: .selected)
-            self.view.addSubview(favoriteButton)
-            favoriteButton.translatesAutoresizingMaskIntoConstraints = false
-            favoriteButton.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -sidePadding/2).isActive = true
-            favoriteButton.centerYAnchor.constraint(equalTo: headingLabel.centerYAnchor).isActive = true
-            favoriteButton.addTarget(self, action: #selector(addBusRouteToFavorites), for: .touchUpInside)
             // set up the table view
             timesTableView.register(TimeTableTableViewCell.self, forCellReuseIdentifier: "timeTableTableViewCell")
             timesTableView.allowsSelection = false
@@ -146,36 +132,6 @@ extension BusInformationViewController {
     @objc func closeButtonPressed(sender: UIButton) {
         if let delegate = closeDelegate {
             delegate.closeBusInformationPanel()
-        }
-    }
-    @objc func addBusRouteToFavorites(sender: UIButton) {
-       
-        if sender.isSelected {
-            sender.isSelected = false
-            
-        }
-        else if !sender.isSelected{
-            promptUserForNotificationsAccess()
-            sender.isSelected = true
-            
-        }
-    }
-    func promptUserForNotificationsAccess() {
-        center.requestAuthorization(options: [.alert, .badge]) { granted, error in
-            if let error {
-                let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: .actionSheet)
-                alert.addAction(UIAlertAction(title: "OK", style: .cancel))
-                DispatchQueue.main.async{
-                    self.present(alert, animated: true)
-                }
-            }
-            if !granted {
-                let alert = UIAlertController(title: "Alert", message: "Proximity alerts will not work without notifications. Please change your settings.", preferredStyle: .actionSheet)
-                alert.addAction(UIAlertAction(title: "OK", style: .cancel))
-                DispatchQueue.main.async {
-                    self.present(alert, animated: true)
-                }
-            }
         }
     }
 }
@@ -211,8 +167,8 @@ extension BusInformationViewController: UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return busNumberViewHeight
     }
+    //MARK: - return a view containing each time point's name
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
         let view = UIView()
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")

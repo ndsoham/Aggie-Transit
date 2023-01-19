@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+//MARK: - this class parses announcement data
 struct AnnouncementData: Codable {
     var Items: [AnnouncementStruct]
 }

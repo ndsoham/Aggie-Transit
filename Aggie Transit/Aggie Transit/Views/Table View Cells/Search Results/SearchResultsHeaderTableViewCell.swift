@@ -13,22 +13,25 @@ class SearchResultsHeaderTableViewCell: UITableViewCell {
     private var resultsLabel: UILabel = UILabel()
     private var resultsName: String = "Results"
     private var resultsNumberLabel: UILabel = UILabel()
-    var resultsNumber: String?
-    var closeDelegate: CloseDelegate?
     private var resultsStack: UIStackView = UIStackView()
     private var leftInset: Double?
     private var safeMargins: UILayoutGuide?
+    var resultsNumber: String?
+    var closeDelegate: CloseDelegate?
+    //MARK: - initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
+   
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    //MARK: - prepare for reuse
     override func prepareForReuse() {
         super.prepareForReuse()
         self.resultsNumber = nil
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    //MARK: - layout subviews
     override func layoutSubviews() {
         super.layoutSubviews()
         self.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -74,14 +77,11 @@ class SearchResultsHeaderTableViewCell: UITableViewCell {
                 closeButton.centerYAnchor.constraint(equalTo: safeMargins.centerYAnchor).isActive = true
                 // add target
                 closeButton.addTarget(self, action: #selector(handleCloseButtonPressed), for: .touchUpInside)
-                
             }
-            
-            
         }
     }
 }
-
+//MARK: - Deal with closing the panel
 extension SearchResultsHeaderTableViewCell {
     @objc func handleCloseButtonPressed(sender: UIButton) {
         if let closeDelegate = closeDelegate {

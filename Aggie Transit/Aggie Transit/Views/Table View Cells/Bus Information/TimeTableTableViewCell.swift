@@ -9,11 +9,11 @@ import Foundation
 import UIKit
 
 class TimeTableTableViewCell: UITableViewCell {
-    private var baseView: UIView?
     private var safeMargins: UILayoutGuide?
+    private var timeHorizontalStack: UIStackView? = UIStackView()
     var times: [Date?]?
     var cellColor: UIColor?
-    private var timeHorizontalStack: UIStackView?
+    //MARK: - initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
@@ -21,29 +21,22 @@ class TimeTableTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    //MARK: - prepare for reuse
     override func prepareForReuse() {
         super.prepareForReuse()
     }
+    //MARK: - layout subviews
     override func layoutSubviews() {
         super.layoutSubviews()
-        baseView = UIView()
         timeHorizontalStack = UIStackView()
         safeMargins = self.contentView.safeAreaLayoutGuide
-        if let baseView, let safeMargins, let times, let timeHorizontalStack, let cellColor {
-            baseView.backgroundColor = cellColor
-            baseView.translatesAutoresizingMaskIntoConstraints = false
-            // add to view hierarchy and constrain
-            self.contentView.addSubview(baseView)
-            baseView.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor).isActive = true
-            baseView.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor).isActive = true
-            baseView.topAnchor.constraint(equalTo: safeMargins.topAnchor).isActive = true
-            baseView.bottomAnchor.constraint(equalTo: safeMargins.bottomAnchor).isActive = true
+        self.contentView.backgroundColor = cellColor
+        if let safeMargins, let times, let timeHorizontalStack {
             // configure time stack
             timeHorizontalStack.axis = .horizontal
             timeHorizontalStack.alignment = .center
             timeHorizontalStack.translatesAutoresizingMaskIntoConstraints = false
             timeHorizontalStack.distribution = .equalSpacing
-            
             // add and constrain
             self.contentView.addSubview(timeHorizontalStack)
             timeHorizontalStack.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor).isActive = true
@@ -65,7 +58,7 @@ class TimeTableTableViewCell: UITableViewCell {
                 ]
                 let label = UILabel()
                 label.widthAnchor.constraint(equalToConstant: self.contentView.frame.width/Double(times.count)).isActive = true
-
+                
                 if let time {
                     label.attributedText = NSDate.now > time ? NSAttributedString(string: dateFormatter.string(from: time), attributes: strikeThroughAttribute):NSAttributedString(string: dateFormatter.string(from: time), attributes: sizeAttribute)
                     label.adjustsFontSizeToFitWidth = true
@@ -76,7 +69,6 @@ class TimeTableTableViewCell: UITableViewCell {
                     timeHorizontalStack.addArrangedSubview(label)
                 }
             }
-            
         }
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+//MARK: - This class is used to parse route data
 struct RouteData: Codable {
     var Group: GroupStruct
     var Icon: String

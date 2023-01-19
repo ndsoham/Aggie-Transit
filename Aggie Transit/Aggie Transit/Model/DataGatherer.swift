@@ -23,12 +23,11 @@ protocol BusRouteDataGathererDelegate {
 class DataGatherer {
     private let baseUrl = "https://transport.tamu.edu/BusRoutesFeed/api/"
     private let dateFormatter = DateFormatter()
-    public var delegate: DataGathererDelegate?
-    public var busRouteDelegate: BusRouteDataGathererDelegate?
+    var delegate: DataGathererDelegate?
+    var busRouteDelegate: BusRouteDataGathererDelegate?
     var alertDelegate: AlertDelegate?
-    init(){
-        configureDateFormatter()
-    }
+    init(){configureDateFormatter()}
+    //MARK: - This functions parses api data and converts it into a usable form; alerts are presented to the user when errors occur
     func gatherData(endpoint: String){
         let url = URL(string: baseUrl+endpoint)
         if let url = url{
@@ -38,13 +37,7 @@ class DataGatherer {
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel))
                     self.alertDelegate?.displayAlert(alert: alert)
                 }
-                else {
-                    guard let data = data else {
-                        let alert = UIAlertController(title: "Alert", message: "An error has occured.", preferredStyle: .actionSheet)
-                        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
-                        self.alertDelegate?.displayAlert(alert: alert)
-                        return
-                    }
+                else if let data {
                     do {
                         let decoder = JSONDecoder()
                         if endpoint == "routes" {
@@ -99,6 +92,10 @@ class DataGatherer {
                         alert.addAction(UIAlertAction(title: "OK", style: .cancel))
                         self.alertDelegate?.displayAlert(alert: alert)
                     }
+                } else {
+                    let alert = UIAlertController(title: "Alert", message: "An error has occured.", preferredStyle: .actionSheet)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                    self.alertDelegate?.displayAlert(alert: alert)
                 }
             }
             task.resume()
@@ -125,7 +122,7 @@ class DataGatherer {
         }
         return routes
     }
-    //MARK: - use this to convert from decoded pattern data to bus pattern
+    //MARK: - Use this to convert from decoded pattern data to bus pattern
     private func gatherBusPattern(data: [PatternData]) -> [BusPattern] {
         var points: [BusPattern] = []
         for point in data {
@@ -135,7 +132,7 @@ class DataGatherer {
         }
         return points
     }
-    //MARK: - use this to convert from decoded stop data to bus stop
+    //MARK: - Use this to convert from decoded stop data to bus stop
     private func gatherBusStops(data: [StopData]) -> [BusStop] {
         var stops: [BusStop] = []
         for stop in data {
@@ -145,7 +142,7 @@ class DataGatherer {
         }
         return stops
     }
-    //MARK: - use this to convert from decoded bus data to bus
+    //MARK: - Use this to convert from decoded bus data to bus
     private func gatherBuses(data: [BusData]) -> [Bus] {
         var buses: [Bus] = []
         for bus in data {
@@ -157,7 +154,7 @@ class DataGatherer {
         }
         return buses
     }
-    //MARK: - use this to convert from decoded bus data to time data
+    //MARK: - Use this to convert from decoded bus data to time data
     private func gatherTime(data: [[String:String?]]) -> [[String:Date?]] {
         var timeTable: [[String:Date?]] = []
         for row in data {
@@ -191,7 +188,7 @@ class DataGatherer {
         }
         return timeTable
     }
-    //MARK: - use this to tather notifications
+    //MARK: - Use this to convert from decoded data to bus notifications
     private func gatherNotifications(data: [AnnouncementStruct]) -> [BusNotification]{
         var notifications:[BusNotification] = []
         for notification in data {

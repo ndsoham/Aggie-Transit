@@ -25,17 +25,20 @@ class NotificationsTableViewCell: UITableViewCell {
     private var titleContentLabel: UILabel = UILabel()
     var alertContent: String?
     var alertTitle: String?
+    //MARK: - initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    //MARK: - prepare for reuse
     override func prepareForReuse() {
         super.prepareForReuse()
         self.alertContent = nil
         self.alertTitle = nil
     }
+    //MARK: - layoutsubviews
     override func layoutSubviews() {
         super.layoutSubviews()
         self.selectedBackgroundView = nil
@@ -76,8 +79,9 @@ class NotificationsTableViewCell: UITableViewCell {
                 viewMargins = view.safeAreaLayoutGuide
                 if let viewMargins = viewMargins {
                     stackView.leadingAnchor.constraint(equalTo: viewMargins.leadingAnchor,constant: 30).isActive = true
-                    stackView.centerYAnchor.constraint(equalTo: viewMargins.centerYAnchor).isActive = true
                     stackView.trailingAnchor.constraint(equalTo: viewMargins.trailingAnchor, constant: -30).isActive = true
+                    stackView.topAnchor.constraint(equalTo: viewMargins.topAnchor).isActive = true
+                    stackView.bottomAnchor.constraint(equalTo: viewMargins.bottomAnchor).isActive = true
                 }
                 // create icon label and text label
                 let nameAttributes: [NSAttributedString.Key:Any] = [

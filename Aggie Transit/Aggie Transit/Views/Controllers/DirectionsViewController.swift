@@ -20,10 +20,13 @@ class DirectionsViewController: UIViewController {
     var endpoints: [Location]?
     var route: [(BusRoute, BusStop)]?
     var routeDisplayerDelegate: RouteDisplayerDelegate?
+    var eta: Double?
+    //MARK: - view did load
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
     }
+    //MARK: - layout subviews
     func layoutSubviews() {
         self.view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
         // set up the close button and heading label
@@ -125,7 +128,6 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "endpointsTableViewCell") as! EndpointsTableViewCell
                 cell.iconTintColor = indexPath.row == 0 ? .systemGreen:.systemRed
                 cell.text = endpoints[indexPath.row].name
-                cell.textField?.delegate = self
                 if indexPath.row == 1 {
                     cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
                 }
@@ -136,9 +138,11 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
                     cell.iconImage = UIImage(systemName: "mappin.circle.fill")
                     cell.directions = endpoints[0].name
                     cell.iconTint = .systemGreen
-                } else if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
+                } else if indexPath.row == tableView.numberOfRows(inSection: 0) - 1, let eta {
                     cell.iconImage = UIImage(systemName: "mappin.circle.fill")
-                    cell.directions = endpoints[1].name
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.setLocalizedDateFormatFromTemplate("hh:mm a")
+                    cell.directions = endpoints[1].name + "\nArrive at \(dateFormatter.string(from: NSDate.now.addingTimeInterval(eta*60)))"
                     cell.iconTint = .systemRed
                 } else {
                     let userLocation = endpoints[0].name
@@ -202,7 +206,7 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
         return UITableViewCell()
         
     }
-    // deal with dragging
+//MARK: - handle dragging
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none
     }
@@ -261,14 +265,5 @@ extension DirectionsViewController {
             }
         }
         
-    }
-}
-//MARK: - deal with text field delegate methods
-extension DirectionsViewController: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        
-    }
-    func textFieldDidEndEditing(_ textField: UITextField) {
-    
     }
 }
