@@ -146,23 +146,25 @@ extension BusInformationViewController: UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "timeTableTableViewCell") as! TimeTableTableViewCell
-        if let timeTable, let keyOrder = keyOrder {
-            let row = timeTable[indexPath.row]
-            var dates: [Date?] = []
-            for key in keyOrder {
-                if let date = row[key] {
-                    dates.append(date)
+        if cell.times == nil {
+            if let timeTable, let keyOrder = keyOrder {
+                let row = timeTable[indexPath.row]
+                var dates: [Date?] = []
+                for key in keyOrder {
+                    if let date = row[key] {
+                        dates.append(date)
+                    }
                 }
+                cell.times = dates
             }
-            cell.times = dates
-            
+            if indexPath.row % 2 == 0 {
+                cell.cellColor = UIColor(named: "menuColor")
+            } else {
+                cell.cellColor = UIColor(named: "launchScreenBackgroundColor")
+            }
+            return cell
         }
-        if indexPath.row % 2 == 0 {
-            cell.cellColor = UIColor(named: "menuColor")
-        } else {
-            cell.cellColor = UIColor(named: "launchScreenBackgroundColor")
-        }
-        return cell
+        return UITableViewCell()
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return busNumberViewHeight
