@@ -16,7 +16,7 @@ class DirectionsTableViewCell: UITableViewCell {
     private var directionsLabel: UILabel = UILabel()
     var directions: String?
     private var safeMargins: UILayoutGuide?
-    private var leftPadding: Double?
+    private var leftPadding: Double = 5.0
     //MARK: - initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -36,10 +36,9 @@ class DirectionsTableViewCell: UITableViewCell {
         super.layoutSubviews()
         safeMargins = self.contentView.layoutMarginsGuide
         // configure the base view
-        leftPadding = 5.0
         self.contentView.backgroundColor = UIColor(named: "menuColor")
-        if let safeMargins = safeMargins, let leftPadding = leftPadding {
-            
+        self.plainView.backgroundColor  = UIColor(named: "menuColor")
+        if let safeMargins = safeMargins {
             // configure the icon and label
             if let iconImage, let directions = directions, let iconTint = iconTint {
                 horizontalStack.translatesAutoresizingMaskIntoConstraints = false

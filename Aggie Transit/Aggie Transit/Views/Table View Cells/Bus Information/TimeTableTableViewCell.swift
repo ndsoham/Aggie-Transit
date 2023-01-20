@@ -54,7 +54,6 @@ class TimeTableTableViewCell: UITableViewCell {
             // add relevant labels
             for time in times {
                 let dateFormatter = DateFormatter()
-                dateFormatter.setLocalizedDateFormatFromTemplate("hh:mm a")
                 let strikeThroughAttribute: [NSAttributedString.Key:Any] = [
                     .strikethroughColor:UIColor(named: "textColor") ?? .black,
                     .strikethroughStyle:NSUnderlineStyle.single.rawValue,
@@ -69,6 +68,11 @@ class TimeTableTableViewCell: UITableViewCell {
                 label.widthAnchor.constraint(equalToConstant: self.contentView.frame.width/Double(times.count)).isActive = true
 
                 if let time {
+                    dateFormatter.setLocalizedDateFormatFromTemplate("mmm d, hh:mm a")
+
+                    print(dateFormatter.string(from: NSDate.now), dateFormatter.string(from: time), NSDate.now > time)
+                    dateFormatter.setLocalizedDateFormatFromTemplate(" hh:mm a")
+
                     label.attributedText = NSDate.now > time ? NSAttributedString(string: dateFormatter.string(from: time), attributes: strikeThroughAttribute):NSAttributedString(string: dateFormatter.string(from: time), attributes: sizeAttribute)
                     label.adjustsFontSizeToFitWidth = true
                     label.textAlignment = .center

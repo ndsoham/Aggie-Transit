@@ -16,7 +16,16 @@ class BusRoute: NSObject {
     var delegate: PathMakerDelegate?
     var stops: [BusStop]?
     var pattern: [BusPattern]?
-    var buses: [Bus]?
+    var buses: [Bus]? {
+        didSet {
+            if let currentlyRunning, !currentlyRunning, let buses {
+                if buses.count > 0 {
+                    self.currentlyRunning = true
+                    gatherBuses()
+                }
+            }
+        }
+    }
     var isFavorited: Bool?
     var timeTable: [[String:Date?]]? {
         // when the time table is set, the data obtained is used to calculate the route time property
@@ -43,7 +52,13 @@ class BusRoute: NSObject {
             }
         }
     }
-    var currentlyRunning: Bool?
+    var currentlyRunning: Bool? {
+        didSet {
+            if self.name == "Bonfire" {
+                print(currentlyRunning)
+            }
+        }
+    }
     var startTime: Date?
     var stopTime: Date?
     var routeTime: Double?
@@ -124,11 +139,6 @@ class BusRoute: NSObject {
         }
         self.busDisplayTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true, block: { timer in
             if let delegate = self.delegate, let buses = self.buses {
-                if let currentlyRunning = self.currentlyRunning {
-                    if !currentlyRunning {
-                        timer.invalidate()
-                    }
-                }
                 delegate.displayBusesOnMap(buses: buses)
             }
         })
@@ -186,6 +196,9 @@ extension BusRoute: BusRouteDataGathererDelegate {
                     if let startTime = self.startTime, let stopTime = self.stopTime {
                         let now = NSDate.now
                         if startTime < now && stopTime > now {
+                            self.currentlyRunning = true
+                        }
+                        else if let buses, buses.count > 0 {
                             self.currentlyRunning = true
                         } else {
                             self.currentlyRunning = false

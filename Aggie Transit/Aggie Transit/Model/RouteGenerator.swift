@@ -100,8 +100,8 @@ class RouteGenerator {
                                 minTravelTime = travelTime
                                 route = (userLocation, [(userRoute, userStop), (desRoute, desStop)], destination, travelTime)
                             }
-                             print(originWalkTime, busArrivalTime, firstRideTime, destinationWalkTime)
-                             print(userLocation.address, "->", userStop.name, "->", "(\(userRoute.name) - \(userRoute.number))", "->", desStop.name, "->", destination.name, ": ", travelTime)
+//                             print(originWalkTime, busArrivalTime, firstRideTime, destinationWalkTime)
+//                             print(userLocation.address, "->", userStop.name, "->", "(\(userRoute.name) - \(userRoute.number))", "->", desStop.name, "->", destination.name, ": ", travelTime)
                         }
                     }
                 }

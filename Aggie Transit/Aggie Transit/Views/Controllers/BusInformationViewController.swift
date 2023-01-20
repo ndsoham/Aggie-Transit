@@ -14,7 +14,7 @@ class BusInformationViewController: UIViewController {
     private var closeButton: UIButton = UIButton(type: .close)
     private var safeMargins: UILayoutGuide?
     private var sidePadding: Double?
-    private let topInset: Double? = 10
+    private let topInset: Double = 10
     private var busNumberView: UIView = UIView()
     private var timesTableView: UITableView = UITableView()
     private var busNumberLabel: UILabel = UILabel()
@@ -65,7 +65,7 @@ class BusInformationViewController: UIViewController {
         safeMargins = self.view.safeAreaLayoutGuide
         sidePadding =  22.5 *  Double(self.view.frame.width/375)
         timesTableView = UITableView()
-        if  let safeMargins, let topInset, let sidePadding, let busName, let busNumber, let busColor {
+        if  let safeMargins, let sidePadding, let busName, let busNumber, let busColor {
             busNumberLabel.translatesAutoresizingMaskIntoConstraints = false
             headingLabel.translatesAutoresizingMaskIntoConstraints = false
             busNumberView.translatesAutoresizingMaskIntoConstraints = false
@@ -108,12 +108,13 @@ class BusInformationViewController: UIViewController {
             closeButton.centerYAnchor.constraint(equalTo: headingLabel.centerYAnchor).isActive = true
             // add target
             closeButton.addTarget(self, action: #selector(closeButtonPressed), for: .touchUpInside)
-            // set up the table view
+            // set up the table view; register header footer/table view cell
             timesTableView.register(TimeTableTableViewCell.self, forCellReuseIdentifier: "timeTableTableViewCell")
+            timesTableView.register(TimeTableHeaderViewCell.self, forHeaderFooterViewReuseIdentifier: "timeTableHeaderViewCell")
             timesTableView.allowsSelection = false
             timesTableView.translatesAutoresizingMaskIntoConstraints = false
             timesTableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            timesTableView.separatorColor = UIColor(named: "borderColor")
+            timesTableView.separatorColor = timesTableView.backgroundColor //UIColor(named: "borderColor")
             timesTableView.dataSource = self
             timesTableView.delegate = self
             timesTableView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
@@ -135,6 +136,7 @@ extension BusInformationViewController {
         }
     }
 }
+
 //MARK: - deal with tableview delegate
 extension BusInformationViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -171,45 +173,12 @@ extension BusInformationViewController: UITableViewDataSource, UITableViewDelega
     }
     //MARK: - return a view containing each time point's name
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-        let safeMargins = view.safeAreaLayoutGuide
-        let labelStack = UIStackView()
-        labelStack.axis = .horizontal
-        labelStack.translatesAutoresizingMaskIntoConstraints = false
-        labelStack.distribution = .fill
-        view.addSubview(labelStack)
-        labelStack.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor).isActive = true
-        labelStack.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor).isActive = true
-        labelStack.bottomAnchor.constraint(equalTo: safeMargins.bottomAnchor).isActive = true
-        labelStack.topAnchor.constraint(equalTo: safeMargins.topAnchor).isActive = true
-        let labelAttributes: [NSAttributedString.Key:Any] = [
-            .font:UIFont.boldSystemFont(ofSize: 11),
-            .foregroundColor:UIColor(named: "textColor") ?? .black
-        ]
-        if let keyOrder, let topInset {
-            for key in keyOrder {
-                if key == " " {
-                    let label = UILabel()
-                    label.text = "No service scheduled."
-                    label.translatesAutoresizingMaskIntoConstraints = false
-                    view.addSubview(label)
-                    label.topAnchor.constraint(equalTo: safeMargins.topAnchor, constant: topInset).isActive = true
-                    label.centerXAnchor.constraint(equalTo: safeMargins.centerXAnchor).isActive = true
-                    return view
-                }
-                let label = UILabel()
-                label.translatesAutoresizingMaskIntoConstraints = false
-                label.widthAnchor.constraint(equalToConstant: tableView.frame.width/CGFloat(keyOrder.count)).isActive = true
-                let index = key.index(key.startIndex, offsetBy: 36)
-                label.attributedText = NSAttributedString(string: (String(key[index...])), attributes: labelAttributes)
-                label.textAlignment = .center
-                label.numberOfLines = 3
-                labelStack.addArrangedSubview(label)
-            }
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "timeTableHeaderViewCell") as! TimeTableHeaderViewCell
+        if view.timeStops == nil {
+            view.timeStops = keyOrder
+            return view
         }
-        return view
+        return UIView()
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return tableView.rowHeight * 2

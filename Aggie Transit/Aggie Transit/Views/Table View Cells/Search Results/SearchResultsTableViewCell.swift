@@ -22,10 +22,10 @@ class SearchResultsTableViewCell: UITableViewCell {
     //MARK: - initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layoutSubviews()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+       
     }
     //MARK: - Prepare for reuse
     override func prepareForReuse() {
@@ -81,9 +81,12 @@ class SearchResultsTableViewCell: UITableViewCell {
                     // add to view hierarcy
                     self.contentView.addSubview(locationDistanceLabel)
                     // add constraints
+                    locationDistanceLabel.widthAnchor.constraint(equalToConstant: 40).isActive = true
                     locationDistanceLabel.trailingAnchor.constraint(equalTo: safeLayoutMargins.trailingAnchor, constant: -horizontalStackPadding).isActive = true
                     locationDistanceLabel.centerYAnchor.constraint(equalTo: safeLayoutMargins.centerYAnchor).isActive = true
                     verticalTextStack.trailingAnchor.constraint(equalTo: locationDistanceLabel.leadingAnchor, constant: -horizontalStackPadding).isActive = true
+                    
+
                 }
         }
     }
