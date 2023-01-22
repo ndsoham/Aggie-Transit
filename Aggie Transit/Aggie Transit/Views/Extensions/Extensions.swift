@@ -7,6 +7,8 @@
 
 import Foundation
 import UIKit
+import MapKit
+import FloatingPanel
 //MARK: - UI Color Extension to create rgb color from string
 extension UIColor {
      static func colorFromRGBString(string: String) -> UIColor {
@@ -26,6 +28,7 @@ extension UIColor {
 
             }
         }
+         // these are default colors returned for the bus routes that do not specify an rgb value
         else if string == "Firebrick" {
             return UIColor(red: 178/255, green: 34/255, blue: 34/255, alpha: 1.0)
         }
@@ -64,5 +67,53 @@ extension UISegmentedControl: UIScrollViewDelegate {
 extension UIScrollView {
     var currentPage:Int{
         return Int((self.contentOffset.x+(0.5*self.frame.size.width))/self.frame.width)
+    }
+}
+//MARK: - UIImage view extension to point the bus in the right direction
+extension UIImage {
+    func rotate(radians: CGFloat) -> UIImage {
+        let rotatedSize = CGRect(origin: .zero, size: size)
+            .applying(CGAffineTransform(rotationAngle: CGFloat(radians)))
+            .integral.size
+        UIGraphicsBeginImageContext(rotatedSize)
+        if let context = UIGraphicsGetCurrentContext() {
+            let origin = CGPoint(x: rotatedSize.width / 2.0,
+                                 y: rotatedSize.height / 2.0)
+            context.translateBy(x: origin.x, y: origin.y)
+            context.rotate(by: radians)
+            draw(in: CGRect(x: -origin.y, y: -origin.x,
+                            width: size.width, height: size.height))
+            let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            return rotatedImage ?? self
+        }
+        
+        return self
+    }
+}
+//MARK: - use to convert to radians
+func rad(_ number: Double) -> Double {
+    return number * Double.pi / 180
+}
+//MARK: - Use to find distance
+extension CLLocationCoordinate2D {
+    func distance(to: CLLocationCoordinate2D) -> CLLocationDistance {
+        MKMapPoint(self).distance(to: MKMapPoint(to))
+    }
+}
+//MARK: - Use this to order the bus stops, insertions
+extension Array {
+    mutating func rotateLeft(positions: Int) {
+        let index = self.index(startIndex, offsetBy: positions, limitedBy: endIndex) ?? endIndex
+        let slice = self[..<index]
+        removeSubrange(..<index)
+        insert(contentsOf: slice, at: endIndex)
+    }
+    mutating func moveItem(at sourceIndex: Int, to destinationIndex: Int) {
+        guard sourceIndex != destinationIndex else {return}
+        let item = self[sourceIndex]
+        self.remove(at: sourceIndex)
+        self.insert(item, at: destinationIndex)
     }
 }
