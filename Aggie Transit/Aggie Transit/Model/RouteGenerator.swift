@@ -112,7 +112,7 @@ class RouteGenerator {
         }
         // check if just faster to walk from your current location to destination location and if so recommend a walking route
         let (fullWalkTime, fullWalkDistance) = findWalkingETA(source: MKMapItem(placemark: MKPlacemark(coordinate: userLocation.location)), destination: MKMapItem(placemark: MKPlacemark(coordinate: destination.location)))
-        if fullWalkTime < minTravelTime {
+        if fullWalkTime < minTravelTime - 5 {
             minTravelTime = fullWalkTime
             route = (userLocation, [], destination, fullWalkTime, [fullWalkDistance])
         }
