@@ -97,7 +97,7 @@ class BusRouteTableViewCell: UITableViewCell {
                             colorView.clipsToBounds = true
                             iconLabel.attributedText = icon
                             iconLabel.textAlignment = .right
-                            iconLabel.textColor = UIColor(named: "textColor")
+                            iconLabel.textColor = UIColor(named: "busNumberTextColor")
                             customTextLabel.attributedText = busName
                             customTextLabel.textColor = UIColor(named: "textColor")
                             // contrain the color

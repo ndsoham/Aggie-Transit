@@ -44,11 +44,20 @@ class HomeScreenMenuViewController: UIViewController {
     var recentsTableView: UITableView = UITableView()
     var allRoutesTableView: UITableView = UITableView()
     var notificationsTableView: UITableView = UITableView()
+    deinit {NotificationCenter.default.removeObserver(self)}
     //MARK: - view did load
     override func viewDidLoad() {
         print("viewDidLoad is called")
         super.viewDidLoad()
+        registerDataTasks()
         layoutSubviews()
+    }
+    //MARK: - Register notification in order to fetch relevant data
+    func registerDataTasks() {
+        NotificationCenter.default.addObserver(self, selector: #selector(fetchTableData), name: UIApplication.didBecomeActiveNotification, object: nil)
+    }
+    //MARK: - fetch relevant data
+    @objc func fetchTableData() {
         setUpDataGatherer()
         checkContainerStatus()
         fetchRecentLocations()

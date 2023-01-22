@@ -57,6 +57,7 @@ class DirectionsTableViewCell: UITableViewCell {
                 // add constraints
                 horizontalStack.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor, constant: leftPadding).isActive = true
                 horizontalStack.centerYAnchor.constraint(equalTo: safeMargins.centerYAnchor).isActive = true
+                horizontalStack.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -leftPadding).isActive = true
                 // configure the text stack
                 textStack.translatesAutoresizingMaskIntoConstraints = false
                 textStack.axis = .vertical
@@ -97,12 +98,9 @@ class DirectionsTableViewCell: UITableViewCell {
                     self.contentView.addSubview(walkingDistanceLabel)
                     // add constraints
                     walkingDistanceLabel.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -leftPadding).isActive = true
-                    walkingDistanceLabel.centerYAnchor.constraint(equalTo: safeMargins.centerYAnchor).isActive = true
+                    walkingDistanceLabel.topAnchor.constraint(equalTo: horizontalStack.topAnchor).isActive = true
                     walkingDistanceLabel.widthAnchor.constraint(equalToConstant: 40).isActive = true
-                    horizontalStack.trailingAnchor.constraint(equalTo: walkingDistanceLabel.leadingAnchor, constant:  -leftPadding*2).isActive = true
 
-                } else {
-                    horizontalStack.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -leftPadding).isActive = true
                 }
             }
         }

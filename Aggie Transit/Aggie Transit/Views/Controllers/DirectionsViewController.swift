@@ -152,18 +152,18 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
                         if indexPath.row == 1 {
                             cell.iconImage = UIImage(systemName: "figure.walk")
                             cell.directionsHeader = "Walk"
-                            cell.directions = "\(userLocation) to \(firstStop.name)"
+                            cell.directions = "From \(userLocation) to \(firstStop.name)"
                             cell.iconTint = UIColor(named: "textColor")
                             cell.walkingDistance = walkDistances[0]
                         } else if indexPath.row == 2 {
                             cell.iconImage = UIImage(systemName: "bus")
                             cell.directionsHeader = "Ride \(firstBus.name) - \(firstBus.number)"
-                            cell.directions = "\(firstStop.name) to \(secondStop.name)"
+                            cell.directions = "From \(firstStop.name) to \(secondStop.name)"
                             cell.iconTint = firstBus.color
                         } else if indexPath.row == 3 {
                             cell.iconImage = UIImage(systemName: "figure.walk")
                             cell.directionsHeader = "Walk"
-                            cell.directions = "\(secondStop.name) to \(destination)"
+                            cell.directions = "From \(secondStop.name) to \(destination)"
                             cell.iconTint = UIColor(named: "textColor")
                             cell.walkingDistance = walkDistances[1]
                         }
@@ -177,37 +177,37 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
                         let fourthStop = route[3].1
                         if indexPath.row == 1 {
                             cell.iconImage = UIImage(systemName: "figure.walk")
-                            cell.directions = "\(userLocation) to \(firstStop.name)"
+                            cell.directions = "From \(userLocation) to \(firstStop.name)"
                             cell.directionsHeader = "Walk"
                             cell.iconTint = UIColor(named: "textColor")
                             cell.walkingDistance = walkDistances[0]
                         } else if indexPath.row == 2 {
                             cell.iconImage = UIImage(systemName: "bus")
-                            cell.directions = "\(firstStop.name) to \(secondStop.name)"
+                            cell.directions = "From \(firstStop.name) to \(secondStop.name)"
                             cell.directionsHeader = "Ride \(firstBus.name) - \(firstBus.number)"
                             cell.iconTint = firstBus.color
                         } else if indexPath.row == 3 {
                             cell.iconImage = UIImage(systemName: "figure.walk")
                             cell.directionsHeader = "Walk"
-                            cell.directions = "\(secondStop.name) to \(thirdStop.name)"
+                            cell.directions = "From \(secondStop.name) to \(thirdStop.name)"
                             cell.iconTint = UIColor(named: "textColor")
                             cell.walkingDistance = walkDistances[1]
                         } else if indexPath.row == 4 {
                             cell.iconImage = UIImage(systemName: "bus")
                             cell.directionsHeader = "Ride \(secondBus.name) - \(secondBus.number)"
-                            cell.directions = "\(thirdStop.name) to \(fourthStop.name)"
+                            cell.directions = "From \(thirdStop.name) to \(fourthStop.name)"
                             cell.iconTint = secondBus.color
                         } else if indexPath.row == 5 {
                             cell.iconImage = UIImage(systemName: "figure.walk")
                             cell.directionsHeader = "Walk"
-                            cell.directions = "\(fourthStop.name) to \(destination)"
+                            cell.directions = "From \(fourthStop.name) to \(destination)"
                             cell.iconTint = UIColor(named: "textColor")
                             cell.walkingDistance = walkDistances[2]
                         }
                     }
                     if route.count == 0 {
                         cell.iconImage = UIImage(systemName: "figure.walk")
-                        cell.directions = "\(userLocation) to \(destination)"
+                        cell.directions = "From \(userLocation) to \(destination)"
                         cell.directionsHeader = "Walk"
                         cell.iconTint = UIColor(named: "textColor")
                         cell.walkingDistance = walkDistances[0]
@@ -227,12 +227,6 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
         return true
     }
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        if let endpoints = endpoints {
-            let itemProvider = NSItemProvider()
-            let dragItem = UIDragItem(itemProvider: itemProvider)
-            dragItem.localObject = endpoints[indexPath.row]
-            return [dragItem]
-        }
         return []
     }
     func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {

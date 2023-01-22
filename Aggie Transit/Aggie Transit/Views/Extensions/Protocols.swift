@@ -55,3 +55,4 @@ protocol BusRouteDataGathererDelegate {
     func didGatherBuses(buses: [Bus])
     func didGatherTimeTable(table: [[String:Date?]])
 }
+

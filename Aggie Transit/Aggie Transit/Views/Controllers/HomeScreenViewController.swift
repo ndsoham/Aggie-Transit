@@ -35,9 +35,8 @@ class HomeScreenViewController: UIViewController {
     private var locationsFpc: FloatingPanelController?
     private var directionsFpc: FloatingPanelController?
     private var busInfoFpc: FloatingPanelController?
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
+    deinit {NotificationCenter.default.removeObserver(self)}
+    //MARK: - life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutSubviews()
@@ -47,20 +46,6 @@ class HomeScreenViewController: UIViewController {
         registerClearNotification()
         setUpRouteGenerator()
         configureLocationManager()
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        // hide the navigation bar
-        if let navigationController = navigationController {
-            navigationController.setNavigationBarHidden(true, animated: false)
-        }
-        super.viewWillAppear(animated)
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-        // show the navigation bar
-        if let navigationController = navigationController {
-            navigationController.setNavigationBarHidden(false, animated: true)
-        }
-        super.viewWillDisappear(animated)
     }
     //MARK: - Configure location manager
     func configureLocationManager() {
@@ -520,6 +505,7 @@ extension HomeScreenViewController {
                 map.removeAnnotations(self.currentlyDisplayedEndpoints)
                 map.setRegion(region, animated: true)
                 self.currentlyDisplayedEndpoints = []
+
             }
         }
     }
