@@ -52,13 +52,7 @@ class BusRoute: NSObject {
             }
         }
     }
-    var currentlyRunning: Bool? {
-        didSet {
-            if self.name == "Bonfire" {
-                print(currentlyRunning)
-            }
-        }
-    }
+    var currentlyRunning: Bool?
     var startTime: Date?
     var stopTime: Date?
     var routeTime: Double?

@@ -40,8 +40,6 @@ class TimeTableHeaderViewCell: UITableViewHeaderFooterView {
             // add to view hierarchy
             self.contentView.addSubview(labelStack)
             // add constraints
-//            labelStack.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor).isActive = true
-//            labelStack.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor).isActive = true
             labelStack.bottomAnchor.constraint(equalTo: safeMargins.bottomAnchor).isActive = true
             labelStack.topAnchor.constraint(equalTo: safeMargins.topAnchor).isActive = true
             // create attributed text

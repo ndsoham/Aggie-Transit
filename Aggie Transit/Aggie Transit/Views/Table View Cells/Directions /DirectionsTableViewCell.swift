@@ -11,12 +11,18 @@ import UIKit
 class DirectionsTableViewCell: UITableViewCell {
     private var horizontalStack: UIStackView = UIStackView()
     private var icon: UIImageView = UIImageView()
-    var iconImage: UIImage?
-    var iconTint: UIColor?
     private var directionsLabel: UILabel = UILabel()
-    var directions: String?
+    private var directionsHeaderLabel: UILabel = UILabel()
+    private var textStack: UIStackView = UIStackView()
     private var safeMargins: UILayoutGuide?
     private var leftPadding: Double = 5.0
+    private var walkingDistanceLabel: UILabel = UILabel()
+    private var verticalStackSpacing: Double = 2.5
+    var directions: String?
+    var directionsHeader: String?
+    var iconImage: UIImage?
+    var iconTint: UIColor?
+    var walkingDistance: Double?
     //MARK: - initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -40,7 +46,7 @@ class DirectionsTableViewCell: UITableViewCell {
         self.plainView.backgroundColor  = UIColor(named: "menuColor")
         if let safeMargins = safeMargins {
             // configure the icon and label
-            if let iconImage, let directions = directions, let iconTint = iconTint {
+            if let iconImage, let directions, let iconTint, let directionsHeader{
                 horizontalStack.translatesAutoresizingMaskIntoConstraints = false
                 horizontalStack.axis = .horizontal
                 horizontalStack.alignment = .leading
@@ -50,24 +56,54 @@ class DirectionsTableViewCell: UITableViewCell {
                 self.contentView.addSubview(horizontalStack)
                 // add constraints
                 horizontalStack.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor, constant: leftPadding).isActive = true
-                horizontalStack.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant:  -leftPadding).isActive = true
                 horizontalStack.centerYAnchor.constraint(equalTo: safeMargins.centerYAnchor).isActive = true
+                // configure the text stack
+                textStack.translatesAutoresizingMaskIntoConstraints = false
+                textStack.axis = .vertical
+                textStack.alignment = .leading
+                textStack.distribution = .fill
+                textStack.spacing = verticalStackSpacing
+                // for attributed text
+                let headerAttributes: [NSAttributedString.Key:Any] = [
+                    .font:UIFont.boldSystemFont(ofSize: 16),
+                    .foregroundColor:UIColor(named: "textColor") ?? .black
+                ]
+                let instructionAttributes: [NSAttributedString.Key:Any] = [
+                    .font:UIFont.systemFont(ofSize: 14),
+                    .foregroundColor:UIColor(named: "textColor")?.withAlphaComponent(0.75) ?? .black
+                ]
                 // configure the other things
                 icon.image = iconImage
                 icon.tintColor = iconTint
                 icon.translatesAutoresizingMaskIntoConstraints = false
-                directionsLabel.text = directions
+                directionsHeaderLabel.attributedText = NSAttributedString(string: directionsHeader, attributes: headerAttributes)
+                directionsHeaderLabel.translatesAutoresizingMaskIntoConstraints = false
+                directionsLabel.attributedText = NSAttributedString(string: directions, attributes: instructionAttributes)
                 directionsLabel.translatesAutoresizingMaskIntoConstraints = false
                 directionsLabel.numberOfLines = 0
-                directionsLabel.adjustsFontSizeToFitWidth = true
                 // add to view hierarchy and constrain
                 horizontalStack.addArrangedSubview(icon)
-                horizontalStack.addArrangedSubview(directionsLabel)
+                textStack.addArrangedSubview(directionsHeaderLabel)
+                textStack.addArrangedSubview(directionsLabel)
+                horizontalStack.addArrangedSubview(textStack)
                 // constrain icon
-                icon.widthAnchor.constraint(equalToConstant: 42).isActive = true
-                icon.heightAnchor.constraint(equalToConstant: 42).isActive = true
+                icon.widthAnchor.constraint(equalToConstant: 31.5).isActive = true
+                icon.heightAnchor.constraint(equalToConstant: 31.5).isActive = true
                 // constrain the label
-                directionsLabel.heightAnchor.constraint(equalToConstant: 42).isActive = true
+                // add an optional walking distance label
+                if let walkingDistance {
+                    walkingDistanceLabel.translatesAutoresizingMaskIntoConstraints = false
+                    walkingDistanceLabel.attributedText = NSAttributedString(string: "\(walkingDistance) mi", attributes: instructionAttributes)
+                    self.contentView.addSubview(walkingDistanceLabel)
+                    // add constraints
+                    walkingDistanceLabel.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -leftPadding).isActive = true
+                    walkingDistanceLabel.centerYAnchor.constraint(equalTo: safeMargins.centerYAnchor).isActive = true
+                    walkingDistanceLabel.widthAnchor.constraint(equalToConstant: 40).isActive = true
+                    horizontalStack.trailingAnchor.constraint(equalTo: walkingDistanceLabel.leadingAnchor, constant:  -leftPadding*2).isActive = true
+
+                } else {
+                    horizontalStack.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -leftPadding).isActive = true
+                }
             }
         }
     }

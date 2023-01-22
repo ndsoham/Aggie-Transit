@@ -11,7 +11,7 @@ extension HomeScreenMenuViewController {
     func generateRoute(origin: Location, destination: Location) {
         let userLocation = origin
         if let destinationRoutesAndStops = RouteGenerator.shared.findRelevantBusRoutesAndClosestStops(location: destination), let userRoutesAndStops = RouteGenerator.shared.findRelevantBusRoutesAndClosestStops(location: userLocation) {
-            let (start, stops, finish, travel) = RouteGenerator.shared.generateRoute(destination: destination, destinationRoutesAndStops: destinationRoutesAndStops, userRoutesAndStops: userRoutesAndStops, userLocation: userLocation)
+            let (start, stops, finish, travel, distances) = RouteGenerator.shared.generateRoute(destination: destination, destinationRoutesAndStops: destinationRoutesAndStops, userRoutesAndStops: userRoutesAndStops, userLocation: userLocation)
             print("Route Generation Successful ---")
             print(start.name, "-> ", terminator: "")
             for (route, stop) in stops {
@@ -19,11 +19,12 @@ extension HomeScreenMenuViewController {
             }
             print(finish.name, travel, separator: ":")
             if let routeDisplayerDelegate = routeDisplayerDelegate {
-                routeDisplayerDelegate.displayRouteOnMap(userLocation: start, route: stops, destination: finish, ETA: travel)
+                routeDisplayerDelegate.displayRouteOnMap(userLocation: start, route: stops, destination: finish, ETA: travel, walkDistances: distances)
             }
         } else {
             if let routeDisplayerDelegate = routeDisplayerDelegate {
-                routeDisplayerDelegate.displayRouteOnMap(userLocation: userLocation, route: [], destination: destination, ETA: RouteGenerator.shared.findWalkingETA(source: MKMapItem(placemark: MKPlacemark(coordinate: userLocation.location)), destination: MKMapItem(placemark: MKPlacemark(coordinate: destination.location))))
+                let (walkTime, walkDistance) = RouteGenerator.shared.findWalkingETA(source: MKMapItem(placemark: MKPlacemark(coordinate: userLocation.location)), destination: MKMapItem(placemark: MKPlacemark(coordinate: destination.location)))
+                routeDisplayerDelegate.displayRouteOnMap(userLocation: userLocation, route: [], destination: destination, ETA: walkTime, walkDistances: [walkDistance])
             }
         }
         

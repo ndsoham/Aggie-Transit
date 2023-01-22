@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-//MARK: - This file contains all of the protocols used within this project
+// This file contains all of the protocols used within this project
 //MARK: - Panel display
 protocol DirectionsPanelClosedDelegate {
     func closeDirectionsPanel()
@@ -28,7 +28,7 @@ protocol PathMakerDelegate {
     func displayPartialRouteOnMap(color: UIColor, points: [BusPattern], startStop: BusStop, endStop: BusStop)
 }
 protocol RouteDisplayerDelegate {
-    func displayRouteOnMap(userLocation: Location, route: [(BusRoute, BusStop)], destination: Location, ETA: Double)
+    func displayRouteOnMap(userLocation: Location, route: [(BusRoute, BusStop)], destination: Location, ETA: Double, walkDistances: [Double])
 }
 //MARK: - loading animation
 protocol RouteGenerationProgressDelegate {
@@ -43,4 +43,15 @@ protocol RouteGenerationProgressDelegate {
 protocol SearchResultsDelegate {
     func displaySearchResults(results: [Location])
 }
-
+//MARK: - Data related protocols
+@objc protocol DataGathererDelegate {
+    @objc optional func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute])
+    @objc optional func didGatherNotifications(notifications: [BusNotification])
+    
+}
+protocol BusRouteDataGathererDelegate {
+    func didGatherBusPattern(points: [BusPattern])
+    func didGatherBusStops(stops: [BusStop])
+    func didGatherBuses(buses: [Bus])
+    func didGatherTimeTable(table: [[String:Date?]])
+}

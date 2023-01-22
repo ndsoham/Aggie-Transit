@@ -9,18 +9,20 @@ import Foundation
 import UIKit
 import MapKit
 class DirectionsViewController: UIViewController {
-    private var directionsTableView: UITableView?
-    private var endpointsTableView: UITableView?
-    private var headingLabel: UILabel?
-    private var closeButton: UIButton?
+    private var endpointsTableView: UITableView = UITableView()
+    private var headingLabel: UILabel = UILabel()
+    private var closeButton: UIButton = UIButton(type: .close)
     private var safeMargins: UILayoutGuide?
     private var sidePadding: Double?
-    private var topInset: Double?
+    private var topInset: Double = 10
     var delegate: DirectionsPanelClosedDelegate?
     var endpoints: [Location]?
     var route: [(BusRoute, BusStop)]?
     var routeDisplayerDelegate: RouteDisplayerDelegate?
     var eta: Double?
+    var walkDistances: [Double]?
+    var directionsTableView: UITableView = UITableView()
+    
     //MARK: - view did load
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,12 +36,9 @@ class DirectionsViewController: UIViewController {
             .font:UIFont.boldSystemFont(ofSize: 24),
             .foregroundColor:UIColor(named: "textColor") ?? .black
         ]
-        headingLabel = UILabel()
-        closeButton = UIButton(type: .close)
         safeMargins = self.view.safeAreaLayoutGuide
-        topInset = 10
         sidePadding =  22.5 *  Double(self.view.frame.width/375)
-        if let headingLabel, let closeButton, let safeMargins, let topInset, let sidePadding {
+        if let safeMargins, let sidePadding {
             // configure
             headingLabel.translatesAutoresizingMaskIntoConstraints = false
             closeButton.translatesAutoresizingMaskIntoConstraints = false
@@ -55,49 +54,46 @@ class DirectionsViewController: UIViewController {
             // add target
             closeButton.addTarget(self, action: #selector(closeButtonPressed), for: .touchUpInside)
             // set up the table views
-            endpointsTableView = UITableView()
-            if let tableView = endpointsTableView {
-                tableView.register(EndpointsTableViewCell.self, forCellReuseIdentifier: "endpointsTableViewCell")
-                tableView.clipsToBounds = true
-                tableView.layer.cornerRadius = 15
-                tableView.delegate = self
-                tableView.dataSource = self
-                tableView.translatesAutoresizingMaskIntoConstraints = false
-                tableView.allowsSelection = false
-                tableView.isScrollEnabled = false
-                tableView.dragDelegate = self
-                tableView.dropDelegate = self
-                tableView.dragInteractionEnabled = true
-                tableView.separatorColor = UIColor(named: "borderColor1")
-                // add to view hierarchy
-                self.view.addSubview(tableView)
-                // add constraints
-                tableView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: topInset).isActive = true
-                tableView.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor, constant: sidePadding).isActive = true
-                tableView.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -sidePadding).isActive = true
-                tableView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-                
-                directionsTableView = UITableView()
-                if let directionsTableView = directionsTableView {
-                    directionsTableView.backgroundColor = UIColor(named: "menuColor")
-                    directionsTableView.register(DirectionsTableViewCell.self, forCellReuseIdentifier: "directionsTableViewCell")
-                    directionsTableView.clipsToBounds = true
-                    directionsTableView.layer.cornerRadius = 15
-                    directionsTableView.delegate = self
-                    directionsTableView.dataSource = self
-                    directionsTableView.translatesAutoresizingMaskIntoConstraints = false
-                    directionsTableView.allowsSelection = false
-                    directionsTableView.isScrollEnabled = true
-                    directionsTableView.separatorColor = UIColor(named: "borderColor1")
-                    // add to view hierarchy
-                    self.view.addSubview(directionsTableView)
-                    // add constraints
-                    directionsTableView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: topInset).isActive = true
-                    directionsTableView.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor, constant: sidePadding).isActive = true
-                    directionsTableView.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -sidePadding).isActive = true
-                    directionsTableView.bottomAnchor.constraint(equalTo: safeMargins.bottomAnchor, constant: -topInset).isActive = true
-                }
-            }
+            
+            endpointsTableView.register(EndpointsTableViewCell.self, forCellReuseIdentifier: "endpointsTableViewCell")
+            endpointsTableView.clipsToBounds = true
+            endpointsTableView.layer.cornerRadius = 15
+            endpointsTableView.delegate = self
+            endpointsTableView.dataSource = self
+            endpointsTableView.translatesAutoresizingMaskIntoConstraints = false
+            endpointsTableView.allowsSelection = false
+            endpointsTableView.isScrollEnabled = false
+            endpointsTableView.dragDelegate = self
+            endpointsTableView.dropDelegate = self
+            endpointsTableView.dragInteractionEnabled = true
+            endpointsTableView.separatorColor = UIColor(named: "borderColor1")
+            // add to view hierarchy
+            self.view.addSubview(endpointsTableView)
+            // add constraints
+            endpointsTableView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: topInset).isActive = true
+            endpointsTableView.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor, constant: sidePadding).isActive = true
+            endpointsTableView.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -sidePadding).isActive = true
+            endpointsTableView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+            directionsTableView.backgroundColor = UIColor(named: "menuColor")
+            directionsTableView.register(DirectionsTableViewCell.self, forCellReuseIdentifier: "directionsTableViewCell")
+            directionsTableView.clipsToBounds = true
+            directionsTableView.layer.cornerRadius = 15
+            directionsTableView.delegate = self
+            directionsTableView.dataSource = self
+            directionsTableView.translatesAutoresizingMaskIntoConstraints = false
+            directionsTableView.allowsSelection = false
+            directionsTableView.isScrollEnabled = true
+            directionsTableView.separatorColor = UIColor(named: "borderColor1")
+            // add to view hierarchy
+            self.view.addSubview(directionsTableView)
+            // add constraints
+            directionsTableView.topAnchor.constraint(equalTo: endpointsTableView.bottomAnchor, constant: topInset).isActive = true
+            directionsTableView.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor, constant: sidePadding).isActive = true
+            directionsTableView.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -sidePadding).isActive = true
+            directionsTableView.bottomAnchor.constraint(equalTo: safeMargins.bottomAnchor, constant: -topInset).isActive = true
+            
+            
+            
         }
     }
 }
@@ -123,6 +119,8 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
     }
     // provide cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let dateFormatter = DateFormatter()
+        dateFormatter.setLocalizedDateFormatFromTemplate("hh:mm a")
         if let endpoints = endpoints {
             if tableView == endpointsTableView {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "endpointsTableViewCell") as! EndpointsTableViewCell
@@ -132,17 +130,17 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
                     cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
                 }
                 return cell
-            } else if tableView == directionsTableView, let route = route {
+            } else if tableView == directionsTableView, let route, let walkDistances {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "directionsTableViewCell") as! DirectionsTableViewCell
                 if indexPath.row == 0 {
                     cell.iconImage = UIImage(systemName: "mappin.circle.fill")
-                    cell.directions = endpoints[0].name
+                    cell.directions = "Start at \(dateFormatter.string(from: NSDate.now))"
+                    cell.directionsHeader = endpoints[0].name
                     cell.iconTint = .systemGreen
                 } else if indexPath.row == tableView.numberOfRows(inSection: 0) - 1, let eta {
                     cell.iconImage = UIImage(systemName: "mappin.circle.fill")
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.setLocalizedDateFormatFromTemplate("hh:mm a")
-                    cell.directions = endpoints[1].name + "\nArrive at \(dateFormatter.string(from: NSDate.now.addingTimeInterval(eta*60)))"
+                    cell.directionsHeader = endpoints[1].name
+                    cell.directions = "Arrive at \(dateFormatter.string(from: NSDate.now.addingTimeInterval(eta*60)))"
                     cell.iconTint = .systemRed
                 } else {
                     let userLocation = endpoints[0].name
@@ -153,16 +151,21 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
                         let secondStop = route[1].1
                         if indexPath.row == 1 {
                             cell.iconImage = UIImage(systemName: "figure.walk")
-                            cell.directions = "Walk from \(userLocation) to \(firstStop.name)"
+                            cell.directionsHeader = "Walk"
+                            cell.directions = "\(userLocation) to \(firstStop.name)"
                             cell.iconTint = UIColor(named: "textColor")
+                            cell.walkingDistance = walkDistances[0]
                         } else if indexPath.row == 2 {
                             cell.iconImage = UIImage(systemName: "bus")
-                            cell.directions = "Ride \(firstBus.name) - \(firstBus.number) from \(firstStop.name) to \(secondStop.name)"
+                            cell.directionsHeader = "Ride \(firstBus.name) - \(firstBus.number)"
+                            cell.directions = "\(firstStop.name) to \(secondStop.name)"
                             cell.iconTint = firstBus.color
                         } else if indexPath.row == 3 {
                             cell.iconImage = UIImage(systemName: "figure.walk")
-                            cell.directions = "Walk from \(secondStop.name) to \(destination)"
+                            cell.directionsHeader = "Walk"
+                            cell.directions = "\(secondStop.name) to \(destination)"
                             cell.iconTint = UIColor(named: "textColor")
+                            cell.walkingDistance = walkDistances[1]
                         }
                     }
                     if route.count == 4 {
@@ -174,30 +177,40 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
                         let fourthStop = route[3].1
                         if indexPath.row == 1 {
                             cell.iconImage = UIImage(systemName: "figure.walk")
-                            cell.directions = "Walk from \(userLocation) to \(firstStop.name)"
+                            cell.directions = "\(userLocation) to \(firstStop.name)"
+                            cell.directionsHeader = "Walk"
                             cell.iconTint = UIColor(named: "textColor")
+                            cell.walkingDistance = walkDistances[0]
                         } else if indexPath.row == 2 {
                             cell.iconImage = UIImage(systemName: "bus")
-                            cell.directions = "Ride \(firstBus.name) - \(firstBus.number) from \(firstStop.name) to \(secondStop.name)"
+                            cell.directions = "\(firstStop.name) to \(secondStop.name)"
+                            cell.directionsHeader = "Ride \(firstBus.name) - \(firstBus.number)"
                             cell.iconTint = firstBus.color
                         } else if indexPath.row == 3 {
                             cell.iconImage = UIImage(systemName: "figure.walk")
-                            cell.directions = "Walk from \(secondStop.name) to \(thirdStop.name)"
+                            cell.directionsHeader = "Walk"
+                            cell.directions = "\(secondStop.name) to \(thirdStop.name)"
                             cell.iconTint = UIColor(named: "textColor")
+                            cell.walkingDistance = walkDistances[1]
                         } else if indexPath.row == 4 {
                             cell.iconImage = UIImage(systemName: "bus")
-                            cell.directions = "Ride \(secondBus.name) - \(secondBus.number) from \(thirdStop.name) to \(fourthStop.name)"
+                            cell.directionsHeader = "Ride \(secondBus.name) - \(secondBus.number)"
+                            cell.directions = "\(thirdStop.name) to \(fourthStop.name)"
                             cell.iconTint = secondBus.color
                         } else if indexPath.row == 5 {
                             cell.iconImage = UIImage(systemName: "figure.walk")
-                            cell.directions = "Walk from \(fourthStop.name) to \(destination)"
+                            cell.directionsHeader = "Walk"
+                            cell.directions = "\(fourthStop.name) to \(destination)"
                             cell.iconTint = UIColor(named: "textColor")
+                            cell.walkingDistance = walkDistances[2]
                         }
                     }
                     if route.count == 0 {
                         cell.iconImage = UIImage(systemName: "figure.walk")
-                        cell.directions = "Walk from \(userLocation) to \(destination)"
+                        cell.directions = "\(userLocation) to \(destination)"
+                        cell.directionsHeader = "Walk"
                         cell.iconTint = UIColor(named: "textColor")
+                        cell.walkingDistance = walkDistances[0]
                     }
                 }
                 return cell
@@ -206,7 +219,7 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
         return UITableViewCell()
         
     }
-//MARK: - handle dragging
+    //MARK: - handle dragging
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none
     }
@@ -214,20 +227,22 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
         return true
     }
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-       if let endpoints = endpoints {
-           let itemProvider = NSItemProvider()
+        if let endpoints = endpoints {
+            let itemProvider = NSItemProvider()
             let dragItem = UIDragItem(itemProvider: itemProvider)
-               dragItem.localObject = endpoints[indexPath.row]
+            dragItem.localObject = endpoints[indexPath.row]
             return [dragItem]
-       }
+        }
         return []
     }
     func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
-       
+        
     }
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         endpoints?.moveItem(at: sourceIndexPath.row, to: destinationIndexPath.row)
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            tableView.reloadData()
+        }
     }
     func tableView(_ tableView: UITableView, dropSessionDidEnd session: UIDropSession) {
         if let endpoints = endpoints {
@@ -249,7 +264,7 @@ extension DirectionsViewController {
     private func generateRoute(origin: Location, destination: Location) {
         let userLocation = origin
         if let destinationRoutesAndStops = RouteGenerator.shared.findRelevantBusRoutesAndClosestStops(location: destination), let userRoutesAndStops = RouteGenerator.shared.findRelevantBusRoutesAndClosestStops(location: userLocation) {
-            let (start, stops, finish, travel) = RouteGenerator.shared.generateRoute(destination: destination, destinationRoutesAndStops: destinationRoutesAndStops, userRoutesAndStops: userRoutesAndStops, userLocation: userLocation)
+            let (start, stops, finish, travel, distances) = RouteGenerator.shared.generateRoute(destination: destination, destinationRoutesAndStops: destinationRoutesAndStops, userRoutesAndStops: userRoutesAndStops, userLocation: userLocation)
             print("Route Generation Successful ---")
             print(start.name, "-> ", terminator: "")
             for (route, stop) in stops {
@@ -257,11 +272,13 @@ extension DirectionsViewController {
             }
             print(finish.name, travel, separator: ":")
             if let routeDisplayerDelegate = routeDisplayerDelegate {
-                routeDisplayerDelegate.displayRouteOnMap(userLocation: start, route: stops, destination: finish, ETA: travel)
+                routeDisplayerDelegate.displayRouteOnMap(userLocation: start, route: stops, destination: finish, ETA: travel, walkDistances: distances)
             }
         } else {
             if let routeDisplayerDelegate = routeDisplayerDelegate {
-                routeDisplayerDelegate.displayRouteOnMap(userLocation: userLocation, route: [], destination: destination, ETA: RouteGenerator.shared.findWalkingETA(source: MKMapItem(placemark: MKPlacemark(coordinate: userLocation.location)), destination: MKMapItem(placemark: MKPlacemark(coordinate: destination.location))))
+                let (walkTime, walkDistance) = RouteGenerator.shared.findWalkingETA(source: MKMapItem(placemark: MKPlacemark(coordinate: userLocation.location)), destination: MKMapItem(placemark: MKPlacemark(coordinate: destination.location)))
+                
+                routeDisplayerDelegate.displayRouteOnMap(userLocation: userLocation, route: [], destination: destination, ETA:walkTime, walkDistances: [walkDistance])
             }
         }
         

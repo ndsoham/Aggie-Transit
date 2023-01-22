@@ -11,7 +11,7 @@ import MapKit
 import CoreData
 
 class SearchResultsViewController: UIViewController {
-    private var tableView: UITableView?
+    var tableView: UITableView = UITableView()
     private var tableViewRowHeight: Double = 75
     private var safeMargins: UILayoutGuide?
     private var leftInset: Double?
@@ -41,8 +41,7 @@ class SearchResultsViewController: UIViewController {
         leftInset = 15 * Double(self.view.frame.width/375)
         safeMargins = self.view.safeAreaLayoutGuide
         // create and configure the table view
-        tableView = UITableView()
-        if let tableView = tableView, let leftInset = leftInset, let safeMargins = safeMargins {
+        if let leftInset = leftInset, let safeMargins = safeMargins {
             // register cell and header view
             tableView.register(SearchResultsTableViewCell.self, forCellReuseIdentifier: "searchResultsTableViewCell")
             tableView.register(SearchResultsHeaderTableViewCell.self, forCellReuseIdentifier: "searchResultsTableViewHeaderCell")
@@ -131,7 +130,7 @@ extension SearchResultsViewController {
     func generateRoute(origin: Location, destination: Location) {
             let userLocation = origin
             if let destinationRoutesAndStops = RouteGenerator.shared.findRelevantBusRoutesAndClosestStops(location: destination), let userRoutesAndStops = RouteGenerator.shared.findRelevantBusRoutesAndClosestStops(location: userLocation) {
-                let (start, stops, finish, travel) = RouteGenerator.shared.generateRoute(destination: destination, destinationRoutesAndStops: destinationRoutesAndStops, userRoutesAndStops: userRoutesAndStops, userLocation: userLocation)
+                let (start, stops, finish, travel, distances) = RouteGenerator.shared.generateRoute(destination: destination, destinationRoutesAndStops: destinationRoutesAndStops, userRoutesAndStops: userRoutesAndStops, userLocation: userLocation)
                 print("Route Generation Successful ---")
                 print(start.name, "-> ", terminator: "")
                 for (route, stop) in stops {
@@ -139,11 +138,12 @@ extension SearchResultsViewController {
                 }
                 print(finish.name, travel, separator: ":")
                 if let routeDisplayerDelegate = routeDisplayerDelegate {
-                    routeDisplayerDelegate.displayRouteOnMap(userLocation: start, route: stops, destination: finish, ETA: travel)
+                    routeDisplayerDelegate.displayRouteOnMap(userLocation: start, route: stops, destination: finish, ETA: travel, walkDistances: distances)
                 }
             } else {
                 if let routeDisplayerDelegate = routeDisplayerDelegate {
-                    routeDisplayerDelegate.displayRouteOnMap(userLocation: userLocation, route: [], destination: destination, ETA: RouteGenerator.shared.findWalkingETA(source: MKMapItem(placemark: MKPlacemark(coordinate: userLocation.location)), destination: MKMapItem(placemark: MKPlacemark(coordinate: destination.location))))
+                    let (walkTime, walkDistance) = RouteGenerator.shared.findWalkingETA(source: MKMapItem(placemark: MKPlacemark(coordinate: userLocation.location)), destination: MKMapItem(placemark: MKPlacemark(coordinate: destination.location)))
+                    routeDisplayerDelegate.displayRouteOnMap(userLocation: userLocation, route: [], destination: destination, ETA: walkTime, walkDistances: [walkDistance])
                 }
             }
         

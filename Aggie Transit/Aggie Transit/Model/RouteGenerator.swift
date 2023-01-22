@@ -33,28 +33,31 @@ class RouteGenerator {
         return closestStops
     }
     //MARK: - Use this to generate the route
-    func generateRoute(destination: Location, destinationRoutesAndStops: [(BusRoute,[BusStop])], userRoutesAndStops: [(BusRoute, [BusStop])], userLocation: Location) -> (Location, [(BusRoute, BusStop)], Location, Double){
+    func generateRoute(destination: Location, destinationRoutesAndStops: [(BusRoute,[BusStop])], userRoutesAndStops: [(BusRoute, [BusStop])], userLocation: Location) -> (Location, [(BusRoute, BusStop)], Location, Double, [Double]){
         progressDelegate?.routeGenerationDidStart()
         var minTravelTime: Double = Double.greatestFiniteMagnitude
-        // the route array contains the starting location, followed by a series of intermediate steps namely bus routes/stops and the destination location
-        var route: (Location, [(BusRoute, BusStop)], Location, Double)? = nil
+        // the route array contains the starting location, followed by a series of intermediate steps namely bus routes/stops and the destination location; last two things are estimated travel time and an array of walking distances
+        var route: (Location, [(BusRoute, BusStop)], Location, Double, [Double])? = nil
         // arrays have been filtered at this point so all there is to find is the fastest route to the destination
         for (userRoute, userStops) in userRoutesAndStops {
             var travelTime: Double = 0
             var originWalkTime: Double = 0
+            var originWalkDistance: Double = 0
             for userStop in userStops {
                 // first calculate the time it will take for the user to walk to the origin bus stop
                 let userStopMapItem = MKMapItem(placemark:MKPlacemark(coordinate: userStop.location))
                 let userLocationMapItem = MKMapItem(placemark: MKPlacemark(coordinate: userLocation.location))
-                originWalkTime = findWalkingETA(source: userLocationMapItem, destination: userStopMapItem)
+                (originWalkTime, originWalkDistance) = findWalkingETA(source: userLocationMapItem, destination: userStopMapItem)
                 // next calculate the time it will take for the user to ride the bus to the next bus stop he/she gets off at
                 for (desRoute, desStops) in destinationRoutesAndStops {
                     var busArrivalTime: Double = 0
                     var firstRideTime: Double = 0
                     var stopChangeTime: Double = 0
+                    var stopChangeDistance: Double = 0
                     var secondBusArrivalTime: Double = 0
                     var secondRideTime: Double = 0
                     var destinationWalkTime: Double = 0
+                    var destinationWalkDistance: Double = 0
                     for desStop in desStops{
                         // this is the case that the user has to change bus stops
                         if userRoute != desRoute {
@@ -67,7 +70,7 @@ class RouteGenerator {
                             // calculate the time it will take for the user to walk between the two bus stops
                             let firstStop = MKMapItem(placemark: MKPlacemark(coordinate: inStop.location))
                             let secondStop = MKMapItem(placemark: MKPlacemark(coordinate: outStop.location))
-                            stopChangeTime = firstRideTime > 0 ? self.findWalkingETA(source: firstStop, destination: secondStop):-1000
+                            (stopChangeTime, stopChangeDistance) = firstRideTime > 0 ? self.findWalkingETA(source: firstStop, destination: secondStop):(-1000, -1000)
                             // calculate the time it will take for the bus to get to a certain location
                             let secondStopArrivalTime = NSDate.now.addingTimeInterval((originWalkTime + firstRideTime + stopChangeTime)*60)
                             secondBusArrivalTime = (firstRideTime > 0 && firstRideTime > 0 && stopChangeTime > 0) ? self.findBusETA(destination: outStop, route: desRoute, arrivalTime: secondStopArrivalTime):-1000
@@ -76,11 +79,11 @@ class RouteGenerator {
                             // finally find the time it will take for the user to walk from the desintation bus stop to the location
                             let destinationStopMapItem = MKMapItem(placemark: MKPlacemark(coordinate: desStop.location))
                             let destinationMapItem = MKMapItem(placemark: MKPlacemark(coordinate: destination.location))
-                            destinationWalkTime = secondRideTime > 0 ? self.findWalkingETA(source: destinationStopMapItem, destination: destinationMapItem):-1000
+                            (destinationWalkTime, destinationWalkDistance) = secondRideTime > 0 ? self.findWalkingETA(source: destinationStopMapItem, destination: destinationMapItem):(-1000, -1000)
                             travelTime = originWalkTime + busArrivalTime + firstRideTime + stopChangeTime + secondBusArrivalTime + secondRideTime + destinationWalkTime
                             if travelTime < minTravelTime && (originWalkTime > 0 && firstRideTime > 0 && stopChangeTime > 0 && secondRideTime > 0 && destinationWalkTime > 0 && busArrivalTime > 0 && secondBusArrivalTime > 0) {
                                 minTravelTime = travelTime
-                                route = (userLocation, [(userRoute, userStop), (userRoute, inStop), (desRoute, outStop), (desRoute, desStop)], destination, travelTime)
+                                route = (userLocation, [(userRoute, userStop), (userRoute, inStop), (desRoute, outStop), (desRoute, desStop)], destination, travelTime, [originWalkDistance, stopChangeDistance, destinationWalkDistance])
                             }
                             //   print(originWalkTime, busArrivalTime, firstRideTime, stopChangeTime, secondRideTime, destinationWalkTime)
                             //   print(userLocation.address, "->", userStop.name, "->", "(\(userRoute.name) - \(userRoute.number))", "->", inStop.name, "->", outStop.name, "->", "(\(desRoute.name) - \(desRoute.number))", "->", desStop.name, "->", destination.name, ": ", travelTime, "\n")
@@ -94,11 +97,11 @@ class RouteGenerator {
                             // find the time it will take for the user to walk from the destination bus stop to the location
                             let destinationStopMapItem = MKMapItem(placemark: MKPlacemark(coordinate: desStop.location))
                             let destinationMapItem = MKMapItem(placemark: MKPlacemark(coordinate: destination.location))
-                            destinationWalkTime = firstRideTime > 0 ? self.findWalkingETA(source: destinationStopMapItem, destination: destinationMapItem):-1000
+                            (destinationWalkTime, destinationWalkDistance) = firstRideTime > 0 ? self.findWalkingETA(source: destinationStopMapItem, destination: destinationMapItem):(-1000, -1000)
                             travelTime = originWalkTime + busArrivalTime + firstRideTime + destinationWalkTime
                             if travelTime <= minTravelTime && (busArrivalTime>0 && originWalkTime>0 && firstRideTime>0 && destinationWalkTime>0) {
                                 minTravelTime = travelTime
-                                route = (userLocation, [(userRoute, userStop), (desRoute, desStop)], destination, travelTime)
+                                route = (userLocation, [(userRoute, userStop), (desRoute, desStop)], destination, travelTime, [originWalkDistance, destinationWalkDistance])
                             }
 //                             print(originWalkTime, busArrivalTime, firstRideTime, destinationWalkTime)
 //                             print(userLocation.address, "->", userStop.name, "->", "(\(userRoute.name) - \(userRoute.number))", "->", desStop.name, "->", destination.name, ": ", travelTime)
@@ -108,10 +111,10 @@ class RouteGenerator {
             }
         }
         // check if just faster to walk from your current location to destination location and if so recommend a walking route
-        let fullWalkTime = findWalkingETA(source: MKMapItem(placemark: MKPlacemark(coordinate: userLocation.location)), destination: MKMapItem(placemark: MKPlacemark(coordinate: destination.location)))
+        let (fullWalkTime, fullWalkDistance) = findWalkingETA(source: MKMapItem(placemark: MKPlacemark(coordinate: userLocation.location)), destination: MKMapItem(placemark: MKPlacemark(coordinate: destination.location)))
         if fullWalkTime < minTravelTime - 5 {
             minTravelTime = fullWalkTime
-            route = (userLocation, [], destination, fullWalkTime)
+            route = (userLocation, [], destination, fullWalkTime, [fullWalkDistance])
         }
         if let route = route {
             return route
@@ -120,7 +123,7 @@ class RouteGenerator {
             let alert = UIAlertController(title: "Alert", message: "No suitable route found.", preferredStyle: .actionSheet)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel))
             alertDelegate?.displayAlert(alert: alert)
-            return (Location(name: "", location: CLLocationCoordinate2D(), address: ""),[(BusRoute(name: "", number: "", color: .clear, campus: ""),BusStop(name: "", location: CLLocationCoordinate2D(), isTimePoint: false, key: ""))], Location(name: "", location: CLLocationCoordinate2D(), address: ""),-1)
+            return (Location(name: "", location: CLLocationCoordinate2D(), address: ""),[(BusRoute(name: "", number: "", color: .clear, campus: ""),BusStop(name: "", location: CLLocationCoordinate2D(), isTimePoint: false, key: ""))], Location(name: "", location: CLLocationCoordinate2D(), address: ""),-1,[])
         }
     }
     //MARK: - use this to find the time it takes to travel to a certain bus stop from the current one on the same bus route; returns in minutes
@@ -172,18 +175,18 @@ class RouteGenerator {
         }
         return travelTime/60
     }
-    //MARK: - use this to find the time it takes to walk from one point to another, approximate halfway between greatest and smallest logical distance; returns in minutes
-    func findWalkingETA(source: MKMapItem, destination: MKMapItem) -> Double {
+    //MARK: - use this to find the time it takes to walk from one point to another, approximate halfway between greatest and smallest logical distance; returns time in minutes, distance in miles
+    func findWalkingETA(source: MKMapItem, destination: MKMapItem) -> (Double, Double) {
         var eta: Double = -1000
         if let src = source.placemark.location, let dst = destination.placemark.location {
             let minDistance = src.distance(from: dst) // straight line
             let maxDistance = minDistance*cos(rad(90)) + minDistance*sin(rad(90)) // legs of the straight line
             let approxDistance = (maxDistance + minDistance)/2
             eta = approxDistance * (1/1.3)
-            return eta/60
+            return (eta/60, (round(approxDistance * 0.000621371) * 10 / 10.0))
         }
         // this is if the source or destination are invalid
-        return eta
+        return (eta, -1000)
     }
     
     //MARK: - Use this to find the relevant route and closest bus stop in one go

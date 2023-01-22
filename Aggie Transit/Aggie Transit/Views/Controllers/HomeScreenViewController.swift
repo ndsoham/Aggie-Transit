@@ -20,7 +20,7 @@ class HomeScreenViewController: UIViewController {
     private var homeScreenMenu: HomeScreenMenuViewController?
     private var navigationBar: UINavigationBar?
     private var currentlyDisplayedWalkingRoutes: [MKPolyline] = []
-    private var currentlyDisplayedEndpoints: [EndpointAnnotation]?
+    private var currentlyDisplayedEndpoints: [EndpointAnnotation] = []
     private var currentlyDisplayedPartialPattern: [BusRouteOverlay] = []
     private var currentlyDisplayedPartialStops: [MKAnnotation] = []
     private var currentlyDisplayedPattern: BusRouteOverlay?
@@ -124,38 +124,39 @@ class HomeScreenViewController: UIViewController {
                             map.bottomAnchor.constraint(equalTo: superViewMargins.bottomAnchor).isActive = true
                             
                             menuFpc = FloatingPanelController()
-                            if let fpc = menuFpc {
+                            if let menuFpc{
                                 // configure floating panel
                                 let appearance = SurfaceAppearance()
                                 appearance.cornerRadius = 15
                                 appearance.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-                                fpc.surfaceView.appearance = appearance
-                                fpc.delegate = self
+                                menuFpc.surfaceView.appearance = appearance
+                                menuFpc.delegate = self
                                 // set a content view
                                 homeScreenMenu = HomeScreenMenuViewController()
                                 // configure the homeScreenMenu view
-                                if let homeScreenMenu = homeScreenMenu {
+                                if let homeScreenMenu {
                                     homeScreenMenu.view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                                     homeScreenMenu.pathDelegate = self
                                     homeScreenMenu.locationIdentifierDelegate = self
                                     homeScreenMenu.routeDisplayerDelegate = self
                                     homeScreenMenu.map = map
                                     RouteGenerator.shared.alertDelegate = homeScreenMenu
-                                    fpc.set(contentViewController: homeScreenMenu)
+                                    menuFpc.set(contentViewController: homeScreenMenu)
+                                    menuFpc.track(scrollView: homeScreenMenu.allRoutesTableView)
                                 }
-                                self.view.addSubview(fpc.view)
-                                fpc.view.frame = self.view.bounds
-                                fpc.view.translatesAutoresizingMaskIntoConstraints = false
+                                self.view.addSubview(menuFpc.view)
+                                menuFpc.view.frame = self.view.bounds
+                                menuFpc.view.translatesAutoresizingMaskIntoConstraints = false
                                 // add constraints
-                                fpc.view.topAnchor.constraint(equalTo: superViewMargins.topAnchor).isActive = true
-                                fpc.view.bottomAnchor.constraint(equalTo: superViewMargins.bottomAnchor).isActive = true
-                                fpc.view.leadingAnchor.constraint(equalTo: superViewMargins.leadingAnchor).isActive = true
-                                fpc.view.trailingAnchor.constraint(equalTo: superViewMargins.trailingAnchor).isActive = true
+                                menuFpc.view.topAnchor.constraint(equalTo: superViewMargins.topAnchor).isActive = true
+                                menuFpc.view.bottomAnchor.constraint(equalTo: superViewMargins.bottomAnchor).isActive = true
+                                menuFpc.view.leadingAnchor.constraint(equalTo: superViewMargins.leadingAnchor).isActive = true
+                                menuFpc.view.trailingAnchor.constraint(equalTo: superViewMargins.trailingAnchor).isActive = true
                                 // add to controller hierarchy
-                                self.addChild(fpc)
+                                self.addChild(menuFpc)
                                 // show
-                                fpc.show(animated: false) {
-                                    fpc.didMove(toParent: self)
+                                menuFpc.show(animated: false) {
+                                    menuFpc.didMove(toParent: self)
                                 }
                             }
                         }
@@ -196,8 +197,10 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
             let endAnnotation = EndpointAnnotation()
             endAnnotation.title = "End"
             endAnnotation.coordinate = end.location
-            map.addAnnotations([startAnnotation, endAnnotation])
-            self.currentlyDisplayedEndpoints = [startAnnotation, endAnnotation]
+            self.currentlyDisplayedEndpoints.append(contentsOf: [startAnnotation, endAnnotation])
+            DispatchQueue.main.async {
+                map.addAnnotations([startAnnotation, endAnnotation])
+            }
             
         }
     }
@@ -512,11 +515,11 @@ extension HomeScreenViewController {
     }
     // this function removes the currently displayed endpoints
     func clearEndpointsFromMap(){
-        if let map = map, let currentlyDisplayedEndpoints = currentlyDisplayedEndpoints, let region = region {
+        if let map = map, !currentlyDisplayedEndpoints.isEmpty, let region = region {
             DispatchQueue.main.async {
-                map.removeAnnotations(currentlyDisplayedEndpoints)
+                map.removeAnnotations(self.currentlyDisplayedEndpoints)
                 map.setRegion(region, animated: true)
-                self.currentlyDisplayedEndpoints = nil
+                self.currentlyDisplayedEndpoints = []
             }
         }
     }
@@ -633,9 +636,9 @@ extension HomeScreenViewController: RouteGenerationProgressDelegate {
 }
 //MARK: - Use this to display the route
 extension HomeScreenViewController: RouteDisplayerDelegate {
-    func displayRouteOnMap(userLocation: Location, route: [(BusRoute, BusStop)], destination: Location, ETA: Double) {
+    func displayRouteOnMap(userLocation: Location, route: [(BusRoute, BusStop)], destination: Location, ETA: Double, walkDistances: [Double]) {
         self.clearMap()
-        self.showDirectionsPanel(start: userLocation, end: destination, route: route, eta: ETA)
+        self.showDirectionsPanel(start: userLocation, end: destination, route: route, eta: ETA, walkDistances: walkDistances)
         if route.count == 0 {
             RouteGenerator.shared.findWalkingRoute(origin: userLocation.location, destination: destination.location) { walkingPath, progressDelegate  in
                 self.displayEndPoints(start: userLocation, end: destination)
@@ -726,7 +729,7 @@ extension HomeScreenViewController: DirectionsPanelClosedDelegate {
         }
     }
     
-    func showDirectionsPanel(start: Location, end: Location, route: [(BusRoute, BusStop)], eta: Double) {
+    func showDirectionsPanel(start: Location, end: Location, route: [(BusRoute, BusStop)], eta: Double, walkDistances: [Double]) {
         directionsFpc = FloatingPanelController()
         let directionsViewController = DirectionsViewController()
         directionsViewController.endpoints = [start, end]
@@ -734,8 +737,10 @@ extension HomeScreenViewController: DirectionsPanelClosedDelegate {
         directionsViewController.routeDisplayerDelegate = self
         directionsViewController.route = route
         directionsViewController.eta = eta
+        directionsViewController.walkDistances = walkDistances
         if let directionsFpc, let menuFpc, let superViewMargins {
             directionsFpc.set(contentViewController: directionsViewController)
+            directionsFpc.track(scrollView: directionsViewController.directionsTableView)
             self.view.addSubview(directionsFpc.view)
             directionsFpc.view.frame = self.view.bounds
             directionsFpc.view.translatesAutoresizingMaskIntoConstraints = false
@@ -782,6 +787,7 @@ extension HomeScreenViewController: SearchResultsPanelClosedDelegate {
         if let locationsFpc, let menuFpc, let superViewMargins, let homeScreenMenu {
             searchResultsViewController.refreshDelegate = homeScreenMenu
             locationsFpc.set(contentViewController: searchResultsViewController)
+            locationsFpc.track(scrollView: searchResultsViewController.tableView)
             self.view.addSubview(locationsFpc.view)
             locationsFpc.view.frame = self.view.bounds
             locationsFpc.view.translatesAutoresizingMaskIntoConstraints = false

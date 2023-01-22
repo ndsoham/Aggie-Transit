@@ -8,18 +8,6 @@
 import Foundation
 import UIKit
 import MapKit
-@objc protocol DataGathererDelegate {
-    @objc optional func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute])
-    @objc optional func didGatherNotifications(notifications: [BusNotification])
-
-}
-protocol BusRouteDataGathererDelegate {
-    func didGatherBusPattern(points: [BusPattern])
-    func didGatherBusStops(stops: [BusStop])
-    func didGatherBuses(buses: [Bus])
-    func didGatherTimeTable(table: [[String:Date?]])
-}
-
 class DataGatherer {
     private let baseUrl = "https://transport.tamu.edu/BusRoutesFeed/api/"
     private let dateFormatter = DateFormatter()

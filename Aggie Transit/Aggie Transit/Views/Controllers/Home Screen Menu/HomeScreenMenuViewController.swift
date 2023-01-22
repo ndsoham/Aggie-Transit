@@ -11,9 +11,7 @@ import MapKit
 import DropDown
 import CoreData
 class HomeScreenMenuViewController: UIViewController {
-    private var recentsTableView: UITableView = UITableView()
-    private var allRoutesTableView: UITableView = UITableView()
-    private var notificationsTableView: UITableView = UITableView()
+    private var scrollView: UIScrollView?
     private var height: Double?
     private var width: Double?
     private var searchBarHeight: Double?
@@ -43,9 +41,12 @@ class HomeScreenMenuViewController: UIViewController {
     var pathDelegate: PathMakerDelegate?
     var locationIdentifierDelegate: SearchResultsDelegate?
     var routeDisplayerDelegate: RouteDisplayerDelegate?
-    var scrollView: UIScrollView?
+    var recentsTableView: UITableView = UITableView()
+    var allRoutesTableView: UITableView = UITableView()
+    var notificationsTableView: UITableView = UITableView()
     //MARK: - view did load
     override func viewDidLoad() {
+        print("viewDidLoad is called")
         super.viewDidLoad()
         layoutSubviews()
         setUpDataGatherer()
