@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -17,10 +18,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchScreenIcon" translatesAutoresizingMaskIntoConstraints="NO" id="0fB-fU-dhr">
-                                <rect key="frame" x="3" y="232.66666666666666" width="387" height="386.66666666666674"/>
+                                <rect key="frame" x="46.666666666666657" y="276" width="300" height="300"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="386.67000000000002" id="DgH-3K-5On"/>
-                                    <constraint firstAttribute="width" constant="386.67000000000002" id="RD5-vy-kTv"/>
+                                    <constraint firstAttribute="height" constant="300" id="DgH-3K-5On"/>
+                                    <constraint firstAttribute="width" constant="300" id="RD5-vy-kTv"/>
                                 </constraints>
                             </imageView>
                         </subviews>
@@ -38,7 +39,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="launchScreenIcon" width="123" height="123"/>
+        <image name="launchScreenIcon" width="233.33332824707031" height="219.33332824707031"/>
         <namedColor name="launchScreenBackgroundColor">
             <color red="0.96078431372549022" green="0.96470588235294119" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

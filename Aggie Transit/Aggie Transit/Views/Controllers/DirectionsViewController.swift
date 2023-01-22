@@ -22,7 +22,6 @@ class DirectionsViewController: UIViewController {
     var eta: Double?
     var walkDistances: [Double]?
     var directionsTableView: UITableView = UITableView()
-    
     //MARK: - view did load
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +53,6 @@ class DirectionsViewController: UIViewController {
             // add target
             closeButton.addTarget(self, action: #selector(closeButtonPressed), for: .touchUpInside)
             // set up the table views
-            
             endpointsTableView.register(EndpointsTableViewCell.self, forCellReuseIdentifier: "endpointsTableViewCell")
             endpointsTableView.clipsToBounds = true
             endpointsTableView.layer.cornerRadius = 15
@@ -91,9 +89,6 @@ class DirectionsViewController: UIViewController {
             directionsTableView.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor, constant: sidePadding).isActive = true
             directionsTableView.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -sidePadding).isActive = true
             directionsTableView.bottomAnchor.constraint(equalTo: safeMargins.bottomAnchor, constant: -topInset).isActive = true
-            
-            
-            
         }
     }
 }
@@ -234,14 +229,11 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
     }
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         endpoints?.moveItem(at: sourceIndexPath.row, to: destinationIndexPath.row)
-        DispatchQueue.main.async {
-            tableView.reloadData()
-        }
     }
     func tableView(_ tableView: UITableView, dropSessionDidEnd session: UIDropSession) {
         if let endpoints = endpoints {
-            self.generateRoute(origin: endpoints[0], destination: endpoints[1])
             self.dismiss(animated: true)
+            self.generateRoute(origin: endpoints[0], destination: endpoints[1])
         }
     }
 }
@@ -271,8 +263,7 @@ extension DirectionsViewController {
         } else {
             if let routeDisplayerDelegate = routeDisplayerDelegate {
                 let (walkTime, walkDistance) = RouteGenerator.shared.findWalkingETA(source: MKMapItem(placemark: MKPlacemark(coordinate: userLocation.location)), destination: MKMapItem(placemark: MKPlacemark(coordinate: destination.location)))
-                
-                routeDisplayerDelegate.displayRouteOnMap(userLocation: userLocation, route: [], destination: destination, ETA:walkTime, walkDistances: [walkDistance])
+                routeDisplayerDelegate.displayRouteOnMap(userLocation: userLocation, route: [], destination: destination,ETA: walkTime, walkDistances: [walkDistance])
             }
         }
         

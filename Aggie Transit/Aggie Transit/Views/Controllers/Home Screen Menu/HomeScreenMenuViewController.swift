@@ -47,7 +47,6 @@ class HomeScreenMenuViewController: UIViewController {
     deinit {NotificationCenter.default.removeObserver(self)}
     //MARK: - view did load
     override func viewDidLoad() {
-        print("viewDidLoad is called")
         super.viewDidLoad()
         registerDataTasks()
         layoutSubviews()

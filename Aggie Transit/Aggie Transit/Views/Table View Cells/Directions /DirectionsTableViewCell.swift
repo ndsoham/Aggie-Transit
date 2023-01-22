@@ -14,6 +14,7 @@ class DirectionsTableViewCell: UITableViewCell {
     private var directionsLabel: UILabel = UILabel()
     private var directionsHeaderLabel: UILabel = UILabel()
     private var textStack: UIStackView = UIStackView()
+    private var iconStack: UIStackView = UIStackView()
     private var safeMargins: UILayoutGuide?
     private var leftPadding: Double = 5.0
     private var walkingDistanceLabel: UILabel = UILabel()
@@ -49,9 +50,9 @@ class DirectionsTableViewCell: UITableViewCell {
             if let iconImage, let directions, let iconTint, let directionsHeader{
                 horizontalStack.translatesAutoresizingMaskIntoConstraints = false
                 horizontalStack.axis = .horizontal
-                horizontalStack.alignment = .leading
+                horizontalStack.alignment = .top
                 horizontalStack.distribution = .fill
-                horizontalStack.spacing = leftPadding
+                horizontalStack.spacing = leftPadding * 2
                 // add to view hierarchy
                 self.contentView.addSubview(horizontalStack)
                 // add constraints
@@ -93,13 +94,18 @@ class DirectionsTableViewCell: UITableViewCell {
                 // constrain the label
                 // add an optional walking distance label
                 if let walkingDistance {
+                    let distanceAttributes: [NSAttributedString.Key:Any] = [
+                        .font:UIFont.systemFont(ofSize: 12),
+                        .foregroundColor:UIColor(named: "textColor")?.withAlphaComponent(0.75) ?? .black
+                    ]
                     walkingDistanceLabel.translatesAutoresizingMaskIntoConstraints = false
-                    walkingDistanceLabel.attributedText = NSAttributedString(string: "\(walkingDistance) mi", attributes: instructionAttributes)
+                    walkingDistanceLabel.attributedText = NSAttributedString(string: "\(walkingDistance) mi", attributes: distanceAttributes)
+                    walkingDistanceLabel.adjustsFontSizeToFitWidth = true
                     self.contentView.addSubview(walkingDistanceLabel)
                     // add constraints
-                    walkingDistanceLabel.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -leftPadding).isActive = true
-                    walkingDistanceLabel.topAnchor.constraint(equalTo: horizontalStack.topAnchor).isActive = true
-                    walkingDistanceLabel.widthAnchor.constraint(equalToConstant: 40).isActive = true
+                    walkingDistanceLabel.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor, constant: leftPadding).isActive = true
+                    walkingDistanceLabel.topAnchor.constraint(equalTo: icon.bottomAnchor, constant: verticalStackSpacing).isActive = true
+                    walkingDistanceLabel.widthAnchor.constraint(equalToConstant: 31).isActive = true
 
                 }
             }

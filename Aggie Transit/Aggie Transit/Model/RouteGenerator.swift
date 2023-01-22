@@ -85,8 +85,8 @@ class RouteGenerator {
                                 minTravelTime = travelTime
                                 route = (userLocation, [(userRoute, userStop), (userRoute, inStop), (desRoute, outStop), (desRoute, desStop)], destination, travelTime, [originWalkDistance, stopChangeDistance, destinationWalkDistance])
                             }
-                            //   print(originWalkTime, busArrivalTime, firstRideTime, stopChangeTime, secondRideTime, destinationWalkTime)
-                            //   print(userLocation.address, "->", userStop.name, "->", "(\(userRoute.name) - \(userRoute.number))", "->", inStop.name, "->", outStop.name, "->", "(\(desRoute.name) - \(desRoute.number))", "->", desStop.name, "->", destination.name, ": ", travelTime, "\n")
+//                               print(originWalkTime, busArrivalTime, firstRideTime, stopChangeTime, secondRideTime, destinationWalkTime)
+//                               print(userLocation.address, "->", userStop.name, "->", "(\(userRoute.name) - \(userRoute.number))", "->", inStop.name, "->", outStop.name, "->", "(\(desRoute.name) - \(desRoute.number))", "->", desStop.name, "->", destination.name, ": ", travelTime, "\n")
                         }
                         // this is the case where the user will only have to take a single bus
                         else if userRoute == desRoute {
@@ -112,7 +112,7 @@ class RouteGenerator {
         }
         // check if just faster to walk from your current location to destination location and if so recommend a walking route
         let (fullWalkTime, fullWalkDistance) = findWalkingETA(source: MKMapItem(placemark: MKPlacemark(coordinate: userLocation.location)), destination: MKMapItem(placemark: MKPlacemark(coordinate: destination.location)))
-        if fullWalkTime < minTravelTime - 5 {
+        if fullWalkTime < minTravelTime {
             minTravelTime = fullWalkTime
             route = (userLocation, [], destination, fullWalkTime, [fullWalkDistance])
         }
@@ -183,7 +183,9 @@ class RouteGenerator {
             let maxDistance = minDistance*cos(rad(90)) + minDistance*sin(rad(90)) // legs of the straight line
             let approxDistance = (maxDistance + minDistance)/2
             eta = approxDistance * (1/1.3)
-            return (eta/60, (round(approxDistance * 0.000621371) * 10 / 10.0))
+            var walkDistance = (round(approxDistance * 0.000621371 * 10) / 10.0)
+            walkDistance = walkDistance > 0 ? walkDistance:0.1
+            return (eta/60, walkDistance)
         }
         // this is if the source or destination are invalid
         return (eta, -1000)
@@ -214,7 +216,7 @@ class RouteGenerator {
                     })
                     let closestStopsCopy = closestStops
                     closestStops = closestStops.filter({
-                        $0.location.distance(to: location.location) <= 1000
+                        $0.location.distance(to: location.location) <= 1500
                     })
                     closestStops.count == 0 ? routesAndStops.append((route, [closestStopsCopy[0]])) : routesAndStops.append((route,closestStops))
                     

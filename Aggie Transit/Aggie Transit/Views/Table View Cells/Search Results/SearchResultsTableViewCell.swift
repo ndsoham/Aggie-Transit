@@ -85,8 +85,6 @@ class SearchResultsTableViewCell: UITableViewCell {
                     locationDistanceLabel.trailingAnchor.constraint(equalTo: safeLayoutMargins.trailingAnchor, constant: -horizontalStackPadding).isActive = true
                     locationDistanceLabel.centerYAnchor.constraint(equalTo: safeLayoutMargins.centerYAnchor).isActive = true
                     verticalTextStack.trailingAnchor.constraint(equalTo: locationDistanceLabel.leadingAnchor, constant: -horizontalStackPadding).isActive = true
-                    
-
                 }
         }
     }

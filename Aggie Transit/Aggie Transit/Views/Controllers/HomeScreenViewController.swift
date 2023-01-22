@@ -158,18 +158,26 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
         if let map = map, let fpc = menuFpc {
             if !currentlyDisplayedWalkingRoutes.isEmpty {
                 self.currentlyDisplayedWalkingRoutes.append(route)
-                map.addOverlay(route)
+                DispatchQueue.main.async {
+                    map.addOverlay(route)
+                }
                 if currentlyDisplayedWalkingRoutes.count == 2 {
                     let union = currentlyDisplayedWalkingRoutes[0].boundingMapRect.union(currentlyDisplayedWalkingRoutes[1].boundingMapRect)
-                    map.setVisibleMapRect(union, edgePadding: UIEdgeInsets(top: 25, left: 25, bottom: fpc.surfaceView.frame.height * (1/7), right: 25), animated: true)
+                    DispatchQueue.main.async{
+                        map.setVisibleMapRect(union, edgePadding: UIEdgeInsets(top: 25, left: 25, bottom: fpc.surfaceView.frame.height * (1/7), right: 25), animated: true)
+                    }
                 } else if currentlyDisplayedWalkingRoutes.count == 3 {
                     let union = currentlyDisplayedWalkingRoutes[0].boundingMapRect.union(currentlyDisplayedWalkingRoutes[1].boundingMapRect).union(currentlyDisplayedWalkingRoutes[2].boundingMapRect)
-                    map.setVisibleMapRect(union, edgePadding: UIEdgeInsets(top: 25, left: 25, bottom: fpc.surfaceView.frame.height * (1/7), right: 25), animated: true)
+                    DispatchQueue.main.async {
+                        map.setVisibleMapRect(union, edgePadding: UIEdgeInsets(top: 25, left: 25, bottom: fpc.surfaceView.frame.height * (1/7), right: 25), animated: true)
+                    }
                 }
             } else {
                 self.currentlyDisplayedWalkingRoutes = [route]
-                map.addOverlay(route)
-                map.setVisibleMapRect(route.boundingMapRect,edgePadding: UIEdgeInsets(top: 25, left: 25, bottom: fpc.surfaceView.frame.height * (1/7), right: 25), animated: true)
+                DispatchQueue.main.async {
+                    map.addOverlay(route)
+                    map.setVisibleMapRect(route.boundingMapRect,edgePadding: UIEdgeInsets(top: 25, left: 25, bottom: fpc.surfaceView.frame.height * (1/7), right: 25), animated: true)
+                }
             }
         }
     }
@@ -182,11 +190,11 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
             let endAnnotation = EndpointAnnotation()
             endAnnotation.title = "End"
             endAnnotation.coordinate = end.location
-            self.currentlyDisplayedEndpoints.append(contentsOf: [startAnnotation, endAnnotation])
             DispatchQueue.main.async {
                 map.addAnnotations([startAnnotation, endAnnotation])
+                self.currentlyDisplayedEndpoints.append(startAnnotation)
+                self.currentlyDisplayedEndpoints.append(endAnnotation)
             }
-            
         }
     }
     // use this to display partial routes on the map
@@ -473,7 +481,7 @@ extension HomeScreenViewController {
             DispatchQueue.main.async {
                 map.removeOverlays(self.currentlyDisplayedPartialPattern)
                 map.setRegion(region, animated: true)
-                self.currentlyDisplayedPartialPattern = []
+                self.currentlyDisplayedPartialPattern.removeAll()
                 self.currentlyDisplayedColor = nil
             }
         }
@@ -484,7 +492,7 @@ extension HomeScreenViewController {
             DispatchQueue.main.async {
                 map.removeAnnotations(self.currentlyDisplayedPartialStops)
                 map.setRegion(region, animated: true)
-                self.currentlyDisplayedPartialStops = []
+                self.currentlyDisplayedPartialStops.removeAll()
             }
         }
     }
@@ -494,7 +502,7 @@ extension HomeScreenViewController {
             DispatchQueue.main.async {
                 map.removeOverlays(self.currentlyDisplayedWalkingRoutes)
                 map.setRegion(region, animated: true)
-                self.currentlyDisplayedWalkingRoutes = []
+                self.currentlyDisplayedWalkingRoutes.removeAll()
             }
         }
     }
@@ -502,15 +510,13 @@ extension HomeScreenViewController {
     func clearEndpointsFromMap(){
         if let map = map, !currentlyDisplayedEndpoints.isEmpty, let region = region {
             DispatchQueue.main.async {
-                map.removeAnnotations(self.currentlyDisplayedEndpoints)
+                map.removeAnnotations(map.annotations)
                 map.setRegion(region, animated: true)
-                self.currentlyDisplayedEndpoints = []
-
+                self.currentlyDisplayedEndpoints.removeAll()
             }
         }
     }
 }
-
 //MARK: - Handle Keyboard popping up on screen
 
 extension HomeScreenViewController {
@@ -874,10 +880,10 @@ extension HomeScreenViewController: CLLocationManagerDelegate {
             manager.startUpdatingLocation()
             break
         case .restricted, .denied:
-            manager.requestAlwaysAuthorization()
+            manager.requestWhenInUseAuthorization()
             break
         case .notDetermined:
-            manager.requestAlwaysAuthorization()
+            manager.requestWhenInUseAuthorization()
             break
         default:
             break
