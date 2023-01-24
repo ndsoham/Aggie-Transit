@@ -28,7 +28,7 @@ protocol PathMakerDelegate {
     func displayPartialRouteOnMap(color: UIColor, points: [BusPattern], startStop: BusStop, endStop: BusStop)
 }
 protocol RouteDisplayerDelegate {
-    func displayRouteOnMap(userLocation: Location, route: [(BusRoute, BusStop)], destination: Location, ETA: Double, walkDistances: [Double])
+    func displayRouteOnMap(userLocation: Location, route: [(BusRoute, BusStop)], destination: Location, routeTimes: [Date], walkDistances: [Double])
 }
 //MARK: - loading animation
 protocol RouteGenerationProgressDelegate {

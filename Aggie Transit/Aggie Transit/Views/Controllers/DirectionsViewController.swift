@@ -19,7 +19,7 @@ class DirectionsViewController: UIViewController {
     var endpoints: [Location]?
     var route: [(BusRoute, BusStop)]?
     var routeDisplayerDelegate: RouteDisplayerDelegate?
-    var eta: Double?
+    var routeTimes: [Date]?
     var walkDistances: [Double]?
     var directionsTableView: UITableView = UITableView()
     //MARK: - view did load
@@ -125,18 +125,20 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
                     cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
                 }
                 return cell
-            } else if tableView == directionsTableView, let route, let walkDistances {
+            } else if tableView == directionsTableView, let route, let walkDistances, let routeTimes {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "directionsTableViewCell") as! DirectionsTableViewCell
                 if indexPath.row == 0 {
                     cell.iconImage = UIImage(systemName: "mappin.circle.fill")
-                    cell.directions = "Start at \(dateFormatter.string(from: NSDate.now))"
+                    cell.directions = ""
                     cell.directionsHeader = endpoints[0].name
                     cell.iconTint = .systemGreen
-                } else if indexPath.row == tableView.numberOfRows(inSection: 0) - 1, let eta {
+                    cell.time = routeTimes[0]
+                } else if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
                     cell.iconImage = UIImage(systemName: "mappin.circle.fill")
                     cell.directionsHeader = endpoints[1].name
-                    cell.directions = "Arrive at \(dateFormatter.string(from: NSDate.now.addingTimeInterval(eta*60)))"
+                    cell.directions = ""
                     cell.iconTint = .systemRed
+                    cell.time = routeTimes[routeTimes.count-1]
                 } else {
                     let userLocation = endpoints[0].name
                     let destination = endpoints[1].name
@@ -146,21 +148,22 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
                         let secondStop = route[1].1
                         if indexPath.row == 1 {
                             cell.iconImage = UIImage(systemName: "figure.walk")
-                            cell.directionsHeader = "Walk"
+                            cell.directionsHeader = "Walk · \(walkDistances[0]) mi"
                             cell.directions = "From \(userLocation) to \(firstStop.name)"
                             cell.iconTint = UIColor(named: "textColor")
-                            cell.walkingDistance = walkDistances[0]
+                            cell.time = routeTimes[1]
                         } else if indexPath.row == 2 {
                             cell.iconImage = UIImage(systemName: "bus")
                             cell.directionsHeader = "Ride \(firstBus.name) - \(firstBus.number)"
                             cell.directions = "From \(firstStop.name) to \(secondStop.name)"
                             cell.iconTint = firstBus.color
+                            cell.time = routeTimes[2]
                         } else if indexPath.row == 3 {
                             cell.iconImage = UIImage(systemName: "figure.walk")
-                            cell.directionsHeader = "Walk"
+                            cell.directionsHeader = "Walk · \(walkDistances[1]) mi"
                             cell.directions = "From \(secondStop.name) to \(destination)"
                             cell.iconTint = UIColor(named: "textColor")
-                            cell.walkingDistance = walkDistances[1]
+                            cell.time = routeTimes[3]
                         }
                     }
                     if route.count == 4 {
@@ -173,39 +176,41 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
                         if indexPath.row == 1 {
                             cell.iconImage = UIImage(systemName: "figure.walk")
                             cell.directions = "From \(userLocation) to \(firstStop.name)"
-                            cell.directionsHeader = "Walk"
+                            cell.directionsHeader = "Walk · \(walkDistances[0]) mi"
                             cell.iconTint = UIColor(named: "textColor")
-                            cell.walkingDistance = walkDistances[0]
+                            cell.time = routeTimes[1]
                         } else if indexPath.row == 2 {
                             cell.iconImage = UIImage(systemName: "bus")
                             cell.directions = "From \(firstStop.name) to \(secondStop.name)"
                             cell.directionsHeader = "Ride \(firstBus.name) - \(firstBus.number)"
                             cell.iconTint = firstBus.color
+                            cell.time = routeTimes[2]
                         } else if indexPath.row == 3 {
                             cell.iconImage = UIImage(systemName: "figure.walk")
-                            cell.directionsHeader = "Walk"
+                            cell.directionsHeader = "Walk · \(walkDistances[1]) mi"
                             cell.directions = "From \(secondStop.name) to \(thirdStop.name)"
                             cell.iconTint = UIColor(named: "textColor")
-                            cell.walkingDistance = walkDistances[1]
+                            cell.time = routeTimes[3]
                         } else if indexPath.row == 4 {
                             cell.iconImage = UIImage(systemName: "bus")
                             cell.directionsHeader = "Ride \(secondBus.name) - \(secondBus.number)"
                             cell.directions = "From \(thirdStop.name) to \(fourthStop.name)"
                             cell.iconTint = secondBus.color
+                            cell.time = routeTimes[4]
                         } else if indexPath.row == 5 {
                             cell.iconImage = UIImage(systemName: "figure.walk")
-                            cell.directionsHeader = "Walk"
+                            cell.directionsHeader = "Walk · \(walkDistances[2]) mi"
                             cell.directions = "From \(fourthStop.name) to \(destination)"
                             cell.iconTint = UIColor(named: "textColor")
-                            cell.walkingDistance = walkDistances[2]
+                            cell.time = routeTimes[5]
                         }
                     }
                     if route.count == 0 {
                         cell.iconImage = UIImage(systemName: "figure.walk")
                         cell.directions = "From \(userLocation) to \(destination)"
-                        cell.directionsHeader = "Walk"
+                        cell.directionsHeader = "Walk · \(walkDistances[0]) mi"
                         cell.iconTint = UIColor(named: "textColor")
-                        cell.walkingDistance = walkDistances[0]
+                        cell.time = routeTimes[0]
                     }
                 }
                 return cell
@@ -258,12 +263,14 @@ extension DirectionsViewController {
             }
             print(finish.name, travel, separator: ":")
             if let routeDisplayerDelegate = routeDisplayerDelegate {
-                routeDisplayerDelegate.displayRouteOnMap(userLocation: start, route: stops, destination: finish, ETA: travel, walkDistances: distances)
+                routeDisplayerDelegate.displayRouteOnMap(userLocation: start, route: stops, destination: finish, routeTimes: travel, walkDistances: distances)
             }
         } else {
             if let routeDisplayerDelegate = routeDisplayerDelegate {
                 let (walkTime, walkDistance) = RouteGenerator.shared.findWalkingETA(source: MKMapItem(placemark: MKPlacemark(coordinate: userLocation.location)), destination: MKMapItem(placemark: MKPlacemark(coordinate: destination.location)))
-                routeDisplayerDelegate.displayRouteOnMap(userLocation: userLocation, route: [], destination: destination,ETA: walkTime, walkDistances: [walkDistance])
+                let start = NSDate.now
+                let arrive = start.addingTimeInterval(walkTime*60)
+                routeDisplayerDelegate.displayRouteOnMap(userLocation: userLocation, route: [], destination: destination,routeTimes: [start, arrive], walkDistances: [walkDistance])
             }
         }
         

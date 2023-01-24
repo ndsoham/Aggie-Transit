@@ -33,11 +33,11 @@ class RouteGenerator {
         return closestStops
     }
     //MARK: - Use this to generate the route
-    func generateRoute(destination: Location, destinationRoutesAndStops: [(BusRoute,[BusStop])], userRoutesAndStops: [(BusRoute, [BusStop])], userLocation: Location) -> (Location, [(BusRoute, BusStop)], Location, Double, [Double]){
+    func generateRoute(destination: Location, destinationRoutesAndStops: [(BusRoute,[BusStop])], userRoutesAndStops: [(BusRoute, [BusStop])], userLocation: Location) -> (Location, [(BusRoute, BusStop)], Location, [Date], [Double]){
         progressDelegate?.routeGenerationDidStart()
         var minTravelTime: Double = Double.greatestFiniteMagnitude
         // the route array contains the starting location, followed by a series of intermediate steps namely bus routes/stops and the destination location; last two things are estimated travel time and an array of walking distances
-        var route: (Location, [(BusRoute, BusStop)], Location, Double, [Double])? = nil
+        var route: (Location, [(BusRoute, BusStop)], Location, [Date], [Double])? = nil
         // arrays have been filtered at this point so all there is to find is the fastest route to the destination
         for (userRoute, userStops) in userRoutesAndStops {
             var travelTime: Double = 0
@@ -83,7 +83,14 @@ class RouteGenerator {
                             travelTime = originWalkTime + busArrivalTime + firstRideTime + stopChangeTime + secondBusArrivalTime + secondRideTime + destinationWalkTime
                             if travelTime < minTravelTime && (originWalkTime > 0 && firstRideTime > 0 && stopChangeTime > 0 && secondRideTime > 0 && destinationWalkTime > 0 && busArrivalTime > 0 && secondBusArrivalTime > 0) {
                                 minTravelTime = travelTime
-                                route = (userLocation, [(userRoute, userStop), (userRoute, inStop), (desRoute, outStop), (desRoute, desStop)], destination, travelTime, [originWalkDistance, stopChangeDistance, destinationWalkDistance])
+                                let startTime = NSDate.now
+                                let originStopArrivalTime = startTime.addingTimeInterval((originWalkTime)*60)
+                                let firstBusBoardingTime = originStopArrivalTime.addingTimeInterval((busArrivalTime)*60)
+                                let secondStopArrivalTime = firstBusBoardingTime.addingTimeInterval((firstRideTime+stopChangeTime)*60)
+                                let secondBusBoardingTime = secondStopArrivalTime.addingTimeInterval(secondBusArrivalTime*60)
+                                let destinationStopArrivalTime = secondBusBoardingTime.addingTimeInterval(secondRideTime*60)
+                                let arrivalTime = destinationStopArrivalTime.addingTimeInterval((destinationWalkTime)*60)
+                                route = (userLocation, [(userRoute, userStop), (userRoute, inStop), (desRoute, outStop), (desRoute, desStop)], destination, [startTime, originStopArrivalTime, firstBusBoardingTime, secondStopArrivalTime, secondBusBoardingTime, destinationStopArrivalTime, arrivalTime], [originWalkDistance, stopChangeDistance, destinationWalkDistance])
                             }
 //                               print(originWalkTime, busArrivalTime, firstRideTime, stopChangeTime, secondRideTime, destinationWalkTime)
 //                               print(userLocation.address, "->", userStop.name, "->", "(\(userRoute.name) - \(userRoute.number))", "->", inStop.name, "->", outStop.name, "->", "(\(desRoute.name) - \(desRoute.number))", "->", desStop.name, "->", destination.name, ": ", travelTime, "\n")
@@ -101,7 +108,12 @@ class RouteGenerator {
                             travelTime = originWalkTime + busArrivalTime + firstRideTime + destinationWalkTime
                             if travelTime <= minTravelTime && (busArrivalTime>0 && originWalkTime>0 && firstRideTime>0 && destinationWalkTime>0) {
                                 minTravelTime = travelTime
-                                route = (userLocation, [(userRoute, userStop), (desRoute, desStop)], destination, travelTime, [originWalkDistance, destinationWalkDistance])
+                                let startTime = NSDate.now
+                                let originStopArrivalTime = startTime.addingTimeInterval((originWalkTime)*60)
+                                let firstBusBoardingTime = originStopArrivalTime.addingTimeInterval((busArrivalTime)*60)
+                                let destinationStopArrivalTime = firstBusBoardingTime.addingTimeInterval(firstRideTime*60)
+                                let arrivalTime = destinationStopArrivalTime.addingTimeInterval((destinationWalkTime)*60)
+                                route = (userLocation, [(userRoute, userStop), (desRoute, desStop)], destination, [startTime, originStopArrivalTime, firstBusBoardingTime, destinationStopArrivalTime ,arrivalTime], [originWalkDistance, destinationWalkDistance])
                             }
 //                             print(originWalkTime, busArrivalTime, firstRideTime, destinationWalkTime)
 //                             print(userLocation.address, "->", userStop.name, "->", "(\(userRoute.name) - \(userRoute.number))", "->", desStop.name, "->", destination.name, ": ", travelTime)
@@ -114,7 +126,9 @@ class RouteGenerator {
         let (fullWalkTime, fullWalkDistance) = findWalkingETA(source: MKMapItem(placemark: MKPlacemark(coordinate: userLocation.location)), destination: MKMapItem(placemark: MKPlacemark(coordinate: destination.location)))
         if fullWalkTime < minTravelTime - 5 {
             minTravelTime = fullWalkTime
-            route = (userLocation, [], destination, fullWalkTime, [fullWalkDistance])
+            let startTime = NSDate.now
+            let arrivalTime = NSDate.now.addingTimeInterval(fullWalkTime*60)
+            route = (userLocation, [], destination, [startTime, arrivalTime], [fullWalkDistance])
         }
         if let route = route {
             return route
@@ -123,7 +137,7 @@ class RouteGenerator {
             let alert = UIAlertController(title: "Alert", message: "No suitable route found.", preferredStyle: .actionSheet)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel))
             alertDelegate?.displayAlert(alert: alert)
-            return (Location(name: "", location: CLLocationCoordinate2D(), address: ""),[(BusRoute(name: "", number: "", color: .clear, campus: ""),BusStop(name: "", location: CLLocationCoordinate2D(), isTimePoint: false, key: ""))], Location(name: "", location: CLLocationCoordinate2D(), address: ""),-1,[])
+            return (Location(name: "", location: CLLocationCoordinate2D(), address: ""),[(BusRoute(name: "", number: "", color: .clear, campus: ""),BusStop(name: "", location: CLLocationCoordinate2D(), isTimePoint: false, key: ""))], Location(name: "", location: CLLocationCoordinate2D(), address: ""),[NSDate.now, NSDate.distantPast],[])
         }
     }
     //MARK: - use this to find the time it takes to travel to a certain bus stop from the current one on the same bus route; returns in minutes

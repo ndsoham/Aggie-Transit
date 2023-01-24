@@ -139,12 +139,14 @@ extension SearchResultsViewController {
                 }
                 print(finish.name, travel, separator: ":")
                 if let routeDisplayerDelegate = routeDisplayerDelegate {
-                    routeDisplayerDelegate.displayRouteOnMap(userLocation: start, route: stops, destination: finish, ETA: travel, walkDistances: distances)
+                    routeDisplayerDelegate.displayRouteOnMap(userLocation: start, route: stops, destination: finish, routeTimes: travel, walkDistances: distances)
                 }
             } else {
                 if let routeDisplayerDelegate = routeDisplayerDelegate {
                     let (walkTime, walkDistance) = RouteGenerator.shared.findWalkingETA(source: MKMapItem(placemark: MKPlacemark(coordinate: userLocation.location)), destination: MKMapItem(placemark: MKPlacemark(coordinate: destination.location)))
-                    routeDisplayerDelegate.displayRouteOnMap(userLocation: userLocation, route: [], destination: destination, ETA: walkTime, walkDistances: [walkDistance])
+                    let start = NSDate.now
+                    let arrive = start.addingTimeInterval(walkTime*60)
+                    routeDisplayerDelegate.displayRouteOnMap(userLocation: userLocation, route: [], destination: destination, routeTimes: [start, arrive], walkDistances: [walkDistance])
                 }
             }
         

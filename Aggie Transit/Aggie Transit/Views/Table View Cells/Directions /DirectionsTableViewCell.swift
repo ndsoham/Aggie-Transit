@@ -17,13 +17,13 @@ class DirectionsTableViewCell: UITableViewCell {
     private var iconStack: UIStackView = UIStackView()
     private var safeMargins: UILayoutGuide?
     private var leftPadding: Double = 5.0
-    private var walkingDistanceLabel: UILabel = UILabel()
     private var verticalStackSpacing: Double = 2.5
+    private var timeLabel: UILabel = UILabel()
+    var time: Date?
     var directions: String?
     var directionsHeader: String?
     var iconImage: UIImage?
     var iconTint: UIColor?
-    var walkingDistance: Double?
     //MARK: - initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -47,10 +47,10 @@ class DirectionsTableViewCell: UITableViewCell {
         self.plainView.backgroundColor  = UIColor(named: "menuColor")
         if let safeMargins = safeMargins {
             // configure the icon and label
-            if let iconImage, let directions, let iconTint, let directionsHeader{
+            if let iconImage, let directions, let iconTint, let directionsHeader, let time{
                 horizontalStack.translatesAutoresizingMaskIntoConstraints = false
                 horizontalStack.axis = .horizontal
-                horizontalStack.alignment = .top
+                horizontalStack.alignment = .center
                 horizontalStack.distribution = .fill
                 horizontalStack.spacing = leftPadding * 2
                 // add to view hierarchy
@@ -58,7 +58,6 @@ class DirectionsTableViewCell: UITableViewCell {
                 // add constraints
                 horizontalStack.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor, constant: leftPadding).isActive = true
                 horizontalStack.centerYAnchor.constraint(equalTo: safeMargins.centerYAnchor).isActive = true
-                horizontalStack.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -leftPadding).isActive = true
                 // configure the text stack
                 textStack.translatesAutoresizingMaskIntoConstraints = false
                 textStack.axis = .vertical
@@ -89,25 +88,28 @@ class DirectionsTableViewCell: UITableViewCell {
                 textStack.addArrangedSubview(directionsLabel)
                 horizontalStack.addArrangedSubview(textStack)
                 // constrain icon
-                icon.widthAnchor.constraint(equalToConstant: 31.5).isActive = true
-                icon.heightAnchor.constraint(equalToConstant: 31.5).isActive = true
+                icon.widthAnchor.constraint(equalToConstant: 40).isActive = true
+                icon.heightAnchor.constraint(equalToConstant: 40).isActive = true
                 // constrain the label
-                // add an optional walking distance label
-                if let walkingDistance {
-                    let distanceAttributes: [NSAttributedString.Key:Any] = [
-                        .font:UIFont.systemFont(ofSize: 12),
-                        .foregroundColor:UIColor(named: "textColor")?.withAlphaComponent(0.75) ?? .black
-                    ]
-                    walkingDistanceLabel.translatesAutoresizingMaskIntoConstraints = false
-                    walkingDistanceLabel.attributedText = NSAttributedString(string: "\(walkingDistance) mi", attributes: distanceAttributes)
-                    walkingDistanceLabel.adjustsFontSizeToFitWidth = true
-                    self.contentView.addSubview(walkingDistanceLabel)
-                    // add constraints
-                    walkingDistanceLabel.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor, constant: leftPadding).isActive = true
-                    walkingDistanceLabel.topAnchor.constraint(equalTo: icon.bottomAnchor, constant: verticalStackSpacing).isActive = true
-                    walkingDistanceLabel.widthAnchor.constraint(equalToConstant: 31).isActive = true
+                // add a time table
+                let timeAttributes:[NSAttributedString.Key:Any] = [
+                    .font:UIFont.systemFont(ofSize: 12),
+                    .foregroundColor:UIColor(named: "textColor")?.withAlphaComponent(0.75) ?? .black
+                ]
+                let dateFormatter = DateFormatter()
+                dateFormatter.setLocalizedDateFormatFromTemplate("hh:mm a")
+                timeLabel.translatesAutoresizingMaskIntoConstraints = false
+                timeLabel.attributedText = NSAttributedString(string: dateFormatter.string(from: time), attributes: timeAttributes)
+                // add to view hierarchy
+                self.contentView.addSubview(timeLabel)
+                // add constraints
+                timeLabel.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -leftPadding).isActive = true
+                timeLabel.centerYAnchor.constraint(equalTo: safeMargins.centerYAnchor).isActive = true
+//                timeLabel.widthAnchor.constraint(equalToConstant: 40).isActive = true
+                // add missing constraints
+                horizontalStack.trailingAnchor.constraint(equalTo: timeLabel.leadingAnchor, constant: -leftPadding).isActive = true
 
-                }
+                
             }
         }
     }

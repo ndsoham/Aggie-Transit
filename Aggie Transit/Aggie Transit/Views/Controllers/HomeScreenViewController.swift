@@ -628,9 +628,9 @@ extension HomeScreenViewController: RouteGenerationProgressDelegate {
 }
 //MARK: - Use this to display the route
 extension HomeScreenViewController: RouteDisplayerDelegate {
-    func displayRouteOnMap(userLocation: Location, route: [(BusRoute, BusStop)], destination: Location, ETA: Double, walkDistances: [Double]) {
+    func displayRouteOnMap(userLocation: Location, route: [(BusRoute, BusStop)], destination: Location, routeTimes: [Date], walkDistances: [Double]) {
         self.clearMap()
-        self.showDirectionsPanel(start: userLocation, end: destination, route: route, eta: ETA, walkDistances: walkDistances)
+        self.showDirectionsPanel(start: userLocation, end: destination, route: route, routeTimes: routeTimes, walkDistances: walkDistances)
         if route.count == 0 {
             RouteGenerator.shared.findWalkingRoute(origin: userLocation.location, destination: destination.location) { walkingPath, progressDelegate  in
                 self.displayEndPoints(start: userLocation, end: destination)
@@ -721,14 +721,14 @@ extension HomeScreenViewController: DirectionsPanelClosedDelegate {
         }
     }
     
-    func showDirectionsPanel(start: Location, end: Location, route: [(BusRoute, BusStop)], eta: Double, walkDistances: [Double]) {
+    func showDirectionsPanel(start: Location, end: Location, route: [(BusRoute, BusStop)], routeTimes: [Date], walkDistances: [Double]) {
         directionsFpc = FloatingPanelController()
         let directionsViewController = DirectionsViewController()
         directionsViewController.endpoints = [start, end]
         directionsViewController.delegate = self
         directionsViewController.routeDisplayerDelegate = self
         directionsViewController.route = route
-        directionsViewController.eta = eta
+        directionsViewController.routeTimes = routeTimes
         directionsViewController.walkDistances = walkDistances
         if let directionsFpc, let menuFpc, let superViewMargins {
             directionsFpc.set(contentViewController: directionsViewController)
