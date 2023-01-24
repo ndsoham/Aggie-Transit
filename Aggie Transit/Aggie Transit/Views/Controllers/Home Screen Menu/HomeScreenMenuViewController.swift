@@ -293,6 +293,7 @@ extension HomeScreenMenuViewController: UITableViewDataSource {
                     cell.icon = boldedIcon
                     cell.busName = NSAttributedString(string: onCampusRoutes[indexPath.row].name, attributes: attributes)
                     cell.cellColor = onCampusRoutes[indexPath.row].color
+                    cell.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                     onCampusRoutes[indexPath.row].delegate = delegate
                     return cell
                 }
@@ -301,6 +302,7 @@ extension HomeScreenMenuViewController: UITableViewDataSource {
                     cell.icon = boldedIcon
                     cell.busName = NSAttributedString(string: offCampusRoutes[indexPath.row].name, attributes: attributes)
                     cell.cellColor = offCampusRoutes[indexPath.row].color
+                    cell.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                     offCampusRoutes[indexPath.row].delegate = delegate
                     return cell
                 }
@@ -312,6 +314,7 @@ extension HomeScreenMenuViewController: UITableViewDataSource {
                 if cell.name == nil, cell.address == nil {
                     cell.name = recentLocations[indexPath.row].name
                     cell.address = recentLocations[indexPath.row].address
+                    cell.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                     return cell
                 }
             }
@@ -342,13 +345,11 @@ extension HomeScreenMenuViewController: UITableViewDelegate {
             if indexPath.section == 0 {
                 if let onCampusRoutes = onCampusRoutes {
                     onCampusRoutes[indexPath.row].displayBusRoute()
-                    onCampusRoutes[indexPath.row].displayBuses()
                 }
             }
             else if indexPath.section == 1 {
                 if let offCampusRoutes = offCampusRoutes {
                     offCampusRoutes[indexPath.row].displayBusRoute()
-                    offCampusRoutes[indexPath.row].displayBuses()
                 }
             }
         }

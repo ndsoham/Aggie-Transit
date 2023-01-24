@@ -37,6 +37,7 @@ class TimeTableHeaderViewCell: UITableViewHeaderFooterView {
             labelStack.translatesAutoresizingMaskIntoConstraints = false
             labelStack.distribution = .fill
             labelStack.spacing = 0
+            labelStack.alignment = .top
             // add to view hierarchy
             self.contentView.addSubview(labelStack)
             // add constraints
@@ -44,7 +45,7 @@ class TimeTableHeaderViewCell: UITableViewHeaderFooterView {
             labelStack.topAnchor.constraint(equalTo: safeMargins.topAnchor).isActive = true
             // create attributed text
             let labelAttributes: [NSAttributedString.Key:Any] = [
-                .font:UIFont.boldSystemFont(ofSize: 12),
+                .font:UIFont.boldSystemFont(ofSize: 11),
                 .foregroundColor:UIColor(named: "textColor") ?? .black
             ]
             // add necessary amount of labels

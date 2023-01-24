@@ -57,11 +57,11 @@ class TimeTableTableViewCell: UITableViewCell {
                 let strikeThroughAttribute: [NSAttributedString.Key:Any] = [
                     .strikethroughColor:UIColor(named: "textColor") ?? .black,
                     .strikethroughStyle:NSUnderlineStyle.single.rawValue,
-                    .font: UIFont.systemFont(ofSize: 12),
+                    .font: UIFont.systemFont(ofSize: 11),
                     .foregroundColor:UIColor(named: "textColor")?.withAlphaComponent(0.5) ?? .black
                 ]
                 let sizeAttribute: [NSAttributedString.Key:Any] = [
-                    .font: UIFont.systemFont(ofSize: 12),
+                    .font: UIFont.systemFont(ofSize: 11),
                     .foregroundColor:UIColor(named: "textColor") ?? .black
                 ]
                 let label = UILabel()

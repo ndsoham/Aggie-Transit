@@ -36,8 +36,6 @@ class SearchResultsTableViewCell: UITableViewCell {
     }
     //MARK: - Layout subviews
     override func layoutSubviews() {
-        self.contentView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
-        self.selectedBackgroundView = nil
         super.layoutSubviews()
         horizontalStackPadding = 22.5 * Double(self.contentView.frame.width/375)
         // constrain the stack view

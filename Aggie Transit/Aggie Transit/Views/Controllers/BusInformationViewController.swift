@@ -85,7 +85,7 @@ class BusInformationViewController: UIViewController {
             // set up the bus number label
             let attributes: [NSAttributedString.Key:Any] = [
                 .font:UIFont.boldSystemFont(ofSize: 12),
-                .foregroundColor:UIColor(named: "textColor") ?? .black
+                .foregroundColor:UIColor(named: "busNumberTextColor") ?? .black
             ]
             busNumberLabel.attributedText = NSAttributedString(string: busNumber, attributes: attributes)
             // add to view hierarhcy and constrain
@@ -181,6 +181,6 @@ extension BusInformationViewController: UITableViewDataSource, UITableViewDelega
         return UIView()
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return tableView.rowHeight * 2
+        return tableView.rowHeight * 1.5
     }
 }

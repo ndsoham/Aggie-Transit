@@ -42,11 +42,9 @@ class BusRouteTableViewCell: UITableViewCell {
     //MARK: - layout subviews
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.selectedBackgroundView = nil
         // access the views width and height
         width = self.contentView.frame.width
         height = self.contentView.frame.height
-        self.contentView.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
         if let width = width, let height = height, let colorViewWidth {
             // add a subview to the view and shape it accordingly
             viewHeight = 86.25 * (height/110)

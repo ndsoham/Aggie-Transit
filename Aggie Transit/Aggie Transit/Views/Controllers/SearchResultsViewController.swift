@@ -105,6 +105,7 @@ extension SearchResultsViewController: UITableViewDelegate, UITableViewDataSourc
                 cell.locationName = searchResults[indexPath.row-1].name
                 cell.locationAddress = searchResults[indexPath.row-1].address
                 cell.locationDistance = "\(String(describing: searchResults[indexPath.row-1].distance ?? 0.5)) mi"
+                cell.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                 return cell
             }
         }

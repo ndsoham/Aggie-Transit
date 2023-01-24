@@ -111,8 +111,14 @@ class BusRoute: NSObject {
     }
 //MARK: - use this to display the route on the map
     func displayBusRoute() {
-        if let delegate = delegate, let stops = stops, let pattern = pattern {
+        if let delegate, let stops, let pattern, let buses {
             delegate.displayBusRouteOnMap(color: self.color, points: pattern, stops: stops, route: self)
+            delegate.displayBusesOnMap(buses: buses)
+            self.busDisplayTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true, block: { timer in
+                if let delegate = self.delegate, let buses = self.buses {
+                    delegate.displayBusesOnMap(buses: buses)
+                }
+            })
         }
     }
 //MARK: -  use this to display a partial bus route
@@ -125,17 +131,6 @@ class BusRoute: NSObject {
                 }
             }
         }
-    }
-//MARK: - use this to display the buses on the map
-    func displayBuses(){
-        if let delegate = self.delegate, let buses = self.buses {
-            delegate.displayBusesOnMap(buses: buses)
-        }
-        self.busDisplayTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true, block: { timer in
-            if let delegate = self.delegate, let buses = self.buses {
-                delegate.displayBusesOnMap(buses: buses)
-            }
-        })
     }
 //MARK: - This is the function called when the invalidate timer notification is received
     @objc func invalidateTimer(){

@@ -180,8 +180,12 @@ class RouteGenerator {
         var eta: Double = -1000
         if let src = source.placemark.location, let dst = destination.placemark.location {
             let minDistance = src.distance(from: dst) // straight line
-            let maxDistance = minDistance*cos(rad(90)) + minDistance*sin(rad(90)) // legs of the straight line
-            let approxDistance = (maxDistance + minDistance)/2
+            let vertEndpoint = CLLocation(latitude: dst.coordinate.latitude, longitude: src.coordinate.longitude)
+            let verticalDistance = src.distance(from: vertEndpoint)
+            let horizontalEndpoint = CLLocation(latitude: src.coordinate.latitude, longitude: dst.coordinate.longitude)
+            let horizontalDistance = src.distance(from: horizontalEndpoint)
+            let approxMaxDistance = verticalDistance + horizontalDistance // legs of the triangle
+            let approxDistance = (approxMaxDistance + minDistance)/2
             eta = approxDistance * (1/1.3)
             var walkDistance = (round(approxDistance * 0.000621371 * 10) / 10.0)
             walkDistance = walkDistance > 0 ? walkDistance:0.1
