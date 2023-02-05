@@ -154,7 +154,7 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
                             cell.time = routeTimes[1]
                         } else if indexPath.row == 2 {
                             cell.iconImage = UIImage(systemName: "bus")
-                            cell.directionsHeader = "Ride \(firstBus.name) - \(firstBus.number)"
+                            cell.directionsHeader = "Ride \(firstBus.number) - \(firstBus.name)"
                             cell.directions = "From \(firstStop.name) to \(secondStop.name)"
                             cell.iconTint = firstBus.color
                             cell.time = routeTimes[2]
@@ -182,7 +182,7 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
                         } else if indexPath.row == 2 {
                             cell.iconImage = UIImage(systemName: "bus")
                             cell.directions = "From \(firstStop.name) to \(secondStop.name)"
-                            cell.directionsHeader = "Ride \(firstBus.name) - \(firstBus.number)"
+                            cell.directionsHeader = "Ride \(firstBus.number) - \(firstBus.name)"
                             cell.iconTint = firstBus.color
                             cell.time = routeTimes[2]
                         } else if indexPath.row == 3 {
@@ -193,7 +193,7 @@ extension DirectionsViewController: UITableViewDataSource, UITableViewDelegate, 
                             cell.time = routeTimes[3]
                         } else if indexPath.row == 4 {
                             cell.iconImage = UIImage(systemName: "bus")
-                            cell.directionsHeader = "Ride \(secondBus.name) - \(secondBus.number)"
+                            cell.directionsHeader = "Ride \(secondBus.number) - \(secondBus.name)"
                             cell.directions = "From \(thirdStop.name) to \(fourthStop.name)"
                             cell.iconTint = secondBus.color
                             cell.time = routeTimes[4]
@@ -256,12 +256,12 @@ extension DirectionsViewController {
         let userLocation = origin
         if let destinationRoutesAndStops = RouteGenerator.shared.findRelevantBusRoutesAndClosestStops(location: destination), let userRoutesAndStops = RouteGenerator.shared.findRelevantBusRoutesAndClosestStops(location: userLocation) {
             let (start, stops, finish, travel, distances) = RouteGenerator.shared.generateRoute(destination: destination, destinationRoutesAndStops: destinationRoutesAndStops, userRoutesAndStops: userRoutesAndStops, userLocation: userLocation)
-            print("Route Generation Successful ---")
-            print(start.name, "-> ", terminator: "")
-            for (route, stop) in stops {
-                print(stop.name,terminator: "(\(route.name) - \(route.number)) ->")
-            }
-            print(finish.name, travel, separator: ":")
+//            print("Route Generation Successful ---")
+//            print(start.name, "-> ", terminator: "")
+//            for (route, stop) in stops {
+//                print(stop.name,terminator: "(\(route.name) - \(route.number)) ->")
+//            }
+//            print(finish.name, travel, separator: ":")
             if let routeDisplayerDelegate = routeDisplayerDelegate {
                 routeDisplayerDelegate.displayRouteOnMap(userLocation: start, route: stops, destination: finish, routeTimes: travel, walkDistances: distances)
             }

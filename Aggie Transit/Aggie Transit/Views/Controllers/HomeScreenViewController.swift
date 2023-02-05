@@ -98,6 +98,7 @@ class HomeScreenViewController: UIViewController {
                         map.translatesAutoresizingMaskIntoConstraints = false
                         map.setRegion(region, animated: false)
                         map.showsCompass = false
+                        map.showsUserLocation = true
                         // add the map to the view hierarchy
                         self.view.addSubview(map)
                         // constrain the map
@@ -320,6 +321,9 @@ extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
     }
     // this provides the annotation view
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation.isKind(of: MKUserLocation.self) {
+            return nil
+        }
         if annotation.isKind(of: BusAnnotation.self), let annotation = annotation as? BusAnnotation, let direction = annotation.direction {
             let view = MKAnnotationView()
             view.image = UIImage(named: "bus")?.rotate(radians: rad(direction-mapView.camera.heading))

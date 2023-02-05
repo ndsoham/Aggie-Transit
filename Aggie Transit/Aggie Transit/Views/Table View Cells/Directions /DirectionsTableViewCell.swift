@@ -105,11 +105,9 @@ class DirectionsTableViewCell: UITableViewCell {
                 // add constraints
                 timeLabel.trailingAnchor.constraint(equalTo: safeMargins.trailingAnchor, constant: -leftPadding).isActive = true
                 timeLabel.centerYAnchor.constraint(equalTo: safeMargins.centerYAnchor).isActive = true
-//                timeLabel.widthAnchor.constraint(equalToConstant: 40).isActive = true
+                timeLabel.widthAnchor.constraint(equalToConstant: 55).isActive = true
                 // add missing constraints
                 horizontalStack.trailingAnchor.constraint(equalTo: timeLabel.leadingAnchor, constant: -leftPadding).isActive = true
-
-                
             }
         }
     }

@@ -45,7 +45,7 @@ class TimeTableTableViewCell: UITableViewCell {
             timeHorizontalStack.axis = .horizontal
             timeHorizontalStack.alignment = .center
             timeHorizontalStack.translatesAutoresizingMaskIntoConstraints = false
-            timeHorizontalStack.distribution = .equalSpacing
+            timeHorizontalStack.distribution = .fillEqually
             // add and constrain
             self.contentView.addSubview(timeHorizontalStack)
             timeHorizontalStack.leadingAnchor.constraint(equalTo: safeMargins.leadingAnchor).isActive = true

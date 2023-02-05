@@ -26,7 +26,7 @@
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" name="launchScreenBackgroundColor"/>
+                        <color key="backgroundColor" name="launchScreenBackgroundColor 1"/>
                         <constraints>
                             <constraint firstItem="0fB-fU-dhr" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="T3A-iw-X27"/>
                             <constraint firstItem="0fB-fU-dhr" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="ut5-He-qsV"/>
@@ -39,8 +39,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="launchScreenIcon" width="233.33332824707031" height="219.33332824707031"/>
-        <namedColor name="launchScreenBackgroundColor">
+        <image name="launchScreenIcon" width="228" height="219.33332824707031"/>
+        <namedColor name="launchScreenBackgroundColor 1">
             <color red="0.96078431372549022" green="0.96470588235294119" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>

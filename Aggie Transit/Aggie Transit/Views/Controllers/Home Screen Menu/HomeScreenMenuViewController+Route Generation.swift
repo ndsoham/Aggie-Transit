@@ -12,12 +12,12 @@ extension HomeScreenMenuViewController {
         let userLocation = origin
         if let destinationRoutesAndStops = RouteGenerator.shared.findRelevantBusRoutesAndClosestStops(location: destination), let userRoutesAndStops = RouteGenerator.shared.findRelevantBusRoutesAndClosestStops(location: userLocation) {
             let (start, stops, finish, travel, distances) = RouteGenerator.shared.generateRoute(destination: destination, destinationRoutesAndStops: destinationRoutesAndStops, userRoutesAndStops: userRoutesAndStops, userLocation: userLocation)
-            print("Route Generation Successful ---")
-            print(start.name, "-> ", terminator: "")
-            for (route, stop) in stops {
-                print(stop.name,terminator: "(\(route.name) - \(route.number)) ->")
-            }
-            print(finish.name, travel, separator: ":")
+//            print("Route Generation Successful ---")
+//            print(start.name, "-> ", terminator: "")
+//            for (route, stop) in stops {
+//                print(stop.name,terminator: "(\(route.name) - \(route.number)) ->")
+//            }
+//            print(finish.name, travel, separator: ":")
             if let routeDisplayerDelegate = routeDisplayerDelegate {
                 routeDisplayerDelegate.displayRouteOnMap(userLocation: start, route: stops, destination: finish, routeTimes: travel, walkDistances: distances)
             }

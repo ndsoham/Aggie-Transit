@@ -14,7 +14,7 @@ class BusInformationViewController: UIViewController {
     private var closeButton: UIButton = UIButton(type: .close)
     private var safeMargins: UILayoutGuide?
     private var sidePadding: Double?
-    private let topInset: Double = 10
+    private let topInset: Double = 12.5
     private var busNumberView: UIView = UIView()
     private var timesTableView: UITableView = UITableView()
     private var busNumberLabel: UILabel = UILabel()

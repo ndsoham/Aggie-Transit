@@ -149,17 +149,21 @@ class DataGatherer {
             var rowCopy: [String: Date?] = [:]
             for (key, value) in row {
                 if let value = value, var date = dateFormatter.date(from: value) {
-                    let nowComponents = Calendar.current.dateComponents([.day, .hour, .minute], from: NSDate.now)
+                    let nowComponents = Calendar.current.dateComponents([.day, .hour, .minute, .year, .month], from: NSDate.now)
                     let dateComponents = Calendar.current.dateComponents([.day, .hour, .minute], from: date)
-                    if let nowHour = nowComponents.hour, let nowDay = nowComponents.day, let dateHour = dateComponents.hour {
+                    if let nowHour = nowComponents.hour, let nowDay = nowComponents.day, let nowYear = nowComponents.year, let nowMonth = nowComponents.month,let dateHour = dateComponents.hour {
                         if nowHour == 0 && dateHour == 0{
                             dateFormatter.defaultDate = NSDate.now
                             date = dateFormatter.date(from: value) ?? date
                         } else if dateHour == 0 {
-                            dateFormatter.defaultDate = Calendar.current.date(bySetting: .day, value: nowDay+1, of: date)
+                            let increasedDay = Calendar.current.date(bySetting: .day, value: nowDay+1, of: date)
+                            let currentYear = Calendar.current.date(bySetting: .year, value: nowYear, of: increasedDay ?? date)
+                            dateFormatter.defaultDate = Calendar.current.date(bySetting: .month, value: nowMonth, of: currentYear ?? date)
                             date = dateFormatter.date(from: value) ?? date
                         } else if nowHour == 0 {
-                            dateFormatter.defaultDate = Calendar.current.date(bySetting: .day, value: nowDay-1, of: date)
+                            let decreasedDay = Calendar.current.date(bySetting: .day, value: nowDay-1, of: date)
+                            let currentYear = Calendar.current.date(bySetting: .year, value: nowYear, of: decreasedDay ?? date)
+                            dateFormatter.defaultDate = Calendar.current.date(bySetting: .month, value: nowMonth, of: currentYear ?? date)
                             date = dateFormatter.date(from: value) ?? date
                         }
                         else {
