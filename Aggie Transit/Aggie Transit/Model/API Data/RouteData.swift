@@ -9,7 +9,7 @@ import Foundation
 //MARK: - This class is used to parse route data
 struct RouteData: Codable {
     var Group: GroupStruct
-    var Icon: String
+    var Icon: String?
     var TimeTableOverride: TimeTableOvverrideStruct
     var WebLink: Bool
     var Color: String
