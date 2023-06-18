@@ -14,3 +14,5 @@ class LocationManager: CLLocationManager {
     var currentLocation: CLLocation?
     private override init(){}
 }
+
+
