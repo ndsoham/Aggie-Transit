@@ -106,8 +106,8 @@ class HomeScreenViewController: UIViewController {
                         if let superViewMargins = superViewMargins {
                             map.leadingAnchor.constraint(equalTo: superViewMargins.leadingAnchor).isActive = true
                             map.trailingAnchor.constraint(equalTo: superViewMargins.trailingAnchor).isActive = true
-                            map.topAnchor.constraint(equalTo: superViewMargins.topAnchor).isActive = true
-                            map.bottomAnchor.constraint(equalTo: superViewMargins.bottomAnchor).isActive = true
+                            map.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+                            map.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
                             
                             menuFpc = FloatingPanelController()
                             if let menuFpc{

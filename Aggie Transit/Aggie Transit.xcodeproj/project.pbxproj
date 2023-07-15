@@ -27,6 +27,10 @@
 		0F475E80296378B600571B8A /* BusData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F475E7F296378B600571B8A /* BusData.swift */; };
 		0F475E822963797900571B8A /* Bus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F475E812963797900571B8A /* Bus.swift */; };
 		0F62CD0A2938847700374C63 /* HomeScreenMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */; };
+		0F6DD8EB2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8EA2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift */; };
+		0F6DD8ED2A62399B003A6E44 /* FavoritesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8EC2A62399B003A6E44 /* FavoritesTableViewCell.swift */; };
+		0F6DD8F02A623A1C003A6E44 /* FavoritesTableViewCell+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8EF2A623A1C003A6E44 /* FavoritesTableViewCell+UISetup.swift */; };
+		0F6DD8F22A623FF8003A6E44 /* HomeScreenMenuViewController+FavoritesTableViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8F12A623FF8003A6E44 /* HomeScreenMenuViewController+FavoritesTableViewSetup.swift */; };
 		0F770040294CB243008C421A /* BusRouteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F77003F294CB243008C421A /* BusRouteTableViewCell.swift */; };
 		0F7C72BB2968AEC00094151C /* RouteGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7C72BA2968AEC00094151C /* RouteGenerator.swift */; };
 		0F8B6351295A92E7000385C6 /* StopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8B6350295A92E7000385C6 /* StopData.swift */; };
@@ -75,6 +79,10 @@
 		0F475E7F296378B600571B8A /* BusData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusData.swift; sourceTree = "<group>"; };
 		0F475E812963797900571B8A /* Bus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bus.swift; sourceTree = "<group>"; };
 		0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenMenuViewController.swift; sourceTree = "<group>"; };
+		0F6DD8EA2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScrenMenuViewController+UISetup.swift"; sourceTree = "<group>"; };
+		0F6DD8EC2A62399B003A6E44 /* FavoritesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesTableViewCell.swift; sourceTree = "<group>"; };
+		0F6DD8EF2A623A1C003A6E44 /* FavoritesTableViewCell+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoritesTableViewCell+UISetup.swift"; sourceTree = "<group>"; };
+		0F6DD8F12A623FF8003A6E44 /* HomeScreenMenuViewController+FavoritesTableViewSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenMenuViewController+FavoritesTableViewSetup.swift"; sourceTree = "<group>"; };
 		0F77003F294CB243008C421A /* BusRouteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusRouteTableViewCell.swift; sourceTree = "<group>"; };
 		0F7C72BA2968AEC00094151C /* RouteGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteGenerator.swift; sourceTree = "<group>"; };
 		0F8B6350295A92E7000385C6 /* StopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopData.swift; sourceTree = "<group>"; };
@@ -139,6 +147,8 @@
 			isa = PBXGroup;
 			children = (
 				0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */,
+				0F6DD8F12A623FF8003A6E44 /* HomeScreenMenuViewController+FavoritesTableViewSetup.swift */,
+				0F6DD8EA2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift */,
 				0F17E7A92973D2B700B7A389 /* HomeScreenMenuViewController+Route Generation.swift */,
 				0FA9087F297272E1002E6AEA /* HomeScreenMenuViewController+Alerts.swift */,
 			);
@@ -198,6 +208,15 @@
 			path = "Annotation Views";
 			sourceTree = "<group>";
 		};
+		0F6DD8EE2A623A02003A6E44 /* FavoritesTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				0F6DD8EC2A62399B003A6E44 /* FavoritesTableViewCell.swift */,
+				0F6DD8EF2A623A1C003A6E44 /* FavoritesTableViewCell+UISetup.swift */,
+			);
+			path = FavoritesTableViewCell;
+			sourceTree = "<group>";
+		};
 		0F6E78952960FF2400C81F81 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -224,6 +243,7 @@
 		0F9300792975277600AC7FDB /* Home Screen Menu */ = {
 			isa = PBXGroup;
 			children = (
+				0F6DD8EE2A623A02003A6E44 /* FavoritesTableViewCell */,
 				0F77003F294CB243008C421A /* BusRouteTableViewCell.swift */,
 				0F17E7A72973A47C00B7A389 /* RecentLocationsTableViewCell.swift */,
 				0FBD765A29765AB10024A627 /* NotificationsTableViewCell.swift */,
@@ -424,7 +444,9 @@
 				0F9300772974BC8700AC7FDB /* TimeTableTableViewCell.swift in Sources */,
 				0F0F8C922952398600BB617E /* BusRoute.swift in Sources */,
 				0F8B6351295A92E7000385C6 /* StopData.swift in Sources */,
+				0F6DD8ED2A62399B003A6E44 /* FavoritesTableViewCell.swift in Sources */,
 				0F7C72BB2968AEC00094151C /* RouteGenerator.swift in Sources */,
+				0F6DD8EB2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift in Sources */,
 				0FA90876297166A5002E6AEA /* EndpointsTableViewCell.swift in Sources */,
 				0FEBBAFC297A545500974000 /* TimeTableHeaderViewCell.swift in Sources */,
 				0F2F37FE29318150005998AF /* HomeScreenViewController.swift in Sources */,
@@ -434,11 +456,13 @@
 				0FCD554A2965351C0091EAD1 /* Location.swift in Sources */,
 				0FEB8F9B29555E6200D2BB1A /* CoordinateConverter.swift in Sources */,
 				0FA9087229711BE2002E6AEA /* SearchResultsHeaderTableViewCell.swift in Sources */,
+				0F6DD8F02A623A1C003A6E44 /* FavoritesTableViewCell+UISetup.swift in Sources */,
 				0F36CD3829155B460059BC24 /* AppDelegate.swift in Sources */,
 				0FB4FB5C2960C02A0091B616 /* Model.xcdatamodeld in Sources */,
 				0FA9086E2970ED10002E6AEA /* SearchResultsTableViewCell.swift in Sources */,
 				0F8B6353295A93B6000385C6 /* BusStop.swift in Sources */,
 				0F0F8C95295293E300BB617E /* Extensions.swift in Sources */,
+				0F6DD8F22A623FF8003A6E44 /* HomeScreenMenuViewController+FavoritesTableViewSetup.swift in Sources */,
 				0FBD765729764EC30024A627 /* AnnouncementData.swift in Sources */,
 				0F475E80296378B600571B8A /* BusData.swift in Sources */,
 				0FBD7659297651A90024A627 /* BusNotification.swift in Sources */,
