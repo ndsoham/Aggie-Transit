@@ -114,14 +114,12 @@ class HomeScreenViewController: UIViewController {
                                 // configure floating panel
                                 let appearance = SurfaceAppearance()
                                 appearance.cornerRadius = 15
-                                appearance.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                                 menuFpc.surfaceView.appearance = appearance
                                 menuFpc.delegate = self
                                 // set a content view
                                 homeScreenMenu = HomeScreenMenuViewController()
                                 // configure the homeScreenMenu view
                                 if let homeScreenMenu {
-                                    homeScreenMenu.view.backgroundColor = UIColor(named: "launchScreenBackgroundColor")
                                     homeScreenMenu.pathDelegate = self
                                     homeScreenMenu.locationIdentifierDelegate = self
                                     homeScreenMenu.routeDisplayerDelegate = self

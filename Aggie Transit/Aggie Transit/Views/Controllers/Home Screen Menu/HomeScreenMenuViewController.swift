@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import DropDown
 import CoreData
+import FloatingPanel
 class HomeScreenMenuViewController: UIViewController {
     private var dataGatherer: DataGatherer = DataGatherer()
     private var onCampusRoutes: [BusRoute]?
@@ -34,6 +35,8 @@ class HomeScreenMenuViewController: UIViewController {
     var allRoutesTableView: UITableView = UITableView()
     var notificationsTableView: UITableView = UITableView()
     var favoritesTableView: UITableView = UITableView()
+    var singleColumnLayout: SingleColumnLayout = SingleColumnLayout()
+    var favoritesCollectionView: UICollectionView?
     deinit {NotificationCenter.default.removeObserver(self)}
     //MARK: - view did load
     override func viewDidLoad() {
@@ -91,7 +94,8 @@ class HomeScreenMenuViewController: UIViewController {
     func layoutSubviews() {
         setupSelf()
         setupSearchBar()
-        setupFavoritesTableView()
+//        setupFavoritesTableView()
+        setupFavoritesCollectionView()
     }
 //    //MARK: - layout the subviews
 //    func layoutSubviews() {

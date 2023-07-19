@@ -1,5 +1,5 @@
 //
-//  FavoritesTableViewCell+UISetup.swift
+//  FavoritesCollectionViewCell+UISetup.swift
 //  Aggie Transit
 //
 //  Created by Soham Nagawanshi on 7/14/23.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-extension FavoritesTableViewCell {
+extension FavoritesCollectionViewCell {
     //MARK: - setup cell and text stack
     func setupStacks() {
         // cell stack

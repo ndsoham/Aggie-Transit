@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class FavoritesTableViewCell: UITableViewCell {
+class FavoritesCollectionViewCell: UICollectionViewCell {
     //MARK: - attributes
     let cellStack: UIStackView = UIStackView()
     let textStack: UIStackView = UIStackView()
@@ -17,10 +17,10 @@ class FavoritesTableViewCell: UITableViewCell {
     let addressLabel: UILabel = UILabel()
     var name: String?
     var address: String?
-    static let id: String = "FavoritesTableViewCell"
+    static let id: String = "FavoritesCollectionViewCell"
     //MARK: - inits
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
