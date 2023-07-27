@@ -28,6 +28,7 @@
 		0F475E822963797900571B8A /* Bus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F475E812963797900571B8A /* Bus.swift */; };
 		0F5299822A71F00600FB09A3 /* FavoritesFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5299812A71F00600FB09A3 /* FavoritesFooterView.swift */; };
 		0F5299842A71F12C00FB09A3 /* FavoritesFooterView+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5299832A71F12C00FB09A3 /* FavoritesFooterView+UISetup.swift */; };
+		0F5299862A71F79800FB09A3 /* HomeScreenViewController+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5299852A71F79800FB09A3 /* HomeScreenViewController+UISetup.swift */; };
 		0F62CD0A2938847700374C63 /* HomeScreenMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */; };
 		0F6DD8EB2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8EA2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift */; };
 		0F6DD8ED2A62399B003A6E44 /* FavoritesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8EC2A62399B003A6E44 /* FavoritesCollectionViewCell.swift */; };
@@ -85,6 +86,7 @@
 		0F475E812963797900571B8A /* Bus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bus.swift; sourceTree = "<group>"; };
 		0F5299812A71F00600FB09A3 /* FavoritesFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesFooterView.swift; sourceTree = "<group>"; };
 		0F5299832A71F12C00FB09A3 /* FavoritesFooterView+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoritesFooterView+UISetup.swift"; sourceTree = "<group>"; };
+		0F5299852A71F79800FB09A3 /* HomeScreenViewController+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenViewController+UISetup.swift"; sourceTree = "<group>"; };
 		0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenMenuViewController.swift; sourceTree = "<group>"; };
 		0F6DD8EA2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScrenMenuViewController+UISetup.swift"; sourceTree = "<group>"; };
 		0F6DD8EC2A62399B003A6E44 /* FavoritesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 				0F6DD8F32A63138D003A6E44 /* Layout */,
 				0F17E7AF2973F46000B7A389 /* Home Screen Menu */,
 				0F2F37FD29318150005998AF /* HomeScreenViewController.swift */,
+				0F5299852A71F79800FB09A3 /* HomeScreenViewController+UISetup.swift */,
 				0FA9086B2970EC7D002E6AEA /* SearchResultsViewController.swift */,
 				0FA90873297165F1002E6AEA /* DirectionsViewController.swift */,
 				0F17E7AB2973EB5800B7A389 /* BusInformationViewController.swift */,
@@ -497,6 +500,7 @@
 				0F17E7AC2973EB5800B7A389 /* BusInformationViewController.swift in Sources */,
 				0F17E7A82973A47C00B7A389 /* RecentLocationsTableViewCell.swift in Sources */,
 				0F0F8C972953F95800BB617E /* PatternData.swift in Sources */,
+				0F5299862A71F79800FB09A3 /* HomeScreenViewController+UISetup.swift in Sources */,
 				0F36CD3A29155B460059BC24 /* SceneDelegate.swift in Sources */,
 				0FA9086C2970EC7D002E6AEA /* SearchResultsViewController.swift in Sources */,
 				0FA908782971F70B002E6AEA /* DirectionsTableViewCell.swift in Sources */,

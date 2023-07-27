@@ -15,6 +15,22 @@ extension HomeScreenMenuViewController {
         self.view.layer.cornerRadius = 15
         self.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         self.view.backgroundColor = .white
+        // configure sheet presentation
+        if let sheet = self.sheetPresentationController {
+            sheet.detents = [
+                .custom(identifier: UISheetPresentationController.Detent.Identifier("small"), resolver: { context in
+                    180
+                }),
+                .medium(),
+                .large()
+            ]
+            sheet.largestUndimmedDetentIdentifier = .medium
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+            sheet.prefersEdgeAttachedInCompactHeight = true
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+            sheet.prefersGrabberVisible = true
+            isModalInPresentation = true
+        }
     }
     //MARK: - setup search bar
     func setupSearchBar() {

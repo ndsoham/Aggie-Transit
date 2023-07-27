@@ -11,14 +11,7 @@ import UIKit
 let sampleData: [FavoriteLocation] = [
     FavoriteLocation(id: 1, name: "Kings Cross Underground Station", address: "New York"),
     FavoriteLocation(id: 2, name: "Kings Cross Underground Station", address: "New York"),
-    FavoriteLocation(id: 3, name: "Kings Cross Underground Station", address: "New York"),
-    FavoriteLocation(id: 4, name: "Kings Cross Underground Station", address: "New York"),
-    FavoriteLocation(id: 5, name: "Kings Cross Underground Station", address: "New York"),
-    FavoriteLocation(id: 6, name: "Kings Cross Underground Station", address: "New York"),
-    FavoriteLocation(id: 7, name: "Kings Cross Underground Station", address: "New York"),
-    FavoriteLocation(id: 8, name: "Kings Cross Underground Station", address: "New York"),
-    FavoriteLocation(id: 9, name: "Kings Cross Underground Station", address: "New York"),
-    FavoriteLocation(id: 10, name: "Kings Cross Underground Station", address: "New York")
+    FavoriteLocation(id: 3, name: "Kings Cross Underground Station", address: "New York")
 ]
 //MARK: - struct for collection view diffable data source section identifier
 enum FavoritesSection: Hashable {
