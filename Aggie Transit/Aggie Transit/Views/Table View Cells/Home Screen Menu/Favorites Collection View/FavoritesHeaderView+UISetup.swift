@@ -28,4 +28,19 @@ extension FavoritesHeaderView {
             headerLabel.leadingAnchor.constraint(equalTo: self.layoutMarginsGuide.leadingAnchor)
         ])
     }
+    //MARK: - setup button
+    func setupExpandButton() {
+        // configure
+        expandButton.tintColor = .systemBlue
+        expandButton.setTitle("Expand", for: .normal)
+        expandButton.translatesAutoresizingMaskIntoConstraints = false
+        expandButton.addTarget(self, action: #selector(didPressExpand), for: .touchUpInside)
+        // add to view hierarchy
+        self.addSubview(expandButton)
+        // configure
+        NSLayoutConstraint.activate([
+            expandButton.trailingAnchor.constraint(equalTo: self.layoutMarginsGuide.trailingAnchor),
+            expandButton.centerYAnchor.constraint(equalTo: self.layoutMarginsGuide.centerYAnchor)
+        ])
+    }
 }

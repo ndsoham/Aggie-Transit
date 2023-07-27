@@ -8,10 +8,15 @@
 import Foundation
 import UIKit
 
+protocol ExpansionDelegate {
+    func sectionExpanded()
+}
 class FavoritesHeaderView: UICollectionReusableView {
     //MARK: - attributes
     var headerLabel: UILabel = UILabel()
     var headerName: String?
+    var expandButton: UIButton = UIButton(type: .system)
+    var delegate: ExpansionDelegate?
     static let id: String = "FavoritesHeaderView"
     //MARK: - init
     override init(frame: CGRect) {
@@ -29,5 +34,10 @@ class FavoritesHeaderView: UICollectionReusableView {
     override func layoutSubviews() {
         super.layoutSubviews()
         setupLabel()
+        setupExpandButton()
+    }
+    //MARK: - manage button actions
+    @objc func didPressExpand() {
+        self.delegate?.sectionExpanded()
     }
 }

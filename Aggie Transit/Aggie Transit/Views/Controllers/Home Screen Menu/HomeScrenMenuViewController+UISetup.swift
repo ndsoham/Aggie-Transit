@@ -37,7 +37,7 @@ extension HomeScreenMenuViewController {
             searchBar.leadingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.leadingAnchor),
             searchBar.trailingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.trailingAnchor),
             searchBar.heightAnchor.constraint(equalToConstant: (52 * (self.view.frame.height/812))),
-            searchBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
+            searchBar.topAnchor.constraint(equalTo: self.view.layoutMarginsGuide.topAnchor, constant: 20)
         ])
     }
     //MARK: - setup favorites collection view
@@ -49,6 +49,7 @@ extension HomeScreenMenuViewController {
 //            // register cells and headers
             favoritesCollectionView.register(FavoritesCollectionViewCell.self, forCellWithReuseIdentifier: FavoritesCollectionViewCell.id)
             favoritesCollectionView.register(FavoritesHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: FavoritesHeaderView.id)
+            favoritesCollectionView.register(FavoritesFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FavoritesFooterView.id)
             // create data source
 //            let dataSource = UICollectionViewDiffableDataSource<FavoritesSection, FavoriteLocation>(collectionView: favoritesCollectionView, cellProvider: {
 //                collectionView, indexPath, favoriteLocation -> UICollectionViewCell? in

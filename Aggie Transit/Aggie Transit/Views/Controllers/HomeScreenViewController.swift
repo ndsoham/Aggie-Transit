@@ -47,6 +47,9 @@ class HomeScreenViewController: UIViewController {
         setUpRouteGenerator()
         configureLocationManager()
     }
+    override func viewDidAppear(_ animated: Bool) {
+        present(homeScreenMenu!, animated: false)
+    }
     //MARK: - Configure location manager
     func configureLocationManager() {
         LocationManager.shared.delegate = self
@@ -114,34 +117,51 @@ class HomeScreenViewController: UIViewController {
                                 // configure floating panel
                                 let appearance = SurfaceAppearance()
                                 appearance.cornerRadius = 15
-                                menuFpc.surfaceView.appearance = appearance
-                                menuFpc.delegate = self
+//                                menuFpc.surfaceView.appearance = appearance
+//                                menuFpc.delegate = self
                                 // set a content view
                                 homeScreenMenu = HomeScreenMenuViewController()
                                 // configure the homeScreenMenu view
                                 if let homeScreenMenu {
-                                    homeScreenMenu.pathDelegate = self
-                                    homeScreenMenu.locationIdentifierDelegate = self
-                                    homeScreenMenu.routeDisplayerDelegate = self
-                                    homeScreenMenu.map = map
-                                    RouteGenerator.shared.alertDelegate = homeScreenMenu
-                                    menuFpc.set(contentViewController: homeScreenMenu)
-                                    menuFpc.track(scrollView: homeScreenMenu.allRoutesTableView)
+                                    if #available(iOS 15.0, *) {
+                                        
+                                        if let sheet = homeScreenMenu.sheetPresentationController {
+                                            sheet.detents = [.custom(resolver: { context in
+                                                return 200
+                                            }) ,.medium(), .large()]
+                                            sheet.largestUndimmedDetentIdentifier = .large
+                                            sheet.largestUndimmedDetentIdentifier = .medium
+                                            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+                                            sheet.prefersEdgeAttachedInCompactHeight = true
+                                            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+                                            sheet.prefersGrabberVisible = true
+                                        }
+                                    } else {
+                                        print("i fell back")
+                                        // Fallback on earlier versions
+                                    }
+//                                    homeScreenMenu.pathDelegate = self
+//                                    homeScreenMenu.locationIdentifierDelegate = self
+//                                    homeScreenMenu.routeDisplayerDelegate = self
+//                                    homeScreenMenu.map = map
+//                                    RouteGenerator.shared.alertDelegate = homeScreenMenu
+//                                    menuFpc.set(contentViewController: homeScreenMenu)
+//                                    menuFpc.track(scrollView: homeScreenMenu.allRoutesTableView)
                                 }
-                                self.view.addSubview(menuFpc.view)
-                                menuFpc.view.frame = self.view.bounds
-                                menuFpc.view.translatesAutoresizingMaskIntoConstraints = false
+//                                self.view.addSubview(menuFpc.view)
+//                                menuFpc.view.frame = self.view.bounds
+//                                menuFpc.view.translatesAutoresizingMaskIntoConstraints = false
                                 // add constraints
-                                menuFpc.view.topAnchor.constraint(equalTo: superViewMargins.topAnchor).isActive = true
-                                menuFpc.view.bottomAnchor.constraint(equalTo: superViewMargins.bottomAnchor).isActive = true
-                                menuFpc.view.leadingAnchor.constraint(equalTo: superViewMargins.leadingAnchor).isActive = true
-                                menuFpc.view.trailingAnchor.constraint(equalTo: superViewMargins.trailingAnchor).isActive = true
-                                // add to controller hierarchy
-                                self.addChild(menuFpc)
-                                // show
-                                menuFpc.show(animated: false) {
-                                    menuFpc.didMove(toParent: self)
-                                }
+//                                menuFpc.view.topAnchor.constraint(equalTo: superViewMargins.topAnchor).isActive = true
+//                                menuFpc.view.bottomAnchor.constraint(equalTo: superViewMargins.bottomAnchor).isActive = true
+//                                menuFpc.view.leadingAnchor.constraint(equalTo: superViewMargins.leadingAnchor).isActive = true
+//                                menuFpc.view.trailingAnchor.constraint(equalTo: superViewMargins.trailingAnchor).isActive = true
+//                                // add to controller hierarchy
+//                                self.addChild(menuFpc)
+//                                // show
+//                                menuFpc.show(animated: false) {
+//                                    menuFpc.didMove(toParent: self)
+//                                }
                             }
                         }
                     }

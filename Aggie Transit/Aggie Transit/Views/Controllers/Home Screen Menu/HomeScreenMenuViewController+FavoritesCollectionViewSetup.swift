@@ -34,7 +34,10 @@ struct FavoriteLocation: Hashable, Identifiable {
 extension HomeScreenMenuViewController: UICollectionViewDataSource, UICollectionViewDelegate {
    // return number of cells
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sampleData.count
+        return 3
+    }
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
     }
     // return cell
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -48,15 +51,35 @@ extension HomeScreenMenuViewController: UICollectionViewDataSource, UICollection
     }
     // return header
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: FavoritesHeaderView.id, for: indexPath) as! FavoritesHeaderView
-        header.headerName = "FAVORITES"
-        return header
+        // return a header
+        if kind == UICollectionView.elementKindSectionHeader {
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: FavoritesHeaderView.id, for: indexPath) as! FavoritesHeaderView
+            if (indexPath.section == 0){
+                header.headerName = "Favorite Locations"
+            } else if (indexPath.section == 1) {
+                header.headerName = "Recent"
+            }
+            return header
+        }
+        // return a footer
+        
+        let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FavoritesFooterView.id, for: indexPath) as! FavoritesFooterView
+        if (indexPath.section == 0) {
+            footer.footerName = "Favorite"
+        } else {
+            footer.footerName = "Recent"
+        }
+        return footer
+        
     }
 }
 //MARK: - layout delegate and methods
 extension HomeScreenMenuViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: self.view.frame.width - self.view.layoutMargins.right * 2, height: 10)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        return CGSize(width: self.view.frame.width - self.view.layoutMargins.right * 2, height: 40)
     }
 }
 
