@@ -10,10 +10,17 @@ import UIKit
 import MapKit
 import FloatingPanel
 class HomeScreenViewController: UIViewController {
-    private var height: Double?
-    private var width: Double?
     var map: MKMapView = MKMapView()
-    let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 30.614965, longitude: -96.340584), span: MKCoordinateSpan(latitudeDelta: 0.0125, longitudeDelta: 0.0125))
+    let region = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(latitude: 30.614965, longitude: -96.340584),
+        span: MKCoordinateSpan(latitudeDelta: 0.0125, longitudeDelta: 0.0125)
+    )
+    var buttonStack: UIStackView = UIStackView()
+    var notiButton: UIButton = UIButton()
+    var busButton: UIButton = UIButton()
+    var favButton: UIButton = UIButton()
+    var userButton: UIButton = UIButton()
+    
     private var mapMargins: UILayoutGuide?
     private var navigationBar: UINavigationBar?
     private var currentlyDisplayedWalkingRoutes: [MKPolyline] = []
@@ -76,6 +83,7 @@ class HomeScreenViewController: UIViewController {
     func layoutSubviews() {
    
     setupMap()
+    setupButtons()
         // configure the homeScreenMenu view
         
         
@@ -111,6 +119,7 @@ class HomeScreenViewController: UIViewController {
         
     }
 }
+
 //MARK: - handle the map and creating patterns and points
 //extension HomeScreenViewController: PathMakerDelegate, MKMapViewDelegate{
 //    // use this to display walking routes on the map

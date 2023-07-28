@@ -24,6 +24,7 @@ extension HomeScreenMenuViewController {
                 .medium(),
                 .large()
             ]
+            
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
             sheet.prefersEdgeAttachedInCompactHeight = true
