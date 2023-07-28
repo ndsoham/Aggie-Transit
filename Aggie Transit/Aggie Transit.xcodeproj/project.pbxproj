@@ -11,7 +11,6 @@
 		0F0F8C95295293E300BB617E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C94295293E300BB617E /* Extensions.swift */; };
 		0F0F8C972953F95800BB617E /* PatternData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C962953F95800BB617E /* PatternData.swift */; };
 		0F0F8C992953FBAB00BB617E /* BusPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0F8C982953FBAB00BB617E /* BusPattern.swift */; };
-		0F17E7A82973A47C00B7A389 /* RecentLocationsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F17E7A72973A47C00B7A389 /* RecentLocationsTableViewCell.swift */; };
 		0F17E7AA2973D2B700B7A389 /* HomeScreenMenuViewController+Route Generation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F17E7A92973D2B700B7A389 /* HomeScreenMenuViewController+Route Generation.swift */; };
 		0F17E7AC2973EB5800B7A389 /* BusInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F17E7AB2973EB5800B7A389 /* BusInformationViewController.swift */; };
 		0F17E7AE2973ECDE00B7A389 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F17E7AD2973ECDE00B7A389 /* Protocols.swift */; };
@@ -30,13 +29,18 @@
 		0F5299842A71F12C00FB09A3 /* FavoritesFooterView+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5299832A71F12C00FB09A3 /* FavoritesFooterView+UISetup.swift */; };
 		0F5299862A71F79800FB09A3 /* HomeScreenViewController+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5299852A71F79800FB09A3 /* HomeScreenViewController+UISetup.swift */; };
 		0F5299882A74430500FB09A3 /* HomeScreenViewController+Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5299872A74430500FB09A3 /* HomeScreenViewController+Buttons.swift */; };
+		0F52998C2A744DBB00FB09A3 /* BusListScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F52998B2A744DBB00FB09A3 /* BusListScreenViewController.swift */; };
+		0F52998E2A744F1E00FB09A3 /* BusListScreenViewController+DataGatherer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F52998D2A744F1E00FB09A3 /* BusListScreenViewController+DataGatherer.swift */; };
+		0F5299902A744F9A00FB09A3 /* BusListScreenViewController+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F52998F2A744F9A00FB09A3 /* BusListScreenViewController+UISetup.swift */; };
+		0F5299932A74520E00FB09A3 /* BusListCollectionViewCell+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5299922A74520E00FB09A3 /* BusListCollectionViewCell+UISetup.swift */; };
+		0F5299952A747CB200FB09A3 /* BusListScreenViewController+CollectionViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5299942A747CB200FB09A3 /* BusListScreenViewController+CollectionViewSetup.swift */; };
 		0F62CD0A2938847700374C63 /* HomeScreenMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */; };
 		0F6DD8EB2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8EA2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift */; };
 		0F6DD8ED2A62399B003A6E44 /* FavoritesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8EC2A62399B003A6E44 /* FavoritesCollectionViewCell.swift */; };
 		0F6DD8F02A623A1C003A6E44 /* FavoritesCollectionViewCell+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8EF2A623A1C003A6E44 /* FavoritesCollectionViewCell+UISetup.swift */; };
 		0F6DD8F22A623FF8003A6E44 /* HomeScreenMenuViewController+FavoritesCollectionViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8F12A623FF8003A6E44 /* HomeScreenMenuViewController+FavoritesCollectionViewSetup.swift */; };
 		0F6DD8F52A631399003A6E44 /* SingleColumnLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8F42A631399003A6E44 /* SingleColumnLayout.swift */; };
-		0F770040294CB243008C421A /* BusRouteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F77003F294CB243008C421A /* BusRouteTableViewCell.swift */; };
+		0F770040294CB243008C421A /* BusListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F77003F294CB243008C421A /* BusListCollectionViewCell.swift */; };
 		0F7C72BB2968AEC00094151C /* RouteGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7C72BA2968AEC00094151C /* RouteGenerator.swift */; };
 		0F8B6351295A92E7000385C6 /* StopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8B6350295A92E7000385C6 /* StopData.swift */; };
 		0F8B6353295A93B6000385C6 /* BusStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8B6352295A93B6000385C6 /* BusStop.swift */; };
@@ -68,7 +72,6 @@
 		0F0F8C94295293E300BB617E /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		0F0F8C962953F95800BB617E /* PatternData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternData.swift; sourceTree = "<group>"; };
 		0F0F8C982953FBAB00BB617E /* BusPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusPattern.swift; sourceTree = "<group>"; };
-		0F17E7A72973A47C00B7A389 /* RecentLocationsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentLocationsTableViewCell.swift; sourceTree = "<group>"; };
 		0F17E7A92973D2B700B7A389 /* HomeScreenMenuViewController+Route Generation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenMenuViewController+Route Generation.swift"; sourceTree = "<group>"; };
 		0F17E7AB2973EB5800B7A389 /* BusInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusInformationViewController.swift; sourceTree = "<group>"; };
 		0F17E7AD2973ECDE00B7A389 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
@@ -89,13 +92,18 @@
 		0F5299832A71F12C00FB09A3 /* FavoritesFooterView+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoritesFooterView+UISetup.swift"; sourceTree = "<group>"; };
 		0F5299852A71F79800FB09A3 /* HomeScreenViewController+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenViewController+UISetup.swift"; sourceTree = "<group>"; };
 		0F5299872A74430500FB09A3 /* HomeScreenViewController+Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenViewController+Buttons.swift"; sourceTree = "<group>"; };
+		0F52998B2A744DBB00FB09A3 /* BusListScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusListScreenViewController.swift; sourceTree = "<group>"; };
+		0F52998D2A744F1E00FB09A3 /* BusListScreenViewController+DataGatherer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BusListScreenViewController+DataGatherer.swift"; sourceTree = "<group>"; };
+		0F52998F2A744F9A00FB09A3 /* BusListScreenViewController+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BusListScreenViewController+UISetup.swift"; sourceTree = "<group>"; };
+		0F5299922A74520E00FB09A3 /* BusListCollectionViewCell+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BusListCollectionViewCell+UISetup.swift"; sourceTree = "<group>"; };
+		0F5299942A747CB200FB09A3 /* BusListScreenViewController+CollectionViewSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BusListScreenViewController+CollectionViewSetup.swift"; sourceTree = "<group>"; };
 		0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenMenuViewController.swift; sourceTree = "<group>"; };
 		0F6DD8EA2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScrenMenuViewController+UISetup.swift"; sourceTree = "<group>"; };
 		0F6DD8EC2A62399B003A6E44 /* FavoritesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCollectionViewCell.swift; sourceTree = "<group>"; };
 		0F6DD8EF2A623A1C003A6E44 /* FavoritesCollectionViewCell+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoritesCollectionViewCell+UISetup.swift"; sourceTree = "<group>"; };
 		0F6DD8F12A623FF8003A6E44 /* HomeScreenMenuViewController+FavoritesCollectionViewSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenMenuViewController+FavoritesCollectionViewSetup.swift"; sourceTree = "<group>"; };
 		0F6DD8F42A631399003A6E44 /* SingleColumnLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleColumnLayout.swift; sourceTree = "<group>"; };
-		0F77003F294CB243008C421A /* BusRouteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusRouteTableViewCell.swift; sourceTree = "<group>"; };
+		0F77003F294CB243008C421A /* BusListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusListCollectionViewCell.swift; sourceTree = "<group>"; };
 		0F7C72BA2968AEC00094151C /* RouteGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteGenerator.swift; sourceTree = "<group>"; };
 		0F8B6350295A92E7000385C6 /* StopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopData.swift; sourceTree = "<group>"; };
 		0F8B6352295A93B6000385C6 /* BusStop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusStop.swift; sourceTree = "<group>"; };
@@ -207,7 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				0F0F8C93295293D300BB617E /* Extensions */,
-				0FEE66092919E464004E2C93 /* Table View Cells */,
+				0FEE66092919E464004E2C93 /* Reusable Cells */,
 				0F6E78952960FF2400C81F81 /* Controllers */,
 				0F4C5029296398F9000D9771 /* Annotation Views */,
 			);
@@ -220,6 +228,36 @@
 				0FA90881297279C5002E6AEA /* CustomAnnotations.swift */,
 			);
 			path = "Annotation Views";
+			sourceTree = "<group>";
+		};
+		0F5299892A744D7200FB09A3 /* Home Screen */ = {
+			isa = PBXGroup;
+			children = (
+				0F2F37FD29318150005998AF /* HomeScreenViewController.swift */,
+				0F5299872A74430500FB09A3 /* HomeScreenViewController+Buttons.swift */,
+				0F5299852A71F79800FB09A3 /* HomeScreenViewController+UISetup.swift */,
+			);
+			path = "Home Screen";
+			sourceTree = "<group>";
+		};
+		0F52998A2A744DA600FB09A3 /* Bus List Screen */ = {
+			isa = PBXGroup;
+			children = (
+				0F52998B2A744DBB00FB09A3 /* BusListScreenViewController.swift */,
+				0F52998F2A744F9A00FB09A3 /* BusListScreenViewController+UISetup.swift */,
+				0F5299942A747CB200FB09A3 /* BusListScreenViewController+CollectionViewSetup.swift */,
+				0F52998D2A744F1E00FB09A3 /* BusListScreenViewController+DataGatherer.swift */,
+			);
+			path = "Bus List Screen";
+			sourceTree = "<group>";
+		};
+		0F5299912A74509400FB09A3 /* Bus List */ = {
+			isa = PBXGroup;
+			children = (
+				0F77003F294CB243008C421A /* BusListCollectionViewCell.swift */,
+				0F5299922A74520E00FB09A3 /* BusListCollectionViewCell+UISetup.swift */,
+			);
+			path = "Bus List";
 			sourceTree = "<group>";
 		};
 		0F6DD8EE2A623A02003A6E44 /* Favorites Collection View */ = {
@@ -246,11 +284,10 @@
 		0F6E78952960FF2400C81F81 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				0F52998A2A744DA600FB09A3 /* Bus List Screen */,
+				0F5299892A744D7200FB09A3 /* Home Screen */,
 				0F6DD8F32A63138D003A6E44 /* Layout */,
 				0F17E7AF2973F46000B7A389 /* Home Screen Menu */,
-				0F2F37FD29318150005998AF /* HomeScreenViewController.swift */,
-				0F5299872A74430500FB09A3 /* HomeScreenViewController+Buttons.swift */,
-				0F5299852A71F79800FB09A3 /* HomeScreenViewController+UISetup.swift */,
 				0FA9086B2970EC7D002E6AEA /* SearchResultsViewController.swift */,
 				0FA90873297165F1002E6AEA /* DirectionsViewController.swift */,
 				0F17E7AB2973EB5800B7A389 /* BusInformationViewController.swift */,
@@ -273,8 +310,6 @@
 			isa = PBXGroup;
 			children = (
 				0F6DD8EE2A623A02003A6E44 /* Favorites Collection View */,
-				0F77003F294CB243008C421A /* BusRouteTableViewCell.swift */,
-				0F17E7A72973A47C00B7A389 /* RecentLocationsTableViewCell.swift */,
 				0FBD765A29765AB10024A627 /* NotificationsTableViewCell.swift */,
 			);
 			path = "Home Screen Menu";
@@ -324,15 +359,16 @@
 			path = Converter;
 			sourceTree = "<group>";
 		};
-		0FEE66092919E464004E2C93 /* Table View Cells */ = {
+		0FEE66092919E464004E2C93 /* Reusable Cells */ = {
 			isa = PBXGroup;
 			children = (
+				0F5299912A74509400FB09A3 /* Bus List */,
 				0F9300782975276200AC7FDB /* Search Results */,
 				0F9300792975277600AC7FDB /* Home Screen Menu */,
 				0F93007A297527A600AC7FDB /* Directions  */,
 				0F93007B297527B600AC7FDB /* Bus Information */,
 			);
-			path = "Table View Cells";
+			path = "Reusable Cells";
 			sourceTree = "<group>";
 		};
 		574A80FF56C20FD1367B37FA /* Pods */ = {
@@ -485,6 +521,7 @@
 				0F933383294FC09100180E0E /* DataGatherer.swift in Sources */,
 				0F17E7AA2973D2B700B7A389 /* HomeScreenMenuViewController+Route Generation.swift in Sources */,
 				0FA9087E29726968002E6AEA /* LocationManager.swift in Sources */,
+				0F52998E2A744F1E00FB09A3 /* BusListScreenViewController+DataGatherer.swift in Sources */,
 				0FCD554A2965351C0091EAD1 /* Location.swift in Sources */,
 				0FEB8F9B29555E6200D2BB1A /* CoordinateConverter.swift in Sources */,
 				0FA9087229711BE2002E6AEA /* SearchResultsHeaderTableViewCell.swift in Sources */,
@@ -493,21 +530,23 @@
 				0F36CD3829155B460059BC24 /* AppDelegate.swift in Sources */,
 				0FB4FB5C2960C02A0091B616 /* Model.xcdatamodeld in Sources */,
 				0FA9086E2970ED10002E6AEA /* SearchResultsTableViewCell.swift in Sources */,
+				0F5299952A747CB200FB09A3 /* BusListScreenViewController+CollectionViewSetup.swift in Sources */,
 				0F6DD8F52A631399003A6E44 /* SingleColumnLayout.swift in Sources */,
 				0F8B6353295A93B6000385C6 /* BusStop.swift in Sources */,
+				0F52998C2A744DBB00FB09A3 /* BusListScreenViewController.swift in Sources */,
 				0F0F8C95295293E300BB617E /* Extensions.swift in Sources */,
 				0F6DD8F22A623FF8003A6E44 /* HomeScreenMenuViewController+FavoritesCollectionViewSetup.swift in Sources */,
 				0FBD765729764EC30024A627 /* AnnouncementData.swift in Sources */,
 				0F475E80296378B600571B8A /* BusData.swift in Sources */,
 				0FBD7659297651A90024A627 /* BusNotification.swift in Sources */,
 				0F17E7AC2973EB5800B7A389 /* BusInformationViewController.swift in Sources */,
-				0F17E7A82973A47C00B7A389 /* RecentLocationsTableViewCell.swift in Sources */,
 				0F0F8C972953F95800BB617E /* PatternData.swift in Sources */,
 				0F5299862A71F79800FB09A3 /* HomeScreenViewController+UISetup.swift in Sources */,
+				0F5299932A74520E00FB09A3 /* BusListCollectionViewCell+UISetup.swift in Sources */,
 				0F36CD3A29155B460059BC24 /* SceneDelegate.swift in Sources */,
 				0FA9086C2970EC7D002E6AEA /* SearchResultsViewController.swift in Sources */,
 				0FA908782971F70B002E6AEA /* DirectionsTableViewCell.swift in Sources */,
-				0F770040294CB243008C421A /* BusRouteTableViewCell.swift in Sources */,
+				0F770040294CB243008C421A /* BusListCollectionViewCell.swift in Sources */,
 				0F1AF87E2950E46100BE0C85 /* RouteData.swift in Sources */,
 				0FA90874297165F1002E6AEA /* DirectionsViewController.swift in Sources */,
 				0F22D400296296A9000AAC01 /* SearchResultsDropDownCell.swift in Sources */,
@@ -517,6 +556,7 @@
 				0F475E822963797900571B8A /* Bus.swift in Sources */,
 				0F0F8C992953FBAB00BB617E /* BusPattern.swift in Sources */,
 				0F62CD0A2938847700374C63 /* HomeScreenMenuViewController.swift in Sources */,
+				0F5299902A744F9A00FB09A3 /* BusListScreenViewController+UISetup.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

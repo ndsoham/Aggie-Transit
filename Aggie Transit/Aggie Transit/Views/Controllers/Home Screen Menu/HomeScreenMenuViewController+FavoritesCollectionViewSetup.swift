@@ -23,7 +23,7 @@ struct FavoriteLocation: Hashable, Identifiable {
     var name: String
     var address: String
 }
-//MARK: - collection view methods
+//MARK: - collection view data source/ delegate methods
 extension HomeScreenMenuViewController: UICollectionViewDataSource, UICollectionViewDelegate {
    // return number of cells
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -73,6 +73,9 @@ extension HomeScreenMenuViewController: UICollectionViewDelegateFlowLayout {
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         return CGSize(width: self.view.frame.width - self.view.layoutMargins.right * 2, height: 40)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: self.view.frame.width - self.view.layoutMargins.right * 2, height: 70)
     }
 }
 

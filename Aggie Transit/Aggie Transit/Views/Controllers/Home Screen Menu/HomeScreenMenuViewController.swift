@@ -12,9 +12,7 @@ import DropDown
 import CoreData
 import FloatingPanel
 class HomeScreenMenuViewController: UIViewController {
-    private var dataGatherer: DataGatherer = DataGatherer()
-    private var onCampusRoutes: [BusRoute]?
-    private var offCampusRoutes: [BusRoute]?
+    
     private var recentLocations: [RecentLocation]?
     private var notifications: [BusNotification]?
     private var editingNotification: Notification?
@@ -50,7 +48,7 @@ class HomeScreenMenuViewController: UIViewController {
     }
     //MARK: - fetch relevant data
     @objc func fetchTableData() {
-        setUpDataGatherer()
+//        setUpDataGatherer()
         checkContainerStatus()
         fetchRecentLocations()
     }
@@ -144,12 +142,12 @@ class HomeScreenMenuViewController: UIViewController {
 //
 //}
 //MARK: - Setup data gatherer
-func setUpDataGatherer(){
-    dataGatherer.delegate = self
-    dataGatherer.gatherData(endpoint: "routes")
-    dataGatherer.gatherData(endpoint: "announcements")
-    dataGatherer.alertDelegate = self
-}
+//func setUpDataGatherer(){
+//    dataGatherer.delegate = self
+//    dataGatherer.gatherData(endpoint: "routes")
+//    dataGatherer.gatherData(endpoint: "announcements")
+//    dataGatherer.alertDelegate = self
+//}
 }
 ////MARK: - Provide Table View with data
 //extension HomeScreenMenuViewController: UITableViewDataSource {
@@ -304,8 +302,8 @@ func setUpDataGatherer(){
 //MARK: - Handle Data Gathering/ etc.
 extension HomeScreenMenuViewController: DataGathererDelegate {
     func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute]) {
-        self.onCampusRoutes = onCampusRoutes
-        self.offCampusRoutes = offCampusRoutes
+//        self.onCampusRoutes = onCampusRoutes
+//        self.offCampusRoutes = offCampusRoutes
         RouteGenerator.shared.allRoutes = onCampusRoutes + offCampusRoutes
         DispatchQueue.main.async {
             self.allRoutesTableView.reloadData()

@@ -39,6 +39,21 @@
             </objects>
             <point key="canvasLocation" x="550" y="612"/>
         </scene>
+        <!--Bus List Screen View Controller-->
+        <scene sceneID="lts-s3-2iY">
+            <objects>
+                <viewController storyboardIdentifier="BusListScreenViewController" id="ZSD-KQ-Byz" customClass="BusListScreenViewController" customModule="Aggie_Transit" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xfC-1l-ojl">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="VjU-Er-pGe"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hvq-q0-uUV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="527" y="1245"/>
+        </scene>
         <!--Search Results View Controller-->
         <scene sceneID="QXe-X2-kcZ">
             <objects>

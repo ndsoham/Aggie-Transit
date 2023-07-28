@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import FloatingPanel
 class HomeScreenViewController: UIViewController {
+    //MARK: - attributes
     var map: MKMapView = MKMapView()
     let region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 30.614965, longitude: -96.340584),

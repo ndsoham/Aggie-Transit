@@ -15,7 +15,11 @@ extension HomeScreenViewController {
     }
     
     @objc func busButtonPressed() {
-        print("buss pressed")
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let busListVC = storyboard.instantiateViewController(withIdentifier: "BusListScreenViewController")
+        busListVC.modalPresentationStyle = .overCurrentContext
+        dismiss(animated: false)
+        present(busListVC, animated: true)
     }
     
     @objc func favButtonPressed() {
