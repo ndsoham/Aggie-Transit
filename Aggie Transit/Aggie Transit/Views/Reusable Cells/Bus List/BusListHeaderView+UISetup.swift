@@ -12,7 +12,6 @@ extension BusListHeaderView {
     //MARK: - setup section button
     func setupSectionButton() {
         // configure
-        var configuration = UIButton.Configuration.plain()
 
         if let section {
             var boldedSection = AttributedString(section)
@@ -20,11 +19,24 @@ extension BusListHeaderView {
             container[AttributeScopes.UIKitAttributes.FontAttribute.self] = .boldSystemFont(ofSize: 18)
             boldedSection.mergeAttributes(container, mergePolicy: .keepNew)
             configuration.attributedTitle = boldedSection
-            
         }
         sectionButton.configuration = configuration
         sectionButton.tintColor = UIColor(red: 0.24, green: 0.29, blue: 0.35, alpha: 1)
         sectionButton.translatesAutoresizingMaskIntoConstraints = false
+        sectionButton.showsMenuAsPrimaryAction = true
+        let onCampusAction = UIAction (title: "On Campus") { action in
+            self.filterDelegate?.sectionChanged(newSection: "On Campus")
+            self.section = "On Campus"
+            self.sectionButton.setTitle("On Campus", for: .normal)
+        }
+        let offCampusAction = UIAction (title: "Off Campus") { action in
+            self.filterDelegate?.sectionChanged(newSection: "Off Campus")
+            self.section = "Off Campus"
+            self.sectionButton.setTitle("Off Campus", for: .normal)
+        }
+    
+        let filterMenu = UIMenu(children: [onCampusAction, offCampusAction])
+        sectionButton.menu = filterMenu
         // add to view hierarchy
         self.addSubview(sectionButton)
         // constrain
@@ -32,6 +44,9 @@ extension BusListHeaderView {
             sectionButton.leadingAnchor.constraint(equalTo: self.layoutMarginsGuide.leadingAnchor),
             sectionButton.centerYAnchor.constraint(equalTo: self.layoutMarginsGuide.centerYAnchor)
         ])
+        // configure button menu
+        
+        
     }
     //MARK: - setup close button
     func setupCloseButton() {

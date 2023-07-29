@@ -11,12 +11,12 @@ import UIKit
 class BusListScreenViewController: UIViewController {
     //MARK: - attributes
     var busRoutes: [BusRoute]?
-    var onCampusRoutes: [BusRoute]?
-    var offCampusRoutes: [BusRoute]?
+    var filteredBusRoutes: [BusRoute] = []
     var dataGatherer: DataGatherer = DataGatherer()
     var listCollectionView: UICollectionView?
     var singleColumnLayout: SingleColumnLayout = SingleColumnLayout()
     var activityIndicatorView: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
+    var filter: String = "On Campus"
     //MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()

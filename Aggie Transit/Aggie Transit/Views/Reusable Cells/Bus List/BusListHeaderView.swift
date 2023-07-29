@@ -13,7 +13,7 @@ protocol DismissalDelegate {
 }
 
 protocol FilterDelegate {
-    func sectionChanged()
+    func sectionChanged(newSection: String)
 }
 
 class BusListHeaderView: UICollectionReusableView {
@@ -24,6 +24,8 @@ class BusListHeaderView: UICollectionReusableView {
     var dismissalDelegate: DismissalDelegate?
     var filterDelegate: FilterDelegate?
     static let id: String = "BusListHeaderView"
+    var configuration = UIButton.Configuration.plain()
+
     //MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,8 +45,11 @@ class BusListHeaderView: UICollectionReusableView {
         setupCloseButton()
     }
     //MARK: - section changed
-    @objc func didChangeSection() {
-        self.filterDelegate?.sectionChanged()
+    @objc func didChangeSection(newSection: String?) {
+        print("did change section")
+        if let newSection{
+            self.filterDelegate?.sectionChanged(newSection: newSection)
+        }
     }
     //MARK: - view closed
     @objc func didCloseView() {

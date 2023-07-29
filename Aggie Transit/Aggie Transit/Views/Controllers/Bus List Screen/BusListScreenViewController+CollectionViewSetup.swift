@@ -17,24 +17,26 @@ extension BusListScreenViewController: UICollectionViewDataSource, UICollectionV
    // number of cells
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if let busRoutes {
+            if filter == "On Campus" {
+                filteredBusRoutes = busRoutes.filter{$0.campus == "On Campus"}
+            } else if filter == "Off Campus" {
+                filteredBusRoutes = busRoutes.filter{$0.campus == "Off Campus"}
+            }
             self.activityIndicatorView.stopAnimating()
-            return busRoutes.count
+            return filteredBusRoutes.count
         }
         return 0
     }
     // return cell
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let busRoutes {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BusListCollectionViewCell.id, for: indexPath) as! BusListCollectionViewCell
-            cell.stops = "Asbury Water Tower/ Becky Gates Center/ Asbury Water tower"
-            cell.number = busRoutes[indexPath.row].number
-            cell.name = busRoutes[indexPath.row].name
-            cell.contentView.layer.cornerRadius = 16
-            cell.contentView.clipsToBounds = true
-            cell.contentView.backgroundColor = busRoutes[indexPath.row].color
-            return cell
-        }
-        return UICollectionViewCell()
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BusListCollectionViewCell.id, for: indexPath) as! BusListCollectionViewCell
+        cell.stops = "Asbury Water Tower/ Becky Gates Center/ Asbury Water tower"
+        cell.number = filteredBusRoutes[indexPath.row].number
+        cell.name = filteredBusRoutes[indexPath.row].name
+        cell.contentView.layer.cornerRadius = 16
+        cell.contentView.clipsToBounds = true
+        cell.contentView.backgroundColor = filteredBusRoutes[indexPath.row].color
+        return cell
     }
     // return header
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -68,8 +70,12 @@ extension BusListScreenViewController: DismissalDelegate, FilterDelegate {
         }
     }
     
-    func sectionChanged() {
-        
+    func sectionChanged(newSection: String) {
+        self.filter = newSection
+        DispatchQueue.main.async {
+            self.activityIndicatorView.startAnimating()
+            self.listCollectionView?.reloadData()
+        }
     }
     
     
