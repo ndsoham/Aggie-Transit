@@ -35,10 +35,10 @@
 		0F5299932A74520E00FB09A3 /* BusListCollectionViewCell+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5299922A74520E00FB09A3 /* BusListCollectionViewCell+UISetup.swift */; };
 		0F5299952A747CB200FB09A3 /* BusListScreenViewController+CollectionViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5299942A747CB200FB09A3 /* BusListScreenViewController+CollectionViewSetup.swift */; };
 		0F62CD0A2938847700374C63 /* HomeScreenMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */; };
-		0F6DD8EB2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8EA2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift */; };
+		0F6DD8EB2A62333C003A6E44 /* HomeScreenMenuViewController+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8EA2A62333C003A6E44 /* HomeScreenMenuViewController+UISetup.swift */; };
 		0F6DD8ED2A62399B003A6E44 /* HomeScreenMenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8EC2A62399B003A6E44 /* HomeScreenMenuCollectionViewCell.swift */; };
 		0F6DD8F02A623A1C003A6E44 /* HomeScreenMenuCollectionViewCell+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8EF2A623A1C003A6E44 /* HomeScreenMenuCollectionViewCell+UISetup.swift */; };
-		0F6DD8F22A623FF8003A6E44 /* HomeScreenMenuViewController+FavoritesCollectionViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8F12A623FF8003A6E44 /* HomeScreenMenuViewController+FavoritesCollectionViewSetup.swift */; };
+		0F6DD8F22A623FF8003A6E44 /* HomeScreenMenuViewController+CollectionViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8F12A623FF8003A6E44 /* HomeScreenMenuViewController+CollectionViewSetup.swift */; };
 		0F6DD8F52A631399003A6E44 /* SingleColumnLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6DD8F42A631399003A6E44 /* SingleColumnLayout.swift */; };
 		0F770040294CB243008C421A /* BusListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F77003F294CB243008C421A /* BusListCollectionViewCell.swift */; };
 		0F7C72BB2968AEC00094151C /* RouteGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7C72BA2968AEC00094151C /* RouteGenerator.swift */; };
@@ -56,6 +56,8 @@
 		0FA90880297272E1002E6AEA /* HomeScreenMenuViewController+Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA9087F297272E1002E6AEA /* HomeScreenMenuViewController+Alerts.swift */; };
 		0FA90882297279C5002E6AEA /* CustomAnnotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA90881297279C5002E6AEA /* CustomAnnotations.swift */; };
 		0FB4FB5C2960C02A0091B616 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0FB4FB5A2960C02A0091B616 /* Model.xcdatamodeld */; };
+		0FB5CF7A2A75572700B55183 /* HomeScreenMenuViewController+DataTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5CF792A75572700B55183 /* HomeScreenMenuViewController+DataTasks.swift */; };
+		0FB5CF7C2A755ED000B55183 /* HomeScreenMenuViewController+SearchBarInteractions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB5CF7B2A755ED000B55183 /* HomeScreenMenuViewController+SearchBarInteractions.swift */; };
 		0FBD765729764EC30024A627 /* AnnouncementData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD765629764EC30024A627 /* AnnouncementData.swift */; };
 		0FBD7659297651A90024A627 /* BusNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD7658297651A90024A627 /* BusNotification.swift */; };
 		0FBD765B29765AB10024A627 /* NotificationsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD765A29765AB10024A627 /* NotificationsTableViewCell.swift */; };
@@ -100,10 +102,10 @@
 		0F5299922A74520E00FB09A3 /* BusListCollectionViewCell+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BusListCollectionViewCell+UISetup.swift"; sourceTree = "<group>"; };
 		0F5299942A747CB200FB09A3 /* BusListScreenViewController+CollectionViewSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BusListScreenViewController+CollectionViewSetup.swift"; sourceTree = "<group>"; };
 		0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenMenuViewController.swift; sourceTree = "<group>"; };
-		0F6DD8EA2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScrenMenuViewController+UISetup.swift"; sourceTree = "<group>"; };
+		0F6DD8EA2A62333C003A6E44 /* HomeScreenMenuViewController+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenMenuViewController+UISetup.swift"; sourceTree = "<group>"; };
 		0F6DD8EC2A62399B003A6E44 /* HomeScreenMenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenMenuCollectionViewCell.swift; sourceTree = "<group>"; };
 		0F6DD8EF2A623A1C003A6E44 /* HomeScreenMenuCollectionViewCell+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenMenuCollectionViewCell+UISetup.swift"; sourceTree = "<group>"; };
-		0F6DD8F12A623FF8003A6E44 /* HomeScreenMenuViewController+FavoritesCollectionViewSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenMenuViewController+FavoritesCollectionViewSetup.swift"; sourceTree = "<group>"; };
+		0F6DD8F12A623FF8003A6E44 /* HomeScreenMenuViewController+CollectionViewSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenMenuViewController+CollectionViewSetup.swift"; sourceTree = "<group>"; };
 		0F6DD8F42A631399003A6E44 /* SingleColumnLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleColumnLayout.swift; sourceTree = "<group>"; };
 		0F77003F294CB243008C421A /* BusListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusListCollectionViewCell.swift; sourceTree = "<group>"; };
 		0F7C72BA2968AEC00094151C /* RouteGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteGenerator.swift; sourceTree = "<group>"; };
@@ -121,6 +123,8 @@
 		0FA9087F297272E1002E6AEA /* HomeScreenMenuViewController+Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenMenuViewController+Alerts.swift"; sourceTree = "<group>"; };
 		0FA90881297279C5002E6AEA /* CustomAnnotations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnnotations.swift; sourceTree = "<group>"; };
 		0FB4FB5B2960C02A0091B616 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		0FB5CF792A75572700B55183 /* HomeScreenMenuViewController+DataTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenMenuViewController+DataTasks.swift"; sourceTree = "<group>"; };
+		0FB5CF7B2A755ED000B55183 /* HomeScreenMenuViewController+SearchBarInteractions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeScreenMenuViewController+SearchBarInteractions.swift"; sourceTree = "<group>"; };
 		0FBD765629764EC30024A627 /* AnnouncementData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementData.swift; sourceTree = "<group>"; };
 		0FBD7658297651A90024A627 /* BusNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusNotification.swift; sourceTree = "<group>"; };
 		0FBD765A29765AB10024A627 /* NotificationsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsTableViewCell.swift; sourceTree = "<group>"; };
@@ -173,10 +177,12 @@
 			isa = PBXGroup;
 			children = (
 				0F62CD092938847700374C63 /* HomeScreenMenuViewController.swift */,
-				0F6DD8F12A623FF8003A6E44 /* HomeScreenMenuViewController+FavoritesCollectionViewSetup.swift */,
-				0F6DD8EA2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift */,
+				0FB5CF7B2A755ED000B55183 /* HomeScreenMenuViewController+SearchBarInteractions.swift */,
+				0F6DD8F12A623FF8003A6E44 /* HomeScreenMenuViewController+CollectionViewSetup.swift */,
+				0F6DD8EA2A62333C003A6E44 /* HomeScreenMenuViewController+UISetup.swift */,
 				0F17E7A92973D2B700B7A389 /* HomeScreenMenuViewController+Route Generation.swift */,
 				0FA9087F297272E1002E6AEA /* HomeScreenMenuViewController+Alerts.swift */,
+				0FB5CF792A75572700B55183 /* HomeScreenMenuViewController+DataTasks.swift */,
 			);
 			path = "Home Screen Menu";
 			sourceTree = "<group>";
@@ -512,11 +518,12 @@
 				0F5299842A71F12C00FB09A3 /* HomeScreenMenuCollectionFooterView+UISetup.swift in Sources */,
 				0F6DD8ED2A62399B003A6E44 /* HomeScreenMenuCollectionViewCell.swift in Sources */,
 				0F7C72BB2968AEC00094151C /* RouteGenerator.swift in Sources */,
-				0F6DD8EB2A62333C003A6E44 /* HomeScrenMenuViewController+UISetup.swift in Sources */,
+				0F6DD8EB2A62333C003A6E44 /* HomeScreenMenuViewController+UISetup.swift in Sources */,
 				0FA90876297166A5002E6AEA /* EndpointsTableViewCell.swift in Sources */,
 				0FEBBAFC297A545500974000 /* TimeTableHeaderViewCell.swift in Sources */,
 				0F2F37FE29318150005998AF /* HomeScreenViewController.swift in Sources */,
 				0FFC59352A676FE500CAE0C6 /* HomeScreenMenuCollectionHeaderView.swift in Sources */,
+				0FB5CF7A2A75572700B55183 /* HomeScreenMenuViewController+DataTasks.swift in Sources */,
 				0F933383294FC09100180E0E /* DataGatherer.swift in Sources */,
 				0F17E7AA2973D2B700B7A389 /* HomeScreenMenuViewController+Route Generation.swift in Sources */,
 				0FA9087E29726968002E6AEA /* LocationManager.swift in Sources */,
@@ -535,7 +542,7 @@
 				0F8B6353295A93B6000385C6 /* BusStop.swift in Sources */,
 				0F52998C2A744DBB00FB09A3 /* BusListScreenViewController.swift in Sources */,
 				0F0F8C95295293E300BB617E /* Extensions.swift in Sources */,
-				0F6DD8F22A623FF8003A6E44 /* HomeScreenMenuViewController+FavoritesCollectionViewSetup.swift in Sources */,
+				0F6DD8F22A623FF8003A6E44 /* HomeScreenMenuViewController+CollectionViewSetup.swift in Sources */,
 				0FBD765729764EC30024A627 /* AnnouncementData.swift in Sources */,
 				0F475E80296378B600571B8A /* BusData.swift in Sources */,
 				0FBD7659297651A90024A627 /* BusNotification.swift in Sources */,
@@ -557,6 +564,7 @@
 				0F0F8C992953FBAB00BB617E /* BusPattern.swift in Sources */,
 				0F62CD0A2938847700374C63 /* HomeScreenMenuViewController.swift in Sources */,
 				0F5299902A744F9A00FB09A3 /* BusListScreenViewController+UISetup.swift in Sources */,
+				0FB5CF7C2A755ED000B55183 /* HomeScreenMenuViewController+SearchBarInteractions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

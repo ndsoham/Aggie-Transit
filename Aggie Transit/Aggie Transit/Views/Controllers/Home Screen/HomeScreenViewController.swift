@@ -119,7 +119,8 @@ class HomeScreenViewController: UIViewController {
     }
     func presentMenu()  {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let homeScreenMenu = storyboard.instantiateViewController(withIdentifier: "HomeScreenMenuViewController")
+        let homeScreenMenu = storyboard.instantiateViewController(withIdentifier: "HomeScreenMenuViewController") as! HomeScreenMenuViewController
+        homeScreenMenu.map = self.map
         present(homeScreenMenu, animated: true)
     }
 }

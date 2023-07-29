@@ -17,6 +17,8 @@ class HomeScreenMenuCollectionViewCell: UICollectionViewCell {
     let addressLabel: UILabel = UILabel()
     var name: String?
     var address: String?
+    var iconTintColor: UIColor?
+    var icon: UIImage?
     static let id: String = "HomeScreenMenuCollectionViewCell"
     //MARK: - inits
     override init(frame: CGRect) {

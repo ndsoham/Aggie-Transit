@@ -21,6 +21,7 @@ extension HomeScreenMenuCollectionViewCell {
         // constraint
         NSLayoutConstraint.activate([
             cellStack.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
+            cellStack.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor),
             cellStack.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
         ])
         // text stack
@@ -31,8 +32,8 @@ extension HomeScreenMenuCollectionViewCell {
     //MARK: - setup icon
     func setupIcon() {
         // configure
-        self.iconImageView.image = UIImage(systemName: "mappin.circle.fill")
-        self.iconImageView.tintColor = .darkGray
+        self.iconImageView.image = icon
+        self.iconImageView.tintColor = iconTintColor
         self.iconImageView.translatesAutoresizingMaskIntoConstraints = false
         // add to view hierarchy
         self.cellStack.addArrangedSubview(iconImageView)

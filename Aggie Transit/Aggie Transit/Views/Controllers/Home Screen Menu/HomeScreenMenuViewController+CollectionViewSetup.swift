@@ -27,16 +27,48 @@ struct FavoriteLocation: Hashable, Identifiable {
 extension HomeScreenMenuViewController: UICollectionViewDataSource, UICollectionViewDelegate {
    // return number of cells
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        if collectionView == searchCollectionView {
+            return searchCompleterResults.count
+        }
+        if section == 0 {
+            return 3
+        } else if section == 1, let _ = recentLocations {
+            return 3
+        }
+        return 0
     }
     func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if collectionView == searchCollectionView{
+            return 1
+        }
         return 2
     }
     // return cell
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeScreenMenuCollectionViewCell.id, for: indexPath) as! HomeScreenMenuCollectionViewCell
-        cell.address = sampleData[indexPath.row].address
-        cell.name = sampleData[indexPath.row].name
+        if collectionView == searchCollectionView {
+            cell.address = searchCompleterResults[indexPath.row].address
+            cell.name = searchCompleterResults[indexPath.row].name
+            if (cell.address == "Search Nearby") {
+                cell.iconTintColor = .darkGray
+                cell.icon = UIImage(systemName: "magnifyingglass.circle.fill")
+            } else {
+                cell.iconTintColor = .red
+                cell.icon = UIImage(systemName: "mappin.circle.fill")
+            }
+        } else {
+            if indexPath.section == 0 {
+                cell.address = sampleData[indexPath.row].address
+                cell.name = sampleData[indexPath.row].name
+                cell.iconTintColor = .darkGray
+                cell.icon = UIImage(systemName: "mappin.circle.fill")
+            } else if indexPath.section == 1,  let recentLocations {
+                cell.address = recentLocations[indexPath.row].address
+                cell.name = recentLocations[indexPath.row].name
+                cell.iconTintColor = .darkGray
+                cell.icon = UIImage(systemName: "mappin.circle.fill")
+            }
+        }
         cell.contentView.layer.cornerRadius = 16
         cell.contentView.clipsToBounds = true
         cell.contentView.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1)
@@ -50,7 +82,7 @@ extension HomeScreenMenuViewController: UICollectionViewDataSource, UICollection
             if (indexPath.section == 0){
                 header.headerName = "Favorite Locations"
             } else if (indexPath.section == 1) {
-                header.headerName = "Recent"
+                header.headerName = "Recent Locations"
             }
             return header
         }
@@ -69,9 +101,15 @@ extension HomeScreenMenuViewController: UICollectionViewDataSource, UICollection
 //MARK: - layout delegate and methods
 extension HomeScreenMenuViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        if collectionView == searchCollectionView{
+            return CGSize.zero
+        }
         return CGSize(width: self.view.frame.width - self.view.layoutMargins.right * 2, height: 10)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        if collectionView == searchCollectionView{
+            return CGSize.zero
+        }
         return CGSize(width: self.view.frame.width - self.view.layoutMargins.right * 2, height: 40)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
