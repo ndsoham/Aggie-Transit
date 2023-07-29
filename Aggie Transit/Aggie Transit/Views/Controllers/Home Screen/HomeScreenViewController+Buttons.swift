@@ -18,7 +18,9 @@ extension HomeScreenViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let busListVC = storyboard.instantiateViewController(withIdentifier: "BusListScreenViewController")
         busListVC.modalPresentationStyle = .overCurrentContext
-        dismiss(animated: false)
+        dismiss(animated: false){
+            self.buttonStack.isHidden = true
+        }
         present(busListVC, animated: true)
     }
     

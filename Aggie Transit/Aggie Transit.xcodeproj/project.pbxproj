@@ -59,6 +59,8 @@
 		0FBD765729764EC30024A627 /* AnnouncementData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD765629764EC30024A627 /* AnnouncementData.swift */; };
 		0FBD7659297651A90024A627 /* BusNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD7658297651A90024A627 /* BusNotification.swift */; };
 		0FBD765B29765AB10024A627 /* NotificationsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD765A29765AB10024A627 /* NotificationsTableViewCell.swift */; };
+		0FBFB3872A7488B100A1961A /* BusListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBFB3862A7488B100A1961A /* BusListHeaderView.swift */; };
+		0FBFB3892A7488BF00A1961A /* BusListHeaderView+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBFB3882A7488BF00A1961A /* BusListHeaderView+UISetup.swift */; };
 		0FCD554A2965351C0091EAD1 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD55492965351C0091EAD1 /* Location.swift */; };
 		0FEB8F9B29555E6200D2BB1A /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEB8F9A29555E6200D2BB1A /* CoordinateConverter.swift */; };
 		0FEBBAFC297A545500974000 /* TimeTableHeaderViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEBBAFB297A545500974000 /* TimeTableHeaderViewCell.swift */; };
@@ -122,6 +124,8 @@
 		0FBD765629764EC30024A627 /* AnnouncementData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementData.swift; sourceTree = "<group>"; };
 		0FBD7658297651A90024A627 /* BusNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusNotification.swift; sourceTree = "<group>"; };
 		0FBD765A29765AB10024A627 /* NotificationsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsTableViewCell.swift; sourceTree = "<group>"; };
+		0FBFB3862A7488B100A1961A /* BusListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusListHeaderView.swift; sourceTree = "<group>"; };
+		0FBFB3882A7488BF00A1961A /* BusListHeaderView+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BusListHeaderView+UISetup.swift"; sourceTree = "<group>"; };
 		0FCD55492965351C0091EAD1 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		0FEB8F9A29555E6200D2BB1A /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
 		0FEBBAFB297A545500974000 /* TimeTableHeaderViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableHeaderViewCell.swift; sourceTree = "<group>"; };
@@ -256,6 +260,8 @@
 			children = (
 				0F77003F294CB243008C421A /* BusListCollectionViewCell.swift */,
 				0F5299922A74520E00FB09A3 /* BusListCollectionViewCell+UISetup.swift */,
+				0FBFB3862A7488B100A1961A /* BusListHeaderView.swift */,
+				0FBFB3882A7488BF00A1961A /* BusListHeaderView+UISetup.swift */,
 			);
 			path = "Bus List";
 			sourceTree = "<group>";
@@ -504,6 +510,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FBFB3892A7488BF00A1961A /* BusListHeaderView+UISetup.swift in Sources */,
 				0FA90880297272E1002E6AEA /* HomeScreenMenuViewController+Alerts.swift in Sources */,
 				0FBD765B29765AB10024A627 /* NotificationsTableViewCell.swift in Sources */,
 				0F9300772974BC8700AC7FDB /* TimeTableTableViewCell.swift in Sources */,
@@ -524,6 +531,7 @@
 				0F52998E2A744F1E00FB09A3 /* BusListScreenViewController+DataGatherer.swift in Sources */,
 				0FCD554A2965351C0091EAD1 /* Location.swift in Sources */,
 				0FEB8F9B29555E6200D2BB1A /* CoordinateConverter.swift in Sources */,
+				0FBFB3872A7488B100A1961A /* BusListHeaderView.swift in Sources */,
 				0FA9087229711BE2002E6AEA /* SearchResultsHeaderTableViewCell.swift in Sources */,
 				0FFC59372A67722400CAE0C6 /* FavoritesHeaderView+UISetup.swift in Sources */,
 				0F6DD8F02A623A1C003A6E44 /* FavoritesCollectionViewCell+UISetup.swift in Sources */,

@@ -11,8 +11,7 @@ import UIKit
 extension BusListScreenViewController {
     //MARK: - setup self
     func setupSelf() {
-        self.view.backgroundColor = .clear
-        
+        self.view.backgroundColor = UIColor.white.withAlphaComponent(0.25)
     }
     //MARK: - setup collection view
     func setupCollectionView() {
@@ -21,6 +20,7 @@ extension BusListScreenViewController {
         if let listCollectionView {
             // register cells and headers
             listCollectionView.register(BusListCollectionViewCell.self, forCellWithReuseIdentifier: BusListCollectionViewCell.id)
+            listCollectionView.register(BusListHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BusListHeaderView.id)
             // configure
             listCollectionView.backgroundColor = .clear
             listCollectionView.dataSource = self

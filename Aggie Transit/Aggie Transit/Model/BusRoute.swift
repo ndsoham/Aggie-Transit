@@ -83,13 +83,13 @@ class BusRoute: NSObject {
     func gatherStops() {
         let endpoint = "route/\(number)/stops"
         dataGatherer.busRouteDelegate = self
-        dataGatherer.gatherData(endpoint: endpoint)
+        dataGatherer.gatherData(endpoint: endpoint) 
     }
 //MARK: - this gathers time data
     func gatherTimeTable(){
         let endpoint = "route/\(number)/timetable"
         dataGatherer.busRouteDelegate = self
-        dataGatherer.gatherData(endpoint: endpoint)
+        dataGatherer.gatherData(endpoint: endpoint) 
     }
 //MARK: this gathers bus data
     func gatherBuses(){

@@ -53,9 +53,7 @@ class HomeScreenViewController: UIViewController {
 //        configureLocationManager()
     }
     override func viewDidAppear(_ animated: Bool) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let homeScreenMenu = storyboard.instantiateViewController(withIdentifier: "HomeScreenMenuViewController")
-        present(homeScreenMenu, animated: false)
+        presentMenu()
     }
     //MARK: - Configure location manager
 //    func configureLocationManager() {
@@ -118,6 +116,11 @@ class HomeScreenViewController: UIViewController {
         
         
         
+    }
+    func presentMenu()  {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let homeScreenMenu = storyboard.instantiateViewController(withIdentifier: "HomeScreenMenuViewController")
+        present(homeScreenMenu, animated: true)
     }
 }
 

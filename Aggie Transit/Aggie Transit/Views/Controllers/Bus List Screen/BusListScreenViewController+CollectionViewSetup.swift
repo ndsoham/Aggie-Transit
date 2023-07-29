@@ -26,6 +26,10 @@ let sampleRouteData: [BusRouteSample] = [
 ]
 //MARK: - data source/delegate methods
 extension BusListScreenViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    // number of sections
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
    // number of cells
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sampleRouteData.count
@@ -41,7 +45,14 @@ extension BusListScreenViewController: UICollectionViewDataSource, UICollectionV
         cell.contentView.backgroundColor = sampleRouteData[indexPath.row].color
         return cell
     }
-    
+    // return header
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BusListHeaderView.id, for: indexPath) as! BusListHeaderView
+        header.dismissalDelegate = self
+        header.filterDelegate = self
+        header.section = "On Campus"
+        return header
+    }
 }
 
 //MARK: - flow layout delegate methods
@@ -50,5 +61,26 @@ extension BusListScreenViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: self.view.frame.width - self.view.layoutMargins.right * 2, height: 78)
     }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: self.view.frame.width - self.view.layoutMargins.right * 2, height: 30)
+    }
+}
+
+//MARK: - header delegate methods
+
+extension BusListScreenViewController: DismissalDelegate, FilterDelegate {
+    func viewDismissed() {
+        guard let presenter = self.presentingViewController as? HomeScreenViewController else {return}
+            presenter.buttonStack.isHidden = false
+        self.dismiss(animated: true) {
+            presenter.presentMenu()
+        }
+    }
+    
+    func sectionChanged() {
+        
+    }
+    
+    
 }
 
