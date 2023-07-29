@@ -38,4 +38,21 @@ extension BusListScreenViewController {
             
         }
     }
+    //MARK: - setup activity indicator
+    func setupActivityIndicator() {
+        // configure
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        // add to view hierarchy
+        if let listCollectionView {
+            listCollectionView.addSubview(activityIndicatorView)
+            // constrain
+            NSLayoutConstraint.activate([
+                activityIndicatorView.centerXAnchor.constraint(equalTo: listCollectionView.centerXAnchor),
+                activityIndicatorView.centerYAnchor.constraint(equalTo: listCollectionView.centerYAnchor)
+            ])
+        }
+        // start the animation
+        activityIndicatorView.startAnimating()
+        
+    }
 }

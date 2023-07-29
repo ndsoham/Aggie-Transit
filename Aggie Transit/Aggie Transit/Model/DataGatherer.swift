@@ -30,11 +30,10 @@ class DataGatherer {
                         let decoder = JSONDecoder()
                         if endpoint == "routes" {
                             let routes = try decoder.decode([RouteData].self, from: data)
-                            let onCampusRoutes = self.gatherOnCampusBusRoutes(data: routes)
-                            let offCampusRoutes = self.gatherOffCampusBusRoutes(data: routes)
+                            let busRoutes = self.gatherBusRoutes(data: routes)
                             if let delegate = self.delegate {
                                 if let gather = delegate.didGatherBusRoutes {
-                                    gather(onCampusRoutes, offCampusRoutes)
+                                    gather(busRoutes)
                                 }
                             }
                         }
@@ -90,26 +89,15 @@ class DataGatherer {
         }
     }
     //MARK: - Use this to convert from decoded route data to bus routes
-    private func gatherOnCampusBusRoutes(data: [RouteData]) -> [BusRoute] {
+    private func gatherBusRoutes(data: [RouteData]) -> [BusRoute] {
         var routes: [BusRoute] = []
         for route in data {
-            if route.Group.Name == "On Campus" {
-                let busRoute = BusRoute(name: route.Name, number: route.ShortName, color: UIColor.colorFromRGBString(string: route.Color), campus: route.Group.Name)
-                routes.append(busRoute)
-            }
+            let busRoute = BusRoute(name: route.Name, number: route.ShortName, color: UIColor.colorFromRGBString(string: route.Color), campus: route.Group.Name)
+            routes.append(busRoute)
         }
         return routes
     }
-    private func gatherOffCampusBusRoutes(data: [RouteData]) -> [BusRoute] {
-        var routes: [BusRoute] = []
-        for route in data {
-            if route.Group.Name == "Off Campus" {
-                let busRoute = BusRoute(name: route.Name, number: route.ShortName, color: UIColor.colorFromRGBString(string: route.Color), campus: route.Group.Name)
-                routes.append(busRoute)
-            }
-        }
-        return routes
-    }
+    
     //MARK: - Use this to convert from decoded pattern data to bus pattern
     private func gatherBusPattern(data: [PatternData]) -> [BusPattern] {
         var points: [BusPattern] = []

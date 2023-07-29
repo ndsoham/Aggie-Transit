@@ -34,7 +34,8 @@ class BusListCollectionViewCell: UICollectionViewCell {
     //MARK: - layout subviews
     override func layoutSubviews() {
         super.layoutSubviews()
-        setupNameAndStopsLabel()
         setupNumberLabel()
+        setupNameAndStopsLabel()
+      
     }
 }

@@ -45,7 +45,7 @@ protocol SearchResultsDelegate {
 }
 //MARK: - Data related protocols
 @objc protocol DataGathererDelegate {
-    @objc optional func didGatherBusRoutes(onCampusRoutes: [BusRoute], offCampusRoutes: [BusRoute])
+    @objc optional func didGatherBusRoutes(routes: [BusRoute])
     @objc optional func didGatherNotifications(notifications: [BusNotification])
     
 }

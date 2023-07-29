@@ -8,22 +8,6 @@
 import Foundation
 import UIKit
 
-//MARK: - sample bus struct
-
-struct BusRouteSample {
-    let name: String
-    let stops: String
-    let number: String
-    let color: UIColor
-}
-
-//MARK: - sample data
-let sampleRouteData: [BusRouteSample] = [
-    BusRouteSample(name: "Bonfire", stops: "Commons/ Asbury / Reed Arena / MSC", number: "01", color: .purple),
-    BusRouteSample(name: "Bonfire", stops: "Commons/ Asbury / Reed Arena / MSC", number: "01", color: .systemPink),
-    BusRouteSample(name: "Bonfire", stops: "Commons/ Asbury / Reed Arena / MSC", number: "01", color: .black),
-    BusRouteSample(name: "Bonfire", stops: "Commons/ Asbury / Reed Arena / MSC", number: "01", color: .red)
-]
 //MARK: - data source/delegate methods
 extension BusListScreenViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     // number of sections
@@ -32,18 +16,25 @@ extension BusListScreenViewController: UICollectionViewDataSource, UICollectionV
     }
    // number of cells
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sampleRouteData.count
+        if let busRoutes {
+            self.activityIndicatorView.stopAnimating()
+            return busRoutes.count
+        }
+        return 0
     }
     // return cell
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BusListCollectionViewCell.id, for: indexPath) as! BusListCollectionViewCell
-        cell.stops = sampleRouteData[indexPath.row].stops
-        cell.number = sampleRouteData[indexPath.row].number
-        cell.name = sampleRouteData[indexPath.row].name
-        cell.contentView.layer.cornerRadius = 16
-        cell.contentView.clipsToBounds = true
-        cell.contentView.backgroundColor = sampleRouteData[indexPath.row].color
-        return cell
+        if let busRoutes {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BusListCollectionViewCell.id, for: indexPath) as! BusListCollectionViewCell
+            cell.stops = "Asbury Water Tower/ Becky Gates Center/ Asbury Water tower"
+            cell.number = busRoutes[indexPath.row].number
+            cell.name = busRoutes[indexPath.row].name
+            cell.contentView.layer.cornerRadius = 16
+            cell.contentView.clipsToBounds = true
+            cell.contentView.backgroundColor = busRoutes[indexPath.row].color
+            return cell
+        }
+        return UICollectionViewCell()
     }
     // return header
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

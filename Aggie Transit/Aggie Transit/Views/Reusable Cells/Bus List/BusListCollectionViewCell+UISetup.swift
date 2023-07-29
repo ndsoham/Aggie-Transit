@@ -19,7 +19,8 @@ extension BusListCollectionViewCell {
         // constrain
         NSLayoutConstraint.activate([
             textStack.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
-            textStack.centerYAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.centerYAnchor)
+            textStack.centerYAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.centerYAnchor),
+            textStack.trailingAnchor.constraint(equalTo: self.numberLabel.layoutMarginsGuide.leadingAnchor, constant: -5)
         ])
         // set up name
         if let name {
@@ -43,6 +44,7 @@ extension BusListCollectionViewCell {
             ])
             stopsLabel.attributedText = formattedStops
             stopsLabel.textAlignment = .left
+            stopsLabel.numberOfLines = 0
             stopsLabel.translatesAutoresizingMaskIntoConstraints = false
         }
         // add to view hierarchy
@@ -54,7 +56,7 @@ extension BusListCollectionViewCell {
         // configure
         if let number {
             let boldedNumber = NSAttributedString(string: number, attributes: [
-                .font: UIFont.systemFont(ofSize: 20),
+                .font: UIFont.boldSystemFont(ofSize: 20),
                 .foregroundColor: UIColor.white
             ])
             numberLabel.attributedText = boldedNumber

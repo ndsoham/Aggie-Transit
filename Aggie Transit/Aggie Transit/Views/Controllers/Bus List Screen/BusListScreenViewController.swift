@@ -10,11 +10,13 @@ import UIKit
 
 class BusListScreenViewController: UIViewController {
     //MARK: - attributes
+    var busRoutes: [BusRoute]?
     var onCampusRoutes: [BusRoute]?
     var offCampusRoutes: [BusRoute]?
     var dataGatherer: DataGatherer = DataGatherer()
     var listCollectionView: UICollectionView?
     var singleColumnLayout: SingleColumnLayout = SingleColumnLayout()
+    var activityIndicatorView: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
     //MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +27,7 @@ class BusListScreenViewController: UIViewController {
     func layoutSubviews() {
         setupSelf()
         setupCollectionView()
+        setupActivityIndicator()
     }
 }
 
