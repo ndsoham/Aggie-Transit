@@ -43,7 +43,7 @@ extension BusListScreenViewController: UICollectionViewDataSource, UICollectionV
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BusListHeaderView.id, for: indexPath) as! BusListHeaderView
         header.dismissalDelegate = self
         header.filterDelegate = self
-        header.section = "On Campus"
+        header.section = filter
         return header
     }
 }

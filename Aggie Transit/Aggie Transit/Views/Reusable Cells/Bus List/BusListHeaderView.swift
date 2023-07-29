@@ -46,7 +46,6 @@ class BusListHeaderView: UICollectionReusableView {
     }
     //MARK: - section changed
     @objc func didChangeSection(newSection: String?) {
-        print("did change section")
         if let newSection{
             self.filterDelegate?.sectionChanged(newSection: newSection)
         }

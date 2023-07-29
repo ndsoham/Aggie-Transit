@@ -27,12 +27,22 @@ extension BusListHeaderView {
         let onCampusAction = UIAction (title: "On Campus") { action in
             self.filterDelegate?.sectionChanged(newSection: "On Campus")
             self.section = "On Campus"
-            self.sectionButton.setTitle("On Campus", for: .normal)
+            DispatchQueue.main.async {
+                self.sectionButton.setAttributedTitle(NSAttributedString(string: "On Campus", attributes: [
+                    .font: UIFont.boldSystemFont(ofSize: 18),
+                    .foregroundColor:UIColor(red: 0.24, green: 0.29, blue: 0.35, alpha: 1)
+                ]), for: .normal)
+            }
         }
         let offCampusAction = UIAction (title: "Off Campus") { action in
             self.filterDelegate?.sectionChanged(newSection: "Off Campus")
             self.section = "Off Campus"
-            self.sectionButton.setTitle("Off Campus", for: .normal)
+            DispatchQueue.main.async {
+                self.sectionButton.setAttributedTitle(NSAttributedString(string: "Off Campus", attributes: [
+                    .font: UIFont.boldSystemFont(ofSize: 18),
+                    .foregroundColor:UIColor(red: 0.24, green: 0.29, blue: 0.35, alpha: 1)
+                ]), for: .normal)
+            }
         }
     
         let filterMenu = UIMenu(children: [onCampusAction, offCampusAction])
