@@ -1,5 +1,5 @@
 //
-//  FavoritesHeaderView+UISetup.swift
+//  HomeScreenMenuCollectionHeaderView+UISetup.swift
 //  Aggie Transit
 //
 //  Created by Soham Nagawanshi on 7/18/23.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-extension FavoritesHeaderView {
+extension HomeScreenMenuCollectionHeaderView {
     //MARK: - setup label
     func setupLabel() {
         // configure

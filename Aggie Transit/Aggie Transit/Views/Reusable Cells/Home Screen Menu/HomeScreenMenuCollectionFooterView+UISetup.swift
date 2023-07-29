@@ -1,5 +1,5 @@
 //
-//  FavoritesFooterView+UISetup.swift
+//  HomeScreenMenuCollectionFooterView+UISetup.swift
 //  Aggie Transit
 //
 //  Created by Soham Nagawanshi on 7/26/23.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-extension FavoritesFooterView {
+extension HomeScreenMenuCollectionFooterView {
     //MARK: - setup button
     func setupAddButton() {
         // configure

@@ -1,5 +1,5 @@
 //
-//  FavoritesFooterView.swift
+//  HomeScreenMenuCollectionFooterView.swift
 //  Aggie Transit
 //
 //  Created by Soham Nagawanshi on 7/26/23.
@@ -12,7 +12,7 @@ protocol AddDelegate {
     func addPressed()
 }
 
-class FavoritesFooterView: UICollectionReusableView {
+class HomeScreenMenuCollectionFooterView: UICollectionReusableView {
     //MARK: - attributes
     var addButton: UIButton = UIButton(type: .system)
     var delegate: AddDelegate?

@@ -1,5 +1,5 @@
 //
-//  FavoritesTableViewCell.swift
+//  HomeScreenMenuCollectionViewCell.swift
 //  Aggie Transit
 //
 //  Created by Soham Nagawanshi on 7/14/23.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class FavoritesCollectionViewCell: UICollectionViewCell {
+class HomeScreenMenuCollectionViewCell: UICollectionViewCell {
     //MARK: - attributes
     let cellStack: UIStackView = UIStackView()
     let textStack: UIStackView = UIStackView()
@@ -17,7 +17,7 @@ class FavoritesCollectionViewCell: UICollectionViewCell {
     let addressLabel: UILabel = UILabel()
     var name: String?
     var address: String?
-    static let id: String = "FavoritesCollectionViewCell"
+    static let id: String = "HomeScreenMenuCollectionViewCell"
     //MARK: - inits
     override init(frame: CGRect) {
         super.init(frame: frame)

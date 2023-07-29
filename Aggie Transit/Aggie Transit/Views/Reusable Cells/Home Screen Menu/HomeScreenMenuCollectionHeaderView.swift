@@ -1,5 +1,5 @@
 //
-//  FavoritesHeaderView.swift
+//  HomeScreenMenuCollectionHeaderView.swift
 //  Aggie Transit
 //
 //  Created by Soham Nagawanshi on 7/18/23.
@@ -11,7 +11,7 @@ import UIKit
 protocol ExpansionDelegate {
     func sectionExpanded()
 }
-class FavoritesHeaderView: UICollectionReusableView {
+class HomeScreenMenuCollectionHeaderView: UICollectionReusableView {
     //MARK: - attributes
     var headerLabel: UILabel = UILabel()
     var headerName: String?

@@ -34,7 +34,7 @@ class HomeScreenMenuViewController: UIViewController {
     var notificationsTableView: UITableView = UITableView()
     var favoritesTableView: UITableView = UITableView()
     var singleColumnLayout: SingleColumnLayout = SingleColumnLayout()
-    var favoritesCollectionView: UICollectionView?
+    var collectionView: UICollectionView?
     deinit {NotificationCenter.default.removeObserver(self)}
     //MARK: - view did load
     override func viewDidLoad() {

@@ -60,13 +60,13 @@ extension HomeScreenMenuViewController {
     //MARK: - setup favorites collection view
     func setupFavoritesCollectionView() {
         // init
-        favoritesCollectionView = UICollectionView(frame: CGRect(x: 0, y: Int(self.searchBar.frame.maxY) + Int((self.view.layoutMargins.bottom)) , width: Int(self.view.frame.width - (self.view.layoutMargins.left * 2)), height: Int(self.view.frame.height - (self.view.layoutMargins.top + self.searchBar.frame.height))), collectionViewLayout: singleColumnLayout)
+        collectionView = UICollectionView(frame: CGRect(x: 0, y: Int(self.searchBar.frame.maxY) + Int((self.view.layoutMargins.bottom)) , width: Int(self.view.frame.width - (self.view.layoutMargins.left * 2)), height: Int(self.view.frame.height - (self.view.layoutMargins.top + self.searchBar.frame.height))), collectionViewLayout: singleColumnLayout)
         // configure
-        if let favoritesCollectionView {
+        if let collectionView {
 //            // register cells and headers
-            favoritesCollectionView.register(FavoritesCollectionViewCell.self, forCellWithReuseIdentifier: FavoritesCollectionViewCell.id)
-            favoritesCollectionView.register(FavoritesHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: FavoritesHeaderView.id)
-            favoritesCollectionView.register(FavoritesFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FavoritesFooterView.id)
+            collectionView.register(HomeScreenMenuCollectionViewCell.self, forCellWithReuseIdentifier: HomeScreenMenuCollectionViewCell.id)
+            collectionView.register(HomeScreenMenuCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HomeScreenMenuCollectionHeaderView.id)
+            collectionView.register(HomeScreenMenuCollectionFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: HomeScreenMenuCollectionFooterView.id)
             // create data source
 //            let dataSource = UICollectionViewDiffableDataSource<FavoritesSection, FavoriteLocation>(collectionView: favoritesCollectionView, cellProvider: {
 //                collectionView, indexPath, favoriteLocation -> UICollectionViewCell? in
@@ -76,18 +76,18 @@ extension HomeScreenMenuViewController {
 //                return cell
 //            })
             // configure collection view and the layout
-            favoritesCollectionView.dataSource = self
-            favoritesCollectionView.delegate = self
-            favoritesCollectionView.backgroundColor = .clear
-            favoritesCollectionView.translatesAutoresizingMaskIntoConstraints = false
+            collectionView.dataSource = self
+            collectionView.delegate = self
+            collectionView.backgroundColor = .clear
+            collectionView.translatesAutoresizingMaskIntoConstraints = false
             // add to view hierarchy
-            self.view.addSubview(favoritesCollectionView)
+            self.view.addSubview(collectionView)
             // constrain
             NSLayoutConstraint.activate([
-                favoritesCollectionView.topAnchor.constraint(equalTo: self.searchBar.layoutMarginsGuide.bottomAnchor, constant: 20),
-                favoritesCollectionView.leadingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.leadingAnchor),
-                favoritesCollectionView.trailingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.trailingAnchor),
-                favoritesCollectionView.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor)
+                collectionView.topAnchor.constraint(equalTo: self.searchBar.layoutMarginsGuide.bottomAnchor, constant: 20),
+                collectionView.leadingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.leadingAnchor),
+                collectionView.trailingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.trailingAnchor),
+                collectionView.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor)
             ])
             // create a snap shot
             var snapshot = NSDiffableDataSourceSnapshot<FavoritesSection, FavoriteLocation>()

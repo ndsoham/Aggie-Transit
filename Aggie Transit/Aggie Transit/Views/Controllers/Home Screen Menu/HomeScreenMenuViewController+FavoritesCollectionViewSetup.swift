@@ -34,7 +34,7 @@ extension HomeScreenMenuViewController: UICollectionViewDataSource, UICollection
     }
     // return cell
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FavoritesCollectionViewCell.id, for: indexPath) as! FavoritesCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeScreenMenuCollectionViewCell.id, for: indexPath) as! HomeScreenMenuCollectionViewCell
         cell.address = sampleData[indexPath.row].address
         cell.name = sampleData[indexPath.row].name
         cell.contentView.layer.cornerRadius = 16
@@ -46,7 +46,7 @@ extension HomeScreenMenuViewController: UICollectionViewDataSource, UICollection
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         // return a header
         if kind == UICollectionView.elementKindSectionHeader {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: FavoritesHeaderView.id, for: indexPath) as! FavoritesHeaderView
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HomeScreenMenuCollectionHeaderView.id, for: indexPath) as! HomeScreenMenuCollectionHeaderView
             if (indexPath.section == 0){
                 header.headerName = "Favorite Locations"
             } else if (indexPath.section == 1) {
@@ -56,7 +56,7 @@ extension HomeScreenMenuViewController: UICollectionViewDataSource, UICollection
         }
         // return a footer
         
-        let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FavoritesFooterView.id, for: indexPath) as! FavoritesFooterView
+        let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: HomeScreenMenuCollectionFooterView.id, for: indexPath) as! HomeScreenMenuCollectionFooterView
         if (indexPath.section == 0) {
             footer.footerName = "Favorite"
         } else {
