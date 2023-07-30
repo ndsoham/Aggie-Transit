@@ -19,6 +19,10 @@ extension BusListHeaderView {
             container[AttributeScopes.UIKitAttributes.FontAttribute.self] = .boldSystemFont(ofSize: 18)
             boldedSection.mergeAttributes(container, mergePolicy: .keepNew)
             configuration.attributedTitle = boldedSection
+            configuration.image = UIImage(systemName: "chevron.down")
+            configuration.imagePlacement = .trailing
+            configuration.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: 7)
+            configuration.imagePadding = 5
         }
         sectionButton.configuration = configuration
         sectionButton.tintColor = UIColor(red: 0.24, green: 0.29, blue: 0.35, alpha: 1)
