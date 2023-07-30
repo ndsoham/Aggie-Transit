@@ -30,7 +30,9 @@ extension BusListScreenViewController: UICollectionViewDataSource, UICollectionV
     // return cell
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BusListCollectionViewCell.id, for: indexPath) as! BusListCollectionViewCell
-        cell.stops = "Asbury Water Tower/ Becky Gates Center/ Asbury Water tower"
+        let stopsString = filteredBusRoutes[indexPath.row].stops?.reduce("", { $0 + $1.name + " / "
+    })
+        cell.stops = stopsString
         cell.number = filteredBusRoutes[indexPath.row].number
         cell.name = filteredBusRoutes[indexPath.row].name
         cell.contentView.layer.cornerRadius = 16

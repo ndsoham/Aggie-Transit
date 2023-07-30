@@ -20,7 +20,7 @@ extension BusListCollectionViewCell {
         NSLayoutConstraint.activate([
             textStack.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
             textStack.centerYAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.centerYAnchor),
-            textStack.trailingAnchor.constraint(equalTo: self.numberLabel.layoutMarginsGuide.leadingAnchor, constant: -5)
+            textStack.trailingAnchor.constraint(equalTo: self.numberLabel.layoutMarginsGuide.leadingAnchor, constant: -10)
         ])
         // set up name
         if let name {
@@ -44,7 +44,7 @@ extension BusListCollectionViewCell {
             ])
             stopsLabel.attributedText = formattedStops
             stopsLabel.textAlignment = .left
-            stopsLabel.numberOfLines = 0
+            stopsLabel.numberOfLines = 2
             stopsLabel.translatesAutoresizingMaskIntoConstraints = false
         }
         // add to view hierarchy

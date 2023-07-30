@@ -8,18 +8,14 @@
 import Foundation
 import UIKit
 
-extension BusListScreenViewController: DataGathererDelegate {
+extension BusListScreenViewController {
     //MARK: - handle data tasks
     func dataTask() {
-        // TODO:
-        dataGatherer.delegate = self
-        dataGatherer.gatherData(endpoint: "routes")
-    }
-    //MARK: - handle refreshing collection view after data has been gathered
-    func didGatherBusRoutes(routes: [BusRoute]) {
-        self.busRoutes = routes
-        DispatchQueue.main.async {
-            self.listCollectionView?.reloadData()
+        dataGatherer.gatherBusRoutes{
+            self.busRoutes = $0
+            DispatchQueue.main.async {
+                self.listCollectionView?.reloadData()
+            }
         }
     }
 }

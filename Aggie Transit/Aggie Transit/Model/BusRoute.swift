@@ -77,26 +77,26 @@ class BusRoute: NSObject {
     func gatherPattern() {
         let endpoint = "route/\(number)/pattern"
         dataGatherer.busRouteDelegate = self
-        dataGatherer.gatherData(endpoint: endpoint)
+       // dataGatherer.gatherData(endpoint: endpoint)
     }
 //MARK: - this gathers stop data
     func gatherStops() {
         let endpoint = "route/\(number)/stops"
         dataGatherer.busRouteDelegate = self
-        dataGatherer.gatherData(endpoint: endpoint) 
+        //dataGatherer.gatherData(endpoint: endpoint)
     }
 //MARK: - this gathers time data
     func gatherTimeTable(){
         let endpoint = "route/\(number)/timetable"
         dataGatherer.busRouteDelegate = self
-        dataGatherer.gatherData(endpoint: endpoint) 
+        //dataGatherer.gatherData(endpoint: endpoint)
     }
 //MARK: this gathers bus data
     func gatherBuses(){
         DispatchQueue.main.async{
             let endpoint = "route/\(self.number)/buses"
             self.dataGatherer.busRouteDelegate = self
-            self.dataGatherer.gatherData(endpoint: endpoint)
+           // self.dataGatherer.gatherData(endpoint: endpoint)
             self.busUpdateTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true, block: { timer in
                 if let currentlyRunning = self.currentlyRunning {
                     if !currentlyRunning {
@@ -105,7 +105,7 @@ class BusRoute: NSObject {
                 }
                 let endpoint = "route/\(self.number)/buses"
                 self.dataGatherer.busRouteDelegate = self
-                self.dataGatherer.gatherData(endpoint: endpoint)
+                //self.dataGatherer.gatherData(endpoint: endpoint)
             })
         }
     }

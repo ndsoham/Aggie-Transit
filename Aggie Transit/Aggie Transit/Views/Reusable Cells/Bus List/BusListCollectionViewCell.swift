@@ -36,6 +36,5 @@ class BusListCollectionViewCell: UICollectionViewCell {
         super.layoutSubviews()
         setupNumberLabel()
         setupNameAndStopsLabel()
-      
     }
 }

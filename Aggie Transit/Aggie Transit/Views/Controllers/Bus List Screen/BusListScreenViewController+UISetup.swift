@@ -53,6 +53,5 @@ extension BusListScreenViewController {
         }
         // start the animation
         activityIndicatorView.startAnimating()
-        
     }
 }
