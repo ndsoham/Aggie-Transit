@@ -39,10 +39,6 @@ protocol RouteGenerationProgressDelegate {
 @objc protocol RefreshDelegate {
     @objc optional func refreshRecentLocations()
 }
-//MARK: - search results
-protocol SearchResultsDelegate {
-    func displaySearchResults(results: [Location])
-}
 //MARK: - Data related protocols
 @objc protocol DataGathererDelegate {
     @objc optional func didGatherBusRoutes(routes: [BusRoute])

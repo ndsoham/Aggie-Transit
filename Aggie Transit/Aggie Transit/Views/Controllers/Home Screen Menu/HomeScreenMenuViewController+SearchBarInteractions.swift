@@ -47,58 +47,19 @@ extension HomeScreenMenuViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
     }
-    //    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-    //        searchBar.endEditing(true)
-    //        if let map = map {
-    //            activityIndicator.startAnimating()
-    //            let searchRequest = MKLocalSearch.Request()
-    //            searchRequest.naturalLanguageQuery = searchBar.text
-    //            searchRequest.region = map.region
-    //            let search = MKLocalSearch(request: searchRequest)
-    //            search.start { response, error in
-    //                if let error = error {
-    //                    let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: .actionSheet)
-    //                    alert.addAction(UIAlertAction(title: "OK", style: .cancel))
-    //                    self.activityIndicator.stopAnimating()
-    //                    self.displayAlert(alert: alert)
-    //                }
-    //                if let response {
-    //                    var locations:[Location] = []
-    //                    for item in response.mapItems {
-    //                        if let name = item.name, let address = item.placemark.title, address.lowercased().contains("bryan") || address.lowercased().contains("college station") {
-    //                            let location = Location(name: name, location: item.placemark.coordinate, address: address)
-    //                            if let currentLocation = LocationManager.shared.currentLocation {
-    //                                // do this to round to two decimal places
-    //                                location.distance = round((location.location.distance(to: currentLocation.coordinate) * 0.0006213712)*10)/10.0
-    //                            }
-    //                            locations.append(location)
-    //                        }
-    //                    }
-    //                    locations = locations.sorted {
-    //                        if let firstDistance = $0.distance, let secondDistance = $1.distance {
-    //                            return firstDistance < secondDistance
-    //                        } else {
-    //                            return false
-    //                        }
-    //                    }
-    //                    if let locationIdentifierDelegate = self.locationIdentifierDelegate {
-    //                        self.activityIndicator.stopAnimating()
-    //                        locationIdentifierDelegate.displaySearchResults(results: locations)
-    //                    }
-    //                    self.collapseNotification = Notification(name: Notification.Name(rawValue: "collapseMenu"))
-    //                    if let collapseNotification = self.collapseNotification {
-    //                        NotificationCenter.default.post(collapseNotification)
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-    
+    //MARK: - search button clicked
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let map else {return}
+        guard let text = searchBar.text else {return}
+        searchBar.endEditing(true)
+        searchForLocations(map: map, text: text)
+    }
 }
 
-//MARK: - search completer's delegate
+//MARK: - search completer's delegate/ search request
 
 extension HomeScreenMenuViewController: MKLocalSearchCompleterDelegate {
+    //MARK: - update autocomplete results
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         if !completer.results.isEmpty {
             searchCompleterResults.removeAll()
@@ -107,6 +68,39 @@ extension HomeScreenMenuViewController: MKLocalSearchCompleterDelegate {
             }
             DispatchQueue.main.async {
                 self.searchCollectionView?.reloadData()
+            }
+        }
+    }
+    //MARK: - handle search functionality
+    func searchForLocations(map: MKMapView, text: String) {
+        searchRequest.naturalLanguageQuery = text
+        searchRequest.region = map.region
+        let search = MKLocalSearch(request: searchRequest)
+        search.start { response, error in
+            if let error {
+                let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: .actionSheet)
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                self.present(alert, animated: true)
+            } else if let response {
+                let _ = response.mapItems.map { item in
+                    if let name = item.name, let address = item.placemark.title,address.lowercased().contains("bryan") || address.lowercased().contains("college station") {
+                        let location = Location(name: name, location: item.placemark.coordinate, address: address)
+                        if let currentLocation = LocationManager.shared.currentLocation {
+                            location.distance = round((location.location.distance(to: currentLocation.coordinate) * 0.0006213712)*10)/10.0
+                        }
+                        self.searchResults.append(location)
+                    }
+                }
+                self.searchResults = self.searchResults.sorted {
+                    if let firstDistance = $0.distance, let secondDistance = $1.distance {
+                        return firstDistance < secondDistance
+                    } else {
+                        return false
+                    }
+                }
+                for result in self.searchResults {
+                    print(result.name, result.address, result.location)
+                }
             }
         }
     }

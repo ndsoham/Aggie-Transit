@@ -90,6 +90,8 @@ extension HomeScreenMenuViewController {
         searchCollectionView = UICollectionView(frame: CGRect(x: 0, y: Int(self.searchBar.frame.maxY) + Int((self.view.layoutMargins.bottom)) , width: Int(self.view.frame.width - (self.view.layoutMargins.left * 2)), height: Int(self.view.frame.height - (self.view.layoutMargins.top + self.searchBar.frame.height))), collectionViewLayout: singleColumnLayout)
         // configure
         if let searchCollectionView {
+            searchCollectionView.allowsSelection = true
+            searchCollectionView.allowsMultipleSelection = false
             // register cell
             searchCollectionView.register(HomeScreenMenuCollectionViewCell.self, forCellWithReuseIdentifier: HomeScreenMenuCollectionViewCell.id)
             searchCollectionView.register(HomeScreenMenuCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HomeScreenMenuCollectionHeaderView.id)

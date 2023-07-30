@@ -16,12 +16,13 @@ class HomeScreenMenuViewController: UIViewController {
     private var notifications: [BusNotification]?
     private var collapseNotification: Notification?
     var searchCompleter: MKLocalSearchCompleter = MKLocalSearchCompleter()
+    let searchRequest = MKLocalSearch.Request()
     var searchCompleterResults: [Location] = []
+    var searchResults: [Location] = []
     var searchBar: UISearchBar = UISearchBar()
     var container: NSPersistentContainer! = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
     var map: MKMapView?
     var pathDelegate: PathMakerDelegate?
-    var locationIdentifierDelegate: SearchResultsDelegate?
     var routeDisplayerDelegate: RouteDisplayerDelegate?
     var recentsTableView: UITableView = UITableView()
     var allRoutesTableView: UITableView = UITableView()

@@ -24,7 +24,7 @@ struct FavoriteLocation: Hashable, Identifiable {
     var address: String
 }
 //MARK: - collection view data source/ delegate methods
-extension HomeScreenMenuViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension HomeScreenMenuViewController: UICollectionViewDataSource{
    // return number of cells
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == searchCollectionView {
@@ -98,22 +98,34 @@ extension HomeScreenMenuViewController: UICollectionViewDataSource, UICollection
         
     }
 }
-//MARK: - layout delegate and methods
+//MARK: - layout size methods
 extension HomeScreenMenuViewController: UICollectionViewDelegateFlowLayout {
+    // size for header
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         if collectionView == searchCollectionView{
             return CGSize.zero
         }
         return CGSize(width: self.view.frame.width - self.view.layoutMargins.right * 2, height: 10)
     }
+    // size for footer
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         if collectionView == searchCollectionView{
             return CGSize.zero
         }
         return CGSize(width: self.view.frame.width - self.view.layoutMargins.right * 2, height: 40)
     }
+    // size for each item
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: self.view.frame.width - self.view.layoutMargins.right * 2, height: 70)
+    }
+}
+//MARK: - handle clicks
+
+extension HomeScreenMenuViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == searchCollectionView, !searchCompleterResults.isEmpty  {
+            // todo
+        }
     }
 }
 
