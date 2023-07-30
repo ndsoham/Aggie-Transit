@@ -67,7 +67,6 @@ class BusRoute: NSObject {
         super.init()
         registerTimerInvalidationNotification()
         gatherPattern()
-        gatherStops()
         gatherTimeTable()
         gatherBuses()
     }
@@ -78,12 +77,6 @@ class BusRoute: NSObject {
         let endpoint = "route/\(number)/pattern"
         dataGatherer.busRouteDelegate = self
        // dataGatherer.gatherData(endpoint: endpoint)
-    }
-//MARK: - this gathers stop data
-    func gatherStops() {
-        let endpoint = "route/\(number)/stops"
-        dataGatherer.busRouteDelegate = self
-        //dataGatherer.gatherData(endpoint: endpoint)
     }
 //MARK: - this gathers time data
     func gatherTimeTable(){
@@ -147,10 +140,6 @@ extension BusRoute: BusRouteDataGathererDelegate {
     //MARK: - The data obtained from this is used to draw the bus's representation on the map
     func didGatherBusPattern(points: [BusPattern]) {
         self.pattern = points
-    }
-    //MARK: - This sets each bus routes bus stops
-    func didGatherBusStops(stops: [BusStop]) {
-        self.stops = stops
     }
     //MARK: - This is used to set each routes current buses and is updated frequently
     func didGatherBuses(buses: [Bus]) {

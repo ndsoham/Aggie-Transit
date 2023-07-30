@@ -49,8 +49,8 @@ class DataGatherer {
     }
     //MARK: - This function gathers the stops for a single bus route
     func gatherStops(routeNumber: String, completion: @escaping ([BusStop]) -> Void) {
-        let endpoint = "/stops"
-        if let url = URL(string: baseUrl+"route/"+routeNumber+endpoint) {
+        let endpoint = "route/"+routeNumber+"/stops"
+        if let url = URL(string: baseUrl+endpoint) {
             let task = URLSession.shared.dataTask(with: url) { data, response, error in
                 if let error {
                     let alert = UIAlertController(title: "Alert", message: "\(error.localizedDescription)", preferredStyle: .actionSheet)
@@ -72,73 +72,102 @@ class DataGatherer {
             task.resume()
         }
     }
-    
-    
-    //    func gatherData(endpoint: String){
-    //        let url = URL(string: baseUrl+endpoint)
-    //        if let url = url{
-    //            let task = URLSession.shared.dataTask(with: url) { data, response, error in
-    //                else if let data {
-    //                    do {
-    //                        let decoder = JSONDecoder()
-    //                        if endpoint == "routes" {
-    //                            let routes = try decoder.decode([RouteData].self, from: data)
-    //                            let busRoutes = self.gatherBusRoutes(data: routes)
-    //                            if let delegate = self.delegate {
-    //                                if let gather = delegate.didGatherBusRoutes {
-    //                                    gather(busRoutes)
-    //                                }
-    //                            }
-    //                        }
-    //                        else if endpoint.split(separator: "/").last == "pattern" {
-    //                            let points = try decoder.decode([PatternData].self, from: data)
-    //                            let busPoints = self.gatherBusPattern(data: points)
-    //                            if let busRouteDelegate = self.busRouteDelegate {
-    //                                busRouteDelegate.didGatherBusPattern(points: busPoints)
-    //                            }
-    //                        }
-    //                        else if endpoint.split(separator: "/").last == "stops" {
-    //                            let stops = try decoder.decode([StopData].self, from: data)
-    //                            let busStops = self.gatherBusStops(data: stops)
-    //                            if let busRouteDelegate = self.busRouteDelegate {
-    //                                busRouteDelegate.didGatherBusStops(stops: busStops)
-    //                            }
-    //                        }
-    //                        else if endpoint.split(separator: "/").last == "buses" {
-    //                            let busData = try decoder.decode([BusData].self, from: data)
-    //                            let buses = self.gatherBuses(data: busData)
-    //                            if let busRouteDelegate = self.busRouteDelegate {
-    //                                busRouteDelegate.didGatherBuses(buses: buses)
-    //                            }
-    //                        }
-    //                        else if endpoint.split(separator: "/").last == "announcements" {
-    //                            let busNotifications = try decoder.decode(AnnouncementData.self, from: data)
-    //                            let notifications = self.gatherNotifications(data: busNotifications.Items)
-    //                            if let delegate = self.delegate {
-    //                                if let gather = delegate.didGatherNotifications {
-    //                                    gather(notifications)
-    //                                }
-    //                            }
-    //                        }
-    //                        else if endpoint.split(separator: "/").last == "timetable" {
-    //                            let timeData = try decoder.decode([[String:String?]].self, from: data)
-    //                            let timeTable = self.gatherTime(data: timeData)
-    //                            if let busRouteDelegate = self.busRouteDelegate {
-    //                                busRouteDelegate.didGatherTimeTable(table: timeTable)
-    //                            }
-    //                        }
-    //                    } catch {
-    
-    //                    }
-    //                } else {
-    //                    let alert = UIAlertController(title: "Alert", message: "An error has occured.", preferredStyle: .actionSheet)
-    //                    alert.addAction(UIAlertAction(title: "OK", style: .cancel))
-    //                    self.alertDelegate?.displayAlert(alert: alert)
-    //                }
-    //            }
-    //            task.resume()
-    //        }
-    //    }
+    //MARK: - this function gathers a route pattern
+    func gatherRoutePattern(routeNumber: String, completion: @escaping ([BusPattern]) -> Void) {
+        let endpoint = "route/"+routeNumber+"/pattern"
+        if let url = URL(string: baseUrl+endpoint) {
+            let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error {
+                    let alert = UIAlertController(title: "Alert", message: "\(error.localizedDescription)", preferredStyle: .actionSheet)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                    self.alertDelegate?.displayAlert(alert: alert)
+                } else if let data {
+                    do {
+                        let points = try self.decoder.decode([PatternData].self, from: data)
+                        let busPoints = self.gatherBusPattern(data: points)
+                        completion(busPoints)
+                    } catch {
+                        let alert = UIAlertController(title: "Alert", message: "\(error.localizedDescription)", preferredStyle: .actionSheet)
+                        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                        self.alertDelegate?.displayAlert(alert: alert)
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
+    //MARK: - this function gathers active buses
+    func gatherRouteBuses(routeNumber: String, completion: @escaping ([Bus]) -> Void) {
+        let endpoint = "route/"+routeNumber+"/buses"
+        if let url = URL(string: baseUrl+endpoint) {
+            let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error {
+                    let alert = UIAlertController(title: "Alert", message: "\(error.localizedDescription)", preferredStyle: .actionSheet)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                    self.alertDelegate?.displayAlert(alert: alert)
+                } else if let data {
+                    do {
+                        let busData = try self.decoder.decode([BusData].self, from: data)
+                        let buses = self.gatherBuses(data: busData)
+                        completion(buses)
+                    } catch {
+                        let alert = UIAlertController(title: "Alert", message: "\(error.localizedDescription)", preferredStyle: .actionSheet)
+                        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                        self.alertDelegate?.displayAlert(alert: alert)
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
+    //MARK: - this function gathers time table data
+    func gatherTimeTable(routeNumber: String, completion: @escaping ([[String:Date?]]) -> Void) {
+        let endpoint: String = "Route"+routeNumber+"TimeTable"
+        if let url = URL(string: baseUrl+endpoint) {
+            let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error {
+                    let alert = UIAlertController(title: "Alert", message: "\(error.localizedDescription)", preferredStyle: .actionSheet)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                    self.alertDelegate?.displayAlert(alert: alert)
+                } else if let data {
+                    do {
+                        let timeData = try self.decoder.decode([[String:String?]].self, from: data)
+                        let timeTable = self.gatherTime(data: timeData)
+                        completion(timeTable)
+                    } catch {
+                        let alert = UIAlertController(title: "Alert", message: "\(error.localizedDescription)", preferredStyle: .actionSheet)
+                        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                        self.alertDelegate?.displayAlert(alert: alert)
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
+    //MARK: - this function gathers announcements
+    func gatherAnnouncements(completion: @escaping ([BusNotification]) -> Void) {
+        let endpoint = "/announcements"
+        if let url = URL(string: baseUrl+endpoint) {
+            let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error {
+                    let alert = UIAlertController(title: "Alert", message: "\(error.localizedDescription)", preferredStyle: .actionSheet)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                    self.alertDelegate?.displayAlert(alert: alert)
+                } else if let data {
+                    do {
+                        let busNotifications = try self.decoder.decode(AnnouncementData.self, from: data)
+                        let notifications = self.gatherNotifications(data: busNotifications.Items)
+                        completion(notifications)
+                    } catch {
+                        let alert = UIAlertController(title: "Alert", message: "\(error.localizedDescription)", preferredStyle: .actionSheet)
+                        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+                        self.alertDelegate?.displayAlert(alert: alert)
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
     //MARK: - Use this to convert from decoded route data to bus routes
     private func gatherBusRoutes(data: [RouteData]) -> [BusRoute] {
         var routes: [BusRoute] = []

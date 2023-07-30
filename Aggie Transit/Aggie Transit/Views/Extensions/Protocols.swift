@@ -46,7 +46,6 @@ protocol RouteGenerationProgressDelegate {
 }
 protocol BusRouteDataGathererDelegate {
     func didGatherBusPattern(points: [BusPattern])
-    func didGatherBusStops(stops: [BusStop])
     func didGatherBuses(buses: [Bus])
     func didGatherTimeTable(table: [[String:Date?]])
 }
