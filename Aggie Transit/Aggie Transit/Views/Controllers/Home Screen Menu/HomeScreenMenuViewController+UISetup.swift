@@ -32,6 +32,7 @@ extension HomeScreenMenuViewController {
             sheet.prefersGrabberVisible = true
             isModalInPresentation = true
         }
+     
     }
     //MARK: - setup search bar
     func setupSearchBar() {

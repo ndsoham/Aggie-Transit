@@ -34,5 +34,9 @@ class HomeScreenMenuCollectionFooterView: UICollectionReusableView {
         super.layoutSubviews()
         setupAddButton()
     }
+    //MARK: - handle button events
+    @objc func didPressAdd() {
+        self.delegate?.addPressed()
+    }
 }
 

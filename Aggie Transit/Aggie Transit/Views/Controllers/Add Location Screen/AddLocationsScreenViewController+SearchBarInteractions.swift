@@ -1,15 +1,14 @@
 //
-//  HomeScreenMenuViewController+SearchBarInteractions.swift
+//  AddLocationsScreenViewController+SearchBarInteractions.swift
 //  Aggie Transit
 //
-//  Created by Soham Nagawanshi on 7/29/23.
+//  Created by Soham Nagawanshi on 7/30/23.
 //
 
 import Foundation
 import UIKit
 import MapKit
-
-extension HomeScreenMenuViewController: UISearchBarDelegate {
+extension AddLocationScreenViewController: UISearchBarDelegate {
     //MARK: - text changed by user
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let map else {return}
@@ -27,9 +26,6 @@ extension HomeScreenMenuViewController: UISearchBarDelegate {
         map.isScrollEnabled = false
         map.isZoomEnabled = false
         map.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 30.614965, longitude: -96.340584), span: MKCoordinateSpan(latitudeDelta: 0.0125, longitudeDelta: 0.0125))
-        // remove the favorites and recents view
-        self.defaultCollectionView?.removeFromSuperview()
-        self.setupSearchCollectionView()
     }
     //MARK: - editing ended
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
@@ -39,9 +35,6 @@ extension HomeScreenMenuViewController: UISearchBarDelegate {
         map.isZoomEnabled = true
         map.isScrollEnabled = true
         map.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 30.614965, longitude: -96.340584), span: MKCoordinateSpan(latitudeDelta: 0.0125, longitudeDelta: 0.0125))
-        // add the collection view back to hierarchy and remove the search collection view
-        self.searchCollectionView?.removeFromSuperview()
-        self.setupDefaultCollectionView()
     }
     //MARK: - cancel button clicked
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -56,9 +49,7 @@ extension HomeScreenMenuViewController: UISearchBarDelegate {
     }
 }
 
-//MARK: - search completer's delegate/ search request
-
-extension HomeScreenMenuViewController: MKLocalSearchCompleterDelegate {
+extension AddLocationScreenViewController: MKLocalSearchCompleterDelegate {
     //MARK: - update autocomplete results
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         if !completer.results.isEmpty {
@@ -105,4 +96,5 @@ extension HomeScreenMenuViewController: MKLocalSearchCompleterDelegate {
         }
     }
 }
+
 

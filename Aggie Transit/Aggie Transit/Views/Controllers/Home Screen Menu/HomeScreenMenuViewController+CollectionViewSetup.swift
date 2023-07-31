@@ -89,11 +89,8 @@ extension HomeScreenMenuViewController: UICollectionViewDataSource{
         // return a footer
         
         let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: HomeScreenMenuCollectionFooterView.id, for: indexPath) as! HomeScreenMenuCollectionFooterView
-        if (indexPath.section == 0) {
-            footer.footerName = "Favorite"
-        } else {
-            footer.footerName = "Recent"
-        }
+        footer.footerName = "Favorite"
+        footer.delegate = self
         return footer
         
     }
@@ -109,9 +106,10 @@ extension HomeScreenMenuViewController: UICollectionViewDelegateFlowLayout {
     }
     // size for footer
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        if collectionView == searchCollectionView{
+        if collectionView == searchCollectionView || section == 1 {
             return CGSize.zero
         }
+        
         return CGSize(width: self.view.frame.width - self.view.layoutMargins.right * 2, height: 40)
     }
     // size for each item
@@ -127,5 +125,17 @@ extension HomeScreenMenuViewController: UICollectionViewDelegate {
             // todo
         }
     }
+}
+
+//MARK: - handle add pressed
+
+extension HomeScreenMenuViewController: AddDelegate {
+    func addPressed() {
+        let addLocVc = storyboard?.instantiateViewController(withIdentifier: "AddLocationScreenViewController") as! AddLocationScreenViewController
+        addLocVc.map = self.map
+        
+        present(addLocVc, animated: true)
+    }
+    
 }
 

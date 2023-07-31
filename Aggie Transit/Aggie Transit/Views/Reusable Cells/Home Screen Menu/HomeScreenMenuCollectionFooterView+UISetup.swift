@@ -17,6 +17,7 @@ extension HomeScreenMenuCollectionFooterView {
         }
         addButton.tintColor = .systemBlue
         addButton.translatesAutoresizingMaskIntoConstraints = false
+        addButton.addTarget(self, action: #selector(didPressAdd), for: .touchUpInside)
         // add to view hierarchy
         self.addSubview(addButton)
         // constrain

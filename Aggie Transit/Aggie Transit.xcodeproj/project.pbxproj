@@ -49,6 +49,7 @@
 		0F9442912A76AB4E007D5659 /* AddLocationScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F9442902A76AB4E007D5659 /* AddLocationScreenViewController.swift */; };
 		0F9442932A76ABA3007D5659 /* AddLocationScreenViewController+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F9442922A76ABA3007D5659 /* AddLocationScreenViewController+UISetup.swift */; };
 		0F9442952A76ABB0007D5659 /* AddLocationScreenViewController+CollectionViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F9442942A76ABB0007D5659 /* AddLocationScreenViewController+CollectionViewSetup.swift */; };
+		0F9442982A773157007D5659 /* AddLocationsScreenViewController+SearchBarInteractions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F9442972A773157007D5659 /* AddLocationsScreenViewController+SearchBarInteractions.swift */; };
 		0FA9086C2970EC7D002E6AEA /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA9086B2970EC7D002E6AEA /* SearchResultsViewController.swift */; };
 		0FA9086E2970ED10002E6AEA /* SearchResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA9086D2970ED10002E6AEA /* SearchResultsTableViewCell.swift */; };
 		0FA9087229711BE2002E6AEA /* SearchResultsHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA9087129711BE2002E6AEA /* SearchResultsHeaderTableViewCell.swift */; };
@@ -119,6 +120,7 @@
 		0F9442902A76AB4E007D5659 /* AddLocationScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationScreenViewController.swift; sourceTree = "<group>"; };
 		0F9442922A76ABA3007D5659 /* AddLocationScreenViewController+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AddLocationScreenViewController+UISetup.swift"; sourceTree = "<group>"; };
 		0F9442942A76ABB0007D5659 /* AddLocationScreenViewController+CollectionViewSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AddLocationScreenViewController+CollectionViewSetup.swift"; sourceTree = "<group>"; };
+		0F9442972A773157007D5659 /* AddLocationsScreenViewController+SearchBarInteractions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AddLocationsScreenViewController+SearchBarInteractions.swift"; sourceTree = "<group>"; };
 		0FA9086B2970EC7D002E6AEA /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 		0FA9086D2970ED10002E6AEA /* SearchResultsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsTableViewCell.swift; sourceTree = "<group>"; };
 		0FA9087129711BE2002E6AEA /* SearchResultsHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsHeaderTableViewCell.swift; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 				0F9442902A76AB4E007D5659 /* AddLocationScreenViewController.swift */,
 				0F9442922A76ABA3007D5659 /* AddLocationScreenViewController+UISetup.swift */,
 				0F9442942A76ABB0007D5659 /* AddLocationScreenViewController+CollectionViewSetup.swift */,
+				0F9442972A773157007D5659 /* AddLocationsScreenViewController+SearchBarInteractions.swift */,
 			);
 			path = "Add Location Screen";
 			sourceTree = "<group>";
@@ -578,6 +581,7 @@
 				0F0F8C972953F95800BB617E /* PatternData.swift in Sources */,
 				0F5299862A71F79800FB09A3 /* HomeScreenViewController+UISetup.swift in Sources */,
 				0F5299932A74520E00FB09A3 /* BusListCollectionViewCell+UISetup.swift in Sources */,
+				0F9442982A773157007D5659 /* AddLocationsScreenViewController+SearchBarInteractions.swift in Sources */,
 				0F36CD3A29155B460059BC24 /* SceneDelegate.swift in Sources */,
 				0FA9086C2970EC7D002E6AEA /* SearchResultsViewController.swift in Sources */,
 				0FA908782971F70B002E6AEA /* DirectionsTableViewCell.swift in Sources */,
