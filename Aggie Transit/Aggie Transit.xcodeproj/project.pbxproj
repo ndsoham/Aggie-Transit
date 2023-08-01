@@ -23,6 +23,8 @@
 		0F36CD3F29155B460059BC24 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F36CD3D29155B460059BC24 /* Main.storyboard */; };
 		0F36CD4129155B460059BC24 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F36CD4029155B460059BC24 /* Assets.xcassets */; };
 		0F36CD4429155B460059BC24 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0F36CD4229155B460059BC24 /* LaunchScreen.storyboard */; };
+		0F39DDA02A78949A00F29629 /* SearchResultsViewController+UISetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F39DD9F2A78949A00F29629 /* SearchResultsViewController+UISetup.swift */; };
+		0F39DDA22A7894A900F29629 /* SearchResultsViewController+CollectionViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F39DDA12A7894A900F29629 /* SearchResultsViewController+CollectionViewSetup.swift */; };
 		0F475E80296378B600571B8A /* BusData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F475E7F296378B600571B8A /* BusData.swift */; };
 		0F475E822963797900571B8A /* Bus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F475E812963797900571B8A /* Bus.swift */; };
 		0F5299822A71F00600FB09A3 /* HomeScreenMenuCollectionFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5299812A71F00600FB09A3 /* HomeScreenMenuCollectionFooterView.swift */; };
@@ -94,6 +96,8 @@
 		0F36CD4029155B460059BC24 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0F36CD4329155B460059BC24 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0F36CD4529155B460059BC24 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0F39DD9F2A78949A00F29629 /* SearchResultsViewController+UISetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchResultsViewController+UISetup.swift"; sourceTree = "<group>"; };
+		0F39DDA12A7894A900F29629 /* SearchResultsViewController+CollectionViewSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchResultsViewController+CollectionViewSetup.swift"; sourceTree = "<group>"; };
 		0F475E7F296378B600571B8A /* BusData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusData.swift; sourceTree = "<group>"; };
 		0F475E812963797900571B8A /* Bus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bus.swift; sourceTree = "<group>"; };
 		0F5299812A71F00600FB09A3 /* HomeScreenMenuCollectionFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenMenuCollectionFooterView.swift; sourceTree = "<group>"; };
@@ -378,6 +382,8 @@
 			isa = PBXGroup;
 			children = (
 				0FA9086B2970EC7D002E6AEA /* SearchResultsViewController.swift */,
+				0F39DD9F2A78949A00F29629 /* SearchResultsViewController+UISetup.swift */,
+				0F39DDA12A7894A900F29629 /* SearchResultsViewController+CollectionViewSetup.swift */,
 			);
 			path = "Search Results Screen";
 			sourceTree = "<group>";
@@ -548,6 +554,7 @@
 				0F7C72BB2968AEC00094151C /* RouteGenerator.swift in Sources */,
 				0F6DD8EB2A62333C003A6E44 /* HomeScreenMenuViewController+UISetup.swift in Sources */,
 				0FA90876297166A5002E6AEA /* EndpointsTableViewCell.swift in Sources */,
+				0F39DDA22A7894A900F29629 /* SearchResultsViewController+CollectionViewSetup.swift in Sources */,
 				0FEBBAFC297A545500974000 /* TimeTableHeaderViewCell.swift in Sources */,
 				0F2F37FE29318150005998AF /* HomeScreenViewController.swift in Sources */,
 				0FFC59352A676FE500CAE0C6 /* HomeScreenMenuCollectionHeaderView.swift in Sources */,
@@ -567,6 +574,7 @@
 				0FB4FB5C2960C02A0091B616 /* Model.xcdatamodeld in Sources */,
 				0FA9086E2970ED10002E6AEA /* SearchResultsTableViewCell.swift in Sources */,
 				0F5299952A747CB200FB09A3 /* BusListScreenViewController+CollectionViewSetup.swift in Sources */,
+				0F39DDA02A78949A00F29629 /* SearchResultsViewController+UISetup.swift in Sources */,
 				0F6DD8F52A631399003A6E44 /* SingleColumnLayout.swift in Sources */,
 				0F9442932A76ABA3007D5659 /* AddLocationScreenViewController+UISetup.swift in Sources */,
 				0F8B6353295A93B6000385C6 /* BusStop.swift in Sources */,

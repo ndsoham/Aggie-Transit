@@ -9,21 +9,6 @@ import Foundation
 import UIKit
 
 extension AddLocationScreenViewController {
-    //MARK: - setup the cancel button
-    func setupCancelButton() {
-        // configure
-        cancelButton.tintColor = .systemBlue
-        cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        cancelButton.addTarget(self, action: #selector(didPressCancel), for: .touchUpInside)
-        // add to view hierarchy
-        self.view.addSubview(cancelButton)
-        // configure
-        NSLayoutConstraint.activate([
-            cancelButton.trailingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.trailingAnchor),
-            cancelButton.topAnchor.constraint(equalTo: self.view.layoutMarginsGuide.topAnchor)
-        ])
-    }
     //MARK: - setup the search bar
     func setupSearchBar() {
         // configure
@@ -45,7 +30,7 @@ extension AddLocationScreenViewController {
             searchBar.leadingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.leadingAnchor),
             searchBar.trailingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.trailingAnchor),
             searchBar.heightAnchor.constraint(equalToConstant: (52 * (self.view.frame.height/812))),
-            searchBar.topAnchor.constraint(equalTo: self.cancelButton.layoutMarginsGuide.bottomAnchor, constant: 20)
+            searchBar.topAnchor.constraint(equalTo: self.view.layoutMarginsGuide.topAnchor, constant: 20)
         ])
     }
     //MARK: - setup the collection view
@@ -84,10 +69,6 @@ extension AddLocationScreenViewController {
         // configure sheet presentation
         if let sheet = self.sheetPresentationController {
             sheet.detents = [
-                .custom(identifier: UISheetPresentationController.Detent.Identifier("small"), resolver: { context in
-                    180
-                }),
-                .medium(),
                 .large()
             ]
             
@@ -96,7 +77,7 @@ extension AddLocationScreenViewController {
             sheet.prefersEdgeAttachedInCompactHeight = true
             sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
             sheet.prefersGrabberVisible = true
-            isModalInPresentation = true
+            isModalInPresentation = false
         }
     }
 

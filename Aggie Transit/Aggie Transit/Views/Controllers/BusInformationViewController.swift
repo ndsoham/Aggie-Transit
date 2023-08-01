@@ -20,7 +20,6 @@ class BusInformationViewController: UIViewController {
     private var busNumberLabel: UILabel = UILabel()
     private var busNumberViewHeight: Double = 42
     var container: NSPersistentContainer! = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
-    var refreshDelegate: RefreshDelegate?
     var center: UNUserNotificationCenter = UNUserNotificationCenter.current()
     var closeDelegate: BusInformationPanelClosedDelegate?
     var busNumber: String?

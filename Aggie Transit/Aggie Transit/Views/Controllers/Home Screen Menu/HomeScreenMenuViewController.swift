@@ -185,9 +185,3 @@ extension HomeScreenMenuViewController: DataGathererDelegate {
         }
     }
 }
-//MARK: - Refresh recent locations when update
-extension HomeScreenMenuViewController: RefreshDelegate {
-    func refreshRecentLocations() {
-        self.fetchRecentLocations()
-    }
-}

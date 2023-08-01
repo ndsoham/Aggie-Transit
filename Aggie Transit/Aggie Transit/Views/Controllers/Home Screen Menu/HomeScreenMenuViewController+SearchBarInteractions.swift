@@ -45,6 +45,7 @@ extension HomeScreenMenuViewController: UISearchBarDelegate {
     }
     //MARK: - cancel button clicked
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = nil
         searchBar.endEditing(true)
     }
     //MARK: - search button clicked

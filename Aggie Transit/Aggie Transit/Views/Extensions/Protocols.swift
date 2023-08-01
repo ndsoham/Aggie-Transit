@@ -35,10 +35,6 @@ protocol RouteGenerationProgressDelegate {
     func routeGenerationDidStart()
     func routeGenerationDidEnd()
 }
-//MARK: - recent locations
-@objc protocol RefreshDelegate {
-    @objc optional func refreshRecentLocations()
-}
 //MARK: - Data related protocols
 @objc protocol DataGathererDelegate {
     @objc optional func didGatherNotifications(notifications: [BusNotification])

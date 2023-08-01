@@ -73,25 +73,27 @@ extension AddLocationScreenViewController: MKLocalSearchCompleterDelegate {
                 alert.addAction(UIAlertAction(title: "OK", style: .cancel))
                 self.present(alert, animated: true)
             } else if let response {
+                self.searchCompleterResults = []
                 let _ = response.mapItems.map { item in
                     if let name = item.name, let address = item.placemark.title,address.lowercased().contains("bryan") || address.lowercased().contains("college station") {
                         let location = Location(name: name, location: item.placemark.coordinate, address: address)
                         if let currentLocation = LocationManager.shared.currentLocation {
                             location.distance = round((location.location.distance(to: currentLocation.coordinate) * 0.0006213712)*10)/10.0
                         }
-                        self.searchResults.append(location)
+                        self.searchCompleterResults.append(location)
                     }
                 }
-                self.searchResults = self.searchResults.sorted {
+                self.searchCompleterResults = self.searchCompleterResults.sorted {
                     if let firstDistance = $0.distance, let secondDistance = $1.distance {
                         return firstDistance < secondDistance
                     } else {
                         return false
                     }
                 }
-                for result in self.searchResults {
-                    print(result.name, result.address, result.location)
+                DispatchQueue.main.async {
+                    self.searchCollectionView?.reloadData()
                 }
+                
             }
         }
     }
