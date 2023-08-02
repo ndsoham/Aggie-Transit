@@ -41,34 +41,42 @@ extension HomeScreenViewController {
             buttonStack.topAnchor.constraint(equalTo: self.view.layoutMarginsGuide.topAnchor),
             buttonStack.rightAnchor.constraint(equalTo: self.view.layoutMarginsGuide.rightAnchor)
         ])
-        
+        // initialize the user location button
+        userButton = MKUserTrackingButton(mapView: map)
+        guard let userButton else {return}
         // configure buttons and add to view
         
         var configuration = UIButton.Configuration.filled()
-        let buttonArray: [UIButton] = [notiButton, busButton, favButton, userButton]
+        configuration.baseBackgroundColor = .white
+        configuration.baseForegroundColor = UIColor(red: 0.24, green: 0.29, blue: 0.35, alpha: 1)
+        let buttonArray = [notiButton, busButton, favButton, userButton]
         
         for button in buttonArray {
             switch button {
             case notiButton:
                 configuration.image = UIImage(systemName: "exclamationmark.square.fill")
-                button.addTarget(self, action: #selector(notiButtonPressed), for: .touchUpInside)
+                notiButton.addTarget(self, action: #selector(notiButtonPressed), for: .touchUpInside)
+                notiButton.configuration = configuration
+
             case busButton:
                 configuration.image = UIImage(systemName: "bus.fill")
-                button.addTarget(self, action: #selector(busButtonPressed), for: .touchUpInside)
+                busButton.addTarget(self, action: #selector(busButtonPressed), for: .touchUpInside)
+                busButton.configuration = configuration
+
             case favButton:
                 configuration.image = UIImage(systemName: "star.fill")
-                button.addTarget(self, action: #selector(favButtonPressed), for: .touchUpInside)
+                favButton.addTarget(self, action: #selector(favButtonPressed), for: .touchUpInside)
+                favButton.configuration = configuration
             case userButton:
-                configuration.image = UIImage(systemName: "location")
-                button.addTarget(self, action: #selector(userButtonPressed), for: .touchUpInside)
-
+                userButton.backgroundColor = .white
+                userButton.tintColor = UIColor(red: 0.24, green: 0.29, blue: 0.35, alpha: 1)
+                userButton.layer.cornerRadius = 5
             default:
                 configuration.image = UIImage()
                 
             }
-            configuration.baseBackgroundColor = .white
-            configuration.baseForegroundColor = UIColor(red: 0.24, green: 0.29, blue: 0.35, alpha: 1)
-            button.configuration = configuration
+            
+            
             NSLayoutConstraint.activate([
                 button.heightAnchor.constraint(equalToConstant: 36),
                 button.widthAnchor.constraint(equalToConstant: 36)

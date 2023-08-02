@@ -20,7 +20,7 @@ class HomeScreenViewController: UIViewController {
     var notiButton: UIButton = UIButton()
     var busButton: UIButton = UIButton()
     var favButton: UIButton = UIButton()
-    var userButton: UIButton = UIButton()
+    var userButton: MKUserTrackingButton?
     
     private var mapMargins: UILayoutGuide?
     private var navigationBar: UINavigationBar?
