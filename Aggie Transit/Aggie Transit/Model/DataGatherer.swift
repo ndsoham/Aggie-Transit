@@ -182,7 +182,7 @@ class DataGatherer {
     private func gatherBusPattern(data: [PatternData]) -> [BusPattern] {
         var points: [BusPattern] = []
         for point in data {
-            let coordinates = CoordinateConverter(latitude: point.Latitude, longitude: point.Longtitude)
+            let coordinates = convertCoordinate(latitude: point.Latitude, longitude: point.Longtitude)
             let busPoint = BusPattern(name: point.Name, location: CLLocationCoordinate2D(latitude: coordinates.0, longitude: coordinates.1),id: point.Key)
             points.append(busPoint)
         }
@@ -192,7 +192,7 @@ class DataGatherer {
     private func gatherBusStops(data: [StopData]) -> [BusStop] {
         var stops: [BusStop] = []
         for stop in data {
-            let coordinates = CoordinateConverter(latitude: stop.Latitude, longitude: stop.Longtitude)
+            let coordinates = convertCoordinate(latitude: stop.Latitude, longitude: stop.Longtitude)
             let busStop = BusStop(name: stop.Name, location: CLLocationCoordinate2D(latitude: coordinates.0, longitude: coordinates.1), isTimePoint: stop.Stop.IsTimePoint, key: stop.Key)
             stops.append(busStop)
         }
@@ -203,7 +203,7 @@ class DataGatherer {
         var buses: [Bus] = []
         for bus in data {
             if let latitude = Double(bus.lat), let longitude = Double(bus.lng), let direction = CLLocationDirection(bus.direction) {
-                let coordinates = CoordinateConverter(latitude: latitude, longitude: longitude)
+                let coordinates = convertCoordinate(latitude: latitude, longitude: longitude)
                 let routeBus = Bus(location: CLLocationCoordinate2D(latitude: coordinates.0, longitude: coordinates.1), direction: direction,name: bus.route, nextStop: bus.nextStop)
                 buses.append(routeBus)
             }

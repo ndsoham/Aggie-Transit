@@ -44,10 +44,6 @@ extension HomeScreenMenuViewController {
         searchBar.delegate = self
         searchBar.showsCancelButton = false
         searchBar.tintColor = .systemBlue
-        if let searchField = searchBar.value(forKey: "searchField") as? UITextField {
-            searchField.textColor = UIColor(named: "textColor")
-            searchField.clipsToBounds = true
-        }
         // add to view hierarchy
         self.view.addSubview(searchBar)
         // constrain

@@ -76,8 +76,8 @@ extension AddLocationScreenViewController {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
             sheet.prefersEdgeAttachedInCompactHeight = true
             sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
-            sheet.prefersGrabberVisible = true
-            isModalInPresentation = false
+            sheet.prefersGrabberVisible = false
+            isModalInPresentation = true
         }
     }
 

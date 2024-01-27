@@ -6,8 +6,8 @@
 //
 
 import Foundation
-//MARK: - This function converts from a mercator project coordinate to a global coordinate
-func CoordinateConverter(latitude: Double, longitude: Double) -> (Double, Double) {
+/// This function converts from a mercator project coordinate to a global coordinate
+func convertCoordinate(latitude: Double, longitude: Double) -> (Double, Double) {
     let radius = 6378137.0
     let newLat = (atan(sinh(latitude/radius)) * 180.0) / Double.pi
     let newLong = (longitude / radius * 180.0) / Double.pi
