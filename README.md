@@ -12,7 +12,7 @@
 
 ## Technologies
 <img src = "Logos/Xcode.png" width = 200 height = 200>
-<img src = "Logos/Figma Logo.png" width = 200 height = 200>
+<img src = "Logos/Figma-Icon.svg" width = 200 height = 200>
 <img src = "Logos/Tamu Transportation Services Logo.png" width = 200 height = 200>
 
 
